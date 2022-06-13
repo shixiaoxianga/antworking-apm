@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/wei-apm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
+  rabbitmq:
+    addresses: 192.168.65.129:5672
+    connection-timeout: 15000
+    password: root
+    username: root
+    virtual-host: /
+    listener:
+      order:
+        exchange:
+          durable: true
+          key: order.*
+          name: order-exchange
+          type: topic
+      # 表示消费者消费成功消息以后需要手工的进行签收(ack)，默认为auto
+      simple:
+        acknowledge-mode: manual
+        concurrency: 5
+        max-concurrency: 10
+        prefetch: 1
+
+server:
+  port: 6060
+
+

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.antworking.apm</groupId>
+    <artifactId>antworking</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+    <modules>
+        <module>apm-test</module>
+        <module>apm-agent</module>
+        <module>apm-common</module>
+        <module>apm-util</module>
+        <module>apm-core</module>
+        <module>apm-logger</module>
+        <module>apm-model</module>
+        <module>spring-boot-web</module>
+    </modules>
+
+    <properties>
+        <shade.package>com.antworking.apm.dependencies</shade.package>
+        <shade.net.bytebuddy.source>net.bytebuddy</shade.net.bytebuddy.source>
+        <shade.net.bytebuddy.target>${shade.package}.${shade.net.bytebuddy.source}</shade.net.bytebuddy.target>
+
+        <bytebuddy.version>1.12.10</bytebuddy.version>
+        <junit.version>4.12</junit.version>
+        <lombok.version>1.18.22</lombok.version>
+        <junit-platform-commons.version>1.7.2</junit-platform-commons.version>
+        <sl4j-api.version>1.7.30</sl4j-api.version>
+        <logback-classic.version>1.2.3</logback-classic.version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.antworking.apm</groupId>
+                <artifactId>apm-common</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.antworking.apm</groupId>
+                <artifactId>apm-util</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.antworking.apm</groupId>
+                <artifactId>apm-logger</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.antworking.apm</groupId>
+                <artifactId>apm-model</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.antworking.apm</groupId>
+                <artifactId>apm-core</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+<!--===========================================================================-->
+
+
+
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-commons</artifactId>
+                <version>${junit-platform-commons.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+
+
+<!--            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${sl4j-api.version}</version>
+            </dependency>-->
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback-classic.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${bytebuddy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+</project>
