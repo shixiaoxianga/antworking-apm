@@ -39,6 +39,7 @@ public class AntWorkingAgent {
 
 
         new AgentBuilder.Default()
+                .disableClassFormatChanges()
                 .ignore(ElementMatchers.nameStartsWith("java."))
                 .type(ElementMatchers.nameStartsWith("com.xxw.test.controller"))
                 .transform(new AgentBuilder.Transformer() {
@@ -46,7 +47,7 @@ public class AntWorkingAgent {
                     public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module) {
                         return builder
                                 .method(ElementMatchers.any())
-                                .intercept(MethodDelegation.to(new ClassEnhanceInterceptor()));
+                                .intercept(MethodDelegation.to(new ClassEnhanceInterceptor(null)));
                     }
                 })
                 .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
@@ -133,10 +134,10 @@ public class AntWorkingAgent {
                                                 TypeDescription typeDescription,
                                                 ClassLoader classLoader,
                                                 JavaModule module) {
+            System.out.println("=================="+typeDescription);
             return builder
-//                    .method(classEnhance.getMethodMatchers().buildMethodMatchers())
-                    .method(ElementMatchers.any())
-                    .intercept(MethodDelegation.to(new ClassEnhanceInterceptor()));
+                    .method(classEnhance.buildMethodMatchers())
+                    .intercept(MethodDelegation.to(new ClassEnhanceInterceptor(classEnhance)));
         }
     }
 

@@ -8,15 +8,18 @@ import org.junit.platform.commons.util.ReflectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author XiangXiaoWei
  * date 2022/6/11
  */
-public enum AntWorkingContextManager {
+public class AntWorkingContextManager {
 
-    INSTANCE;
 
+
+    private final static List<IFilter> filters = new ArrayList<>();
+    private final static List<MessageProcessor> processors = new ArrayList<>();
 
     AntWorkingContextManager() {
 
@@ -54,17 +57,23 @@ public enum AntWorkingContextManager {
         });
     }
 
-    private final static List<IFilter> filters = new ArrayList<>();
-    private final static List<MessageProcessor> processors = new ArrayList<>();
 
     private static final ThreadLocal<BaseCollectModel> session = new ThreadLocal<>();
+    private static final ThreadLocal<AtomicInteger> invokerOrder = new ThreadLocal<>();
 
     public static void push(BaseCollectModel data){
         try {
 
         } finally {
+            invokerOrder.remove();
             session.remove();
         }
+    }
+    public static int getOrder(){
+        if(invokerOrder.get()==null){
+            invokerOrder.set(new AtomicInteger(0));
+        }
+        return invokerOrder.get().getAndIncrement();
     }
 
     public static void remove(){

@@ -23,7 +23,7 @@ public class AgentListener implements AgentBuilder.Listener {
 
     @Override
     public void onIgnored(TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, boolean loaded) {
-
+//        log.info("antworking enhance ignored "+typeDescription);
     }
 
     @Override
