@@ -12,4 +12,11 @@
     <artifactId>apm-model</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>com.antworking.apm</groupId>
+            <artifactId>apm-common</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

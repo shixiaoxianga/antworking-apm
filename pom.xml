@@ -28,8 +28,9 @@
         <junit.version>4.12</junit.version>
         <lombok.version>1.18.22</lombok.version>
         <junit-platform-commons.version>1.7.2</junit-platform-commons.version>
-        <sl4j-api.version>1.7.30</sl4j-api.version>
+        <sl4j-api.version>1.7.25</sl4j-api.version>
         <logback-classic.version>1.2.3</logback-classic.version>
+        <google-json.version>2.9.0</google-json.version>
     </properties>
 
 
@@ -83,16 +84,22 @@
 
 
 
-<!--            <dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${sl4j-api.version}</version>
-            </dependency>-->
+            </dependency>
 
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback-classic.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -106,6 +113,13 @@
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
                 <scope>compile</scope>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${google-json.version}</version>
             </dependency>
 
         </dependencies>

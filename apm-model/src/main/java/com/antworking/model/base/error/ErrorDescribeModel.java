@@ -1,5 +1,7 @@
 package com.antworking.model.base.error;
 
+import com.google.gson.Gson;
+
 import java.util.Arrays;
 
 public class ErrorDescribeModel {
@@ -47,11 +49,6 @@ public class ErrorDescribeModel {
 
     @Override
     public String toString() {
-        return "ErrorDescribeModel{" +
-                "stacks=" + Arrays.toString(stacks) +
-                ", message='" + message + '\'' +
-                ", clazz='" + clazz + '\'' +
-                ", timeStamp=" + timeStamp +
-                '}';
+        return "ErrorDescribeModel =====>  "+ new Gson().toJson(this);
     }
 }

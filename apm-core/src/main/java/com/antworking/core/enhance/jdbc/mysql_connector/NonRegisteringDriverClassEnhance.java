@@ -5,8 +5,11 @@ import com.antworking.core.AntWorkingContextManager;
 import com.antworking.core.enhance.AbstractClassEnhance;
 import com.antworking.core.matchers.AbstractMethodMatchers;
 import com.antworking.model.base.BaseCollectModel;
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -16,6 +19,7 @@ import java.util.concurrent.Callable;
  * date 2022/6/14
  */
 public class NonRegisteringDriverClassEnhance extends AbstractClassEnhance {
+    private static final Logger log = LoggerFactory.getLogger(NonRegisteringDriverClassEnhance.class);
     private final static String prepared_statement_class = "com.mysql.cj.jdbc.NonRegisteringDriver";
 /*    private final static String[] prepared_statement_setMethods =
             new String[]{"setNull", "setBoolean", "setByte","setShort",
@@ -45,7 +49,7 @@ private final static String[] non_registering_driver_methods = new String[]{"con
 
     @Override
     public void invokeMethodAfter(Class<?> clazz, Method method, Object[] args, Object result,BaseCollectModel model) {
-        System.out.println(model);
+        log.info(model.toString());
     }
 
     @Override

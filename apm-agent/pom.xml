@@ -32,11 +32,12 @@
 
 
     <build>
-        <plugins>
 
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -45,18 +46,30 @@
                         </goals>
                         <configuration>
                             <artifactSet>
+
+                                <excludes>
+                                    <exclude>org.slf4j:*</exclude>
+                                </excludes>
+
                                 <includes>
                                     <include>com.antworking.*:*</include>
                                     <include>net.bytebuddy:byte-buddy</include>
                                     <include>org.junit.platform:junit-platform-commons</include>
                                     <include>org.projectlombok:lombok</include>
-                                    <include>org.slf4j:slf4j-api</include>
                                     <include>ch.qos.logback:logback-classic</include>
                                     <include>ch.qos.logback:logback-core</include>
-<!--                                    <include>*:*</include>-->
-
+                                    <include>com.google.code.gson:gson</include>
                                 </includes>
+
                             </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>ch.qos.logback:logback-classic</artifact>
+                                    <excludes>
+                                        <exclude>org/slf4j/impl/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                             <relocations>
                                 <relocation>
                                     <pattern>${shade.net.bytebuddy.source}</pattern>
@@ -68,19 +81,21 @@
                                     <shadedPattern>${shade.package}.org.projectlombok</shadedPattern>
                                 </relocation>
 
-                       <!--         <relocation>
-                                    <pattern>org.slf4j</pattern>
-                                    <shadedPattern>${shade.package}.org.slf4j</shadedPattern>
-                                </relocation>
 
                                 <relocation>
-                                    <pattern>ch.qos.logback</pattern>
-                                    <shadedPattern>${shade.package}.ch.qos.logback</shadedPattern>
-                                </relocation>-->
-<!--                                <relocation>
-                                    <pattern>logback-core</pattern>
-                                    <shadedPattern>${shade.package}.ch.qos.logback</shadedPattern>
-                                </relocation>-->
+                                    <pattern>gson</pattern>
+                                    <shadedPattern>${shade.package}.com.google.code.gson</shadedPattern>
+                                </relocation>
+
+                                <!--         <relocation>
+                                             <pattern>org.slf4j</pattern>
+                                             <shadedPattern>${shade.package}.org.slf4j</shadedPattern>
+                                         </relocation>
+
+                                         <relocation>
+                                             <pattern>ch.qos.logback</pattern>
+                                             <shadedPattern>${shade.package}.ch.qos.logback</shadedPattern>
+                                         </relocation>-->
                             </relocations>
                             <transformers>
                                 <transformer
@@ -98,5 +113,6 @@
             </plugin>
 
         </plugins>
+
     </build>
 </project>

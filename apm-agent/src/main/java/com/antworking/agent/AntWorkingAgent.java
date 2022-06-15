@@ -134,7 +134,6 @@ public class AntWorkingAgent {
                                                 TypeDescription typeDescription,
                                                 ClassLoader classLoader,
                                                 JavaModule module) {
-            System.out.println("=================="+typeDescription);
             return builder
                     .method(classEnhance.buildMethodMatchers())
                     .intercept(MethodDelegation.to(new ClassEnhanceInterceptor(classEnhance)));

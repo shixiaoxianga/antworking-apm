@@ -2,6 +2,7 @@ package com.antworking.model.base;
 
 import com.antworking.model.base.error.ErrorDescribeModel;
 import com.antworking.model.base.method.MethodDescribeModel;
+import com.google.gson.Gson;
 
 /**
  * @author XiangXiaoWei
@@ -114,18 +115,6 @@ public class BaseCollectModel {
 
     @Override
     public String toString() {
-        return "BaseCollectModel{" +
-                "startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", timeUse=" + timeUse +
-                ", host='" + host + '\'' +
-                ", appName='" + appName + '\'' +
-                ", order=" + order +
-                ", data=" + data +
-                ", node='" + node + '\'' +
-                ", crux=" + crux +
-                ", method=" + method +
-                ", error=" + error +
-                '}';
+        return "BaseCollectModel =====>  "+ new Gson().toJson(this);
     }
 }

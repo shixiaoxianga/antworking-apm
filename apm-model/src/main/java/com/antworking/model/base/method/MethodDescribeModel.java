@@ -1,5 +1,7 @@
 package com.antworking.model.base.method;
 
+import com.google.gson.Gson;
+
 import java.util.Arrays;
 
 public class MethodDescribeModel {
@@ -55,12 +57,6 @@ public class MethodDescribeModel {
 
     @Override
     public String toString() {
-        return "MethodDescribeModel{" +
-                "name='" + name + '\'' +
-                ", param=" + Arrays.toString(param) +
-                ", clazz='" + clazz + '\'' +
-                ", returnClazz='" + returnClazz + '\'' +
-                ", paramClazz=" + Arrays.toString(paramClazz) +
-                '}';
+        return "MethodDescribeModel =====>  "+ new Gson().toJson(this);
     }
 }

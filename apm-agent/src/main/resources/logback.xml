@@ -6,7 +6,7 @@
     <property name="log.console" value="%d{MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
     <!--日志输出-->
     <property name="log.pattern" value="%d{MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
-
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
     <!-- 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -62,8 +62,8 @@
 
     <!-- 系统模块日志级别控制  -->
     <logger name="com.antworking" level="info" />
-    <!-- Spring日志级别控制  -->
-    <logger name="org.springframework" level="warn" />
+
+    <logger name="ch.qos.logback" level="TRACE" />
 
     <root level="info">
         <appender-ref ref="console" />
