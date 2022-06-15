@@ -4,6 +4,7 @@ import com.antworking.common.ConstantNode;
 import com.antworking.core.AntWorkingContextManager;
 import com.antworking.core.enhance.AbstractClassEnhance;
 import com.antworking.core.matchers.AbstractMethodMatchers;
+import com.antworking.core.method.MethodTools;
 import com.antworking.model.base.BaseCollectModel;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.description.method.MethodDescription;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.concurrent.Callable;
 
 /**
@@ -21,14 +23,7 @@ import java.util.concurrent.Callable;
 public class NonRegisteringDriverClassEnhance extends AbstractClassEnhance {
     private static final Logger log = LoggerFactory.getLogger(NonRegisteringDriverClassEnhance.class);
     private final static String prepared_statement_class = "com.mysql.cj.jdbc.NonRegisteringDriver";
-/*    private final static String[] prepared_statement_setMethods =
-            new String[]{"setNull", "setBoolean", "setByte","setShort",
-                    "setInt","setLong","setFloat","setDouble","setBigDecimal",
-                    "setString","setBytes","setDate","setTime","setTimestamp","setAsciiStream",
-                    "setUnicodeStream","setBinaryStream","clearParameters","setObject",
-                    "setArray","setDate","setTime","setTimestamp","setNull","setNString","setSQLXML"};
-    private final static String[] prepared_statement_methods = new String[]{"execute", "executeUpdate", "executeQuery"};*/
-private final static String[] non_registering_driver_methods = new String[]{"connect"};
+    private final static String[] non_registering_driver_methods = new String[]{"connect"};
 
 
     @Override
@@ -42,18 +37,23 @@ private final static String[] non_registering_driver_methods = new String[]{"con
     }
 
     @Override
-    public void invokeMethodBefore(Class<?> clazz, Method method, Object[] args,BaseCollectModel model) {
+    public void invokeMethodBefore(Class<?> clazz, Method method, Object[] args, BaseCollectModel model) {
         model.setNode(ConstantNode.MYSQL_CONNECTOR);
         model.setCrux(true);
     }
 
     @Override
-    public void invokeMethodAfter(Class<?> clazz, Method method, Object[] args, Object result,BaseCollectModel model) {
-        log.info(model.toString());
+    public Object invokeMethodAfter(Class<?> clazz, Method method, Object[] args, Object result, BaseCollectModel model) {
+        if (result instanceof java.sql.Connection) {
+            return Proxy.newProxyInstance(this.getClass().getClassLoader(),
+                    new Class[]{java.sql.Connection.class},
+                    new MysqlConnectorConnectionProxy(result, model));
+        }
+        return result;
     }
 
     @Override
-    public void invokeMethodException(Class<?> clazz, Method method, Object[] args, Throwable e,BaseCollectModel model) {
-
+    public void invokeMethodException(Class<?> clazz, Method method, Object[] args, Throwable e, BaseCollectModel model) {
+        MethodTools.INSTANCE.end(e,model,clazz,args,method);
     }
 }

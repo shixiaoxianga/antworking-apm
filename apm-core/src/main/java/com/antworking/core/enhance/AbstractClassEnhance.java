@@ -26,7 +26,7 @@ public abstract class AbstractClassEnhance {
                                             Object[] args,
                                             BaseCollectModel model);
 
-    public abstract void invokeMethodAfter(Class<?> clazz,
+    public abstract Object invokeMethodAfter(Class<?> clazz,
                                            Method method,
                                            Object[] args,
                                            Object result,

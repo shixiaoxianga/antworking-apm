@@ -2,10 +2,10 @@ package com.antworking.core.interceptor;
 
 import com.antworking.core.AntWorkingContextManager;
 import com.antworking.core.enhance.AbstractClassEnhance;
+import com.antworking.core.method.MethodTools;
 import com.antworking.model.base.BaseCollectModel;
 import com.antworking.model.base.error.ErrorDescribeModel;
 import com.antworking.model.base.method.MethodDescribeModel;
-import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
@@ -13,10 +13,8 @@ import net.bytebuddy.implementation.bind.annotation.SuperCall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.Callable;
 
 /**
@@ -38,47 +36,51 @@ public class ClassEnhanceInterceptor {
                               @AllArguments Object[] args,
                               @Origin Class<?> clazz,
                               @SuperCall Callable<Object> callable) {
+        MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
         Object result = null;
-        final BaseCollectModel model = beforeBuild(method, args, clazz);
+        final BaseCollectModel model = beforeBuild(method, args, clazz, methodDescribeModel);
         enhance.invokeMethodBefore(clazz, method, args, model);
         try {
             result = callable.call();
-            return result;
         } catch (Throwable e) {
-            enhance.invokeMethodException(clazz, method, args, e, afterBuild(method,args,clazz,model,e));
-            log.error("invoker class :{}  method : {} args: {} error:{}", clazz.getName(), method.getName(), Arrays.toString(args), e);
+            enhance.invokeMethodException(clazz, method, args, e, afterBuild(method, args, clazz, model, e, methodDescribeModel));
+            log.debug("invoker class :{}  method : {} args: {} error:{}", clazz.getName(), method.getName(), Arrays.toString(args), e);
+            e.printStackTrace();
         } finally {
-            enhance.invokeMethodAfter(clazz, method, args, result, afterBuild(method,args,clazz,model,null));
-            log.info("执行 {} {} 方法 参数：{}", clazz.getName(), method.getName(), Arrays.toString(args));
+            result = enhance.invokeMethodAfter(clazz, method, args, result, afterBuild(method, args, clazz, model, null, methodDescribeModel));
+            log.debug("执行 {} {} 方法 参数：{}", clazz.getName(), method.getName(), Arrays.toString(args));
         }
-        return null;
+        return result;
     }
 
-    private BaseCollectModel beforeBuild(Method method, Object[] args, Class<?> clazz) {
+    private BaseCollectModel beforeBuild(Method method,
+                                         Object[] args,
+                                         Class<?> clazz,
+                                         MethodDescribeModel methodDescribeModel) {
         BaseCollectModel model = new BaseCollectModel();
         model.setOrder(AntWorkingContextManager.getOrder());
         model.setStartTime(System.currentTimeMillis());
-        MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
-        methodDescribeModel.setName(method.getName());
-        methodDescribeModel.setClazz(clazz.getName());
-        if(args.length>0&&args[0]!=null){
-            methodDescribeModel.setParam(Arrays.stream(args).map(Object::toString).toArray(String[]::new));
-        }
-        methodDescribeModel.setParamClazz(Arrays.stream(method.getParameterTypes()).map(Object::toString).toArray(String[]::new));
-        methodDescribeModel.setReturnClazz(method.getReturnType().toString());
-        model.setMethod(methodDescribeModel);
+        methodDescribeModel.setCrux(true);
+        MethodTools.INSTANCE.buildMethodDes(methodDescribeModel,clazz, args, method);
         return model;
     }
-    private BaseCollectModel afterBuild(Method method, Object[] args, Class<?> clazz,BaseCollectModel model,Throwable e) {
+
+    private BaseCollectModel afterBuild(Method method,
+                                        Object[] args,
+                                        Class<?> clazz,
+                                        BaseCollectModel model,
+                                        Throwable e,
+                                        MethodDescribeModel methodDescribeModel) {
         model.setEndTime(System.currentTimeMillis());
-        if(e!=null){
+        if (e != null) {
             ErrorDescribeModel error = new ErrorDescribeModel();
             error.setTimeStamp(System.currentTimeMillis());
             error.setStacks(Arrays.stream(e.getStackTrace()).map(Object::toString).toArray(String[]::new));
             error.setMessage(e.getMessage());
             error.setClazz(e.getClass().getName());
-            model.setError(error);
+            methodDescribeModel.setError(error);
         }
+        model.putMethods(methodDescribeModel);
         return model;
     }
 }

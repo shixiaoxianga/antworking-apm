@@ -1,5 +1,6 @@
 package com.antworking.model.base.method;
 
+import com.antworking.model.base.error.ErrorDescribeModel;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
@@ -9,11 +10,43 @@ public class MethodDescribeModel {
     private String name;
 
     private String[] param;
+
     private String clazz;
+
+    private boolean crux = false;
+
+    private Object data;
 
     private String returnClazz;
 
     private String[] paramClazz;
+
+
+    private ErrorDescribeModel error;
+
+    public ErrorDescribeModel getError() {
+        return error;
+    }
+
+    public void setError(ErrorDescribeModel error) {
+        this.error = error;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    public boolean isCrux() {
+        return crux;
+    }
+
+    public void setCrux(boolean crux) {
+        this.crux = crux;
+    }
 
     public String getName() {
         return name;

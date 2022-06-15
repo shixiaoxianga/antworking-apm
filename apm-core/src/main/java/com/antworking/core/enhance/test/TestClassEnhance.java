@@ -31,8 +31,9 @@ public class TestClassEnhance extends AbstractClassEnhance {
     }
 
     @Override
-    public void invokeMethodAfter(Class<?> clazz, Method method, Object[] args, Object result, BaseCollectModel model) {
-
+    public Object invokeMethodAfter(Class<?> clazz, Method method, Object[] args, Object result, BaseCollectModel model) {
+        System.out.println(result);
+        return result;
     }
 
     @Override

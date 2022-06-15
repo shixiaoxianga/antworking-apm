@@ -4,24 +4,53 @@ import com.antworking.model.base.error.ErrorDescribeModel;
 import com.antworking.model.base.method.MethodDescribeModel;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author XiangXiaoWei
  * date 2022/6/11
  */
 public class BaseCollectModel {
+    private String id;
     private Long startTime;
     private Long endTime;
     private Long timeUse;
     private String host;
     private String appName;
     private Integer order;
-    private Object data;
     private String node;
+    private String label;
     private boolean crux;
+    private Object data;
 
-    private MethodDescribeModel method;
-    private ErrorDescribeModel error;
+    private List<MethodDescribeModel> methods;
 
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Long getStartTime() {
         return startTime;
@@ -37,7 +66,7 @@ public class BaseCollectModel {
 
     public void setEndTime(Long endTime) {
         this.endTime = endTime;
-        this.setTimeUse(endTime-this.startTime);
+        this.setTimeUse(endTime - this.startTime);
     }
 
     public Long getTimeUse() {
@@ -72,13 +101,6 @@ public class BaseCollectModel {
         this.order = order;
     }
 
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
 
     public String getNode() {
         return node;
@@ -96,25 +118,23 @@ public class BaseCollectModel {
         this.crux = crux;
     }
 
-    public MethodDescribeModel getMethod() {
-        return method;
+    public List<MethodDescribeModel> getMethods() {
+        return methods;
     }
 
-    public void setMethod(MethodDescribeModel method) {
-        this.method = method;
+    public void setMethods(List<MethodDescribeModel> methods) {
+        this.methods = methods;
     }
 
-    public ErrorDescribeModel getError() {
-        return error;
+    public void putMethods(MethodDescribeModel methods) {
+        if (this.methods == null) this.methods = new LinkedList<>();
+        this.methods.add(methods);
     }
 
-    public void setError(ErrorDescribeModel error) {
-        this.error = error;
-    }
 
 
     @Override
     public String toString() {
-        return "BaseCollectModel =====>  "+ new Gson().toJson(this);
+        return "BaseCollectModel =====>  " + new Gson().toJson(this);
     }
 }
