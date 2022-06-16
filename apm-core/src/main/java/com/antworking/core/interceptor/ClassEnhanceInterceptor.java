@@ -26,7 +26,7 @@ public class ClassEnhanceInterceptor {
     private static final Logger log = LoggerFactory.getLogger(ClassEnhanceInterceptor.class);
 
     private static AbstractClassEnhance enhance;
-
+    private Throwable e;
     public ClassEnhanceInterceptor(AbstractClassEnhance enhance) {
         ClassEnhanceInterceptor.enhance = enhance;
     }
@@ -43,12 +43,15 @@ public class ClassEnhanceInterceptor {
         try {
             result = callable.call();
         } catch (Throwable e) {
+            this.e=e;
             enhance.invokeMethodException(clazz, method, args, e, afterBuild(method, args, clazz, model, e, methodDescribeModel));
             log.debug("invoker class :{}  method : {} args: {} error:{}", clazz.getName(), method.getName(), Arrays.toString(args), e);
             e.printStackTrace();
         } finally {
-            result = enhance.invokeMethodAfter(clazz, method, args, result, afterBuild(method, args, clazz, model, null, methodDescribeModel));
-            log.debug("执行 {} {} 方法 参数：{}", clazz.getName(), method.getName(), Arrays.toString(args));
+            if(this.e==null){
+                result = enhance.invokeMethodAfter(clazz, method, args, result, afterBuild(method, args, clazz, model, null, methodDescribeModel));
+                log.debug("invoker {} {} method args：{}", clazz.getName(), method.getName(), Arrays.toString(args));
+            }
         }
         return result;
     }

@@ -51,4 +51,8 @@ public class ErrorDescribeModel {
     public String toString() {
         return "ErrorDescribeModel =====>  "+ new Gson().toJson(this);
     }
+
+    public void setStacks(StackTraceElement[] stackTrace) {
+        this.stacks=Arrays.stream(stackTrace).map(Object::toString).toArray(String[]::new);
+    }
 }

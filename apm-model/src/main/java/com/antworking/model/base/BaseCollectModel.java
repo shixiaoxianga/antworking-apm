@@ -1,10 +1,8 @@
 package com.antworking.model.base;
 
-import com.antworking.model.base.error.ErrorDescribeModel;
 import com.antworking.model.base.method.MethodDescribeModel;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,18 +21,23 @@ public class BaseCollectModel {
     private String node;
     private String label;
     private boolean crux;
-    private Object data;
 
     private List<MethodDescribeModel> methods;
 
+    private List<BaseCollectModel> childes;
 
-    public Object getData() {
-        return data;
+    public List<BaseCollectModel> getChildes() {
+        return childes;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setChildes(List<BaseCollectModel> childes) {
+        this.childes = childes;
     }
+
+    public void putChildes(BaseCollectModel children) {
+        this.childes.add(children);
+    }
+
 
     public String getLabel() {
         return label;

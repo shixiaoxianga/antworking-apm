@@ -63,6 +63,9 @@ public class MethodDescribeModel {
     public void setParam(String[] param) {
         this.param = param;
     }
+    public void setParam(Object[] args) {
+        this.param = Arrays.stream(args).map(Object::toString).toArray(String[]::new);
+    }
 
     public String getReturnClazz() {
         return returnClazz;
@@ -91,5 +94,9 @@ public class MethodDescribeModel {
     @Override
     public String toString() {
         return "MethodDescribeModel =====>  "+ new Gson().toJson(this);
+    }
+
+    public void setParamClazz(Class<?>[] parameterTypes) {
+        this.paramClazz=Arrays.stream(parameterTypes).map(Object::toString).toArray(String[]::new);
     }
 }

@@ -3,6 +3,7 @@ package com.antworking.core.enhance.jdbc.mysql_connector;
 import com.antworking.core.method.MethodTools;
 import com.antworking.model.base.BaseCollectModel;
 import com.antworking.model.base.jdbc.JdbcDescribeModel;
+import com.antworking.model.base.method.MethodDescribeModel;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -16,7 +17,8 @@ public class MysqlConnectorStatementProxy implements InvocationHandler {
     private Object[] args;
     private Object result;
     private BaseCollectModel model;
-    private JdbcDescribeModel.JdbcNode jdbcNode;
+    private JdbcDescribeModel jdbc;
+    MethodDescribeModel methodDescribeModel;
     private final static String[] prepared_statement_setMethods =
             new String[]{"setNull", "setBoolean", "setByte", "setShort",
                     "setInt", "setLong", "setFloat", "setDouble", "setBigDecimal",
@@ -25,10 +27,11 @@ public class MysqlConnectorStatementProxy implements InvocationHandler {
                     "setArray", "setDate", "setTime", "setTimestamp", "setNull", "setNString", "setSQLXML"};
     private final static String[] prepared_statement_methods = new String[]{"execute", "executeUpdate", "executeQuery"};
 
-    public MysqlConnectorStatementProxy(Object target, BaseCollectModel model, JdbcDescribeModel.JdbcNode jdbcNode) {
+    public MysqlConnectorStatementProxy(Object target, BaseCollectModel model, JdbcDescribeModel jdbc, MethodDescribeModel methodDescribeModel) {
         this.target = target;
         this.model = model;
-        this.jdbcNode = jdbcNode;
+        this.jdbc = jdbc;
+        this.methodDescribeModel = methodDescribeModel;
     }
 
     @Override
@@ -49,38 +52,21 @@ public class MysqlConnectorStatementProxy implements InvocationHandler {
     private void execute() {
         for (String execute : prepared_statement_methods) {
             if (execute.equals(method.getName())) {
-                MethodTools.INSTANCE.end(null, model, target, args, method);
+                methodDescribeModel.setData(jdbc);
                 break;
             }
         }
     }
-/*    private void end(Throwable e){
-        model.setEndTime(System.currentTimeMillis());
-        if(e!=null){
-            ErrorDescribeModel error = new ErrorDescribeModel();
-            error.setTimeStamp(System.currentTimeMillis());
-            error.setStacks(Arrays.stream(e.getStackTrace()).map(Object::toString).toArray(String[]::new));
-            error.setMessage(e.getMessage());
-            error.setClazz(e.getClass().getName());
-
-            MethodDescribeModel methodDescribeModel =
-                    MethodErrorHandler.INSTANCE.buildMethodDes(target.getClass(),args,method);
-            methodDescribeModel.setError(error);
-            model.putMethods(methodDescribeModel);
-        }
-    }*/
 
     private void setVal() {
         for (String param : prepared_statement_setMethods) {
             if (param.equals(method.getName())) {
                 int i = (int) args[0];
                 Object o = args[1];
-                jdbcNode.putParams(new JdbcDescribeModel.JdbcNode.ParamValues(i, o.toString()));
+                jdbc.putParams(new JdbcDescribeModel.ParamValues(i, o.toString()));
             }
         }
     }
-
-
 
 
 }
