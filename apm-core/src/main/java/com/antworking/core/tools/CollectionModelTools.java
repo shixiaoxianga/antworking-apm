@@ -74,6 +74,8 @@ public enum CollectionModelTools {
             methodDescribeModel.setError(error);
             model.putMethods(methodDescribeModel);
         }
+
+        // TODO: 2022/6/17 校验此数据是否是在请求线程中不是则忽略
         AntWorkingContextManager.linkModel(model);
         log.info("整个节点Model=====》" + AntWorkingContextManager.get());
     }

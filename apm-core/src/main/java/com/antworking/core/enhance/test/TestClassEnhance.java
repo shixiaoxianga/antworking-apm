@@ -13,7 +13,8 @@ import java.util.concurrent.Callable;
 
 public class TestClassEnhance extends AbstractClassEnhance {
 
-    private String CLASS_NAME="com.xxw.test.controller.IndexController";
+//    private String CLASS_NAME="com.xxw.test.controller.IndexController";
+    private String CLASS_NAME="com.danduola.sys.controller.client.dev.ClientApiController";
 
 
     @Override
