@@ -54,24 +54,11 @@ public class AntWorkingAgent {
                 .with(new AgentBuilder.RedefinitionStrategy.Listener() {
                     @Override
                     public void onBatch(int index, List<Class<?>> batch, List<Class<?>> types) {
-                        types.forEach(clazz -> {
-                            System.out.println("onBatch" + clazz.getName());
-                        });
-                        batch.forEach(clazz -> {
-                            System.out.println("onBatch" + clazz.getName());
-                        });
                     }
 
                     @Override
                     public Iterable<? extends List<Class<?>>> onError(int index, List<Class<?>> batch, Throwable throwable, List<Class<?>> types) {
-                        System.out.println("重新定义失败：" + index + "----" + throwable.toString());
-                        System.out.println(throwable.getMessage());
-                        types.forEach(clazz -> {
-                            System.out.println("onError" + clazz.getName());
-                        });
-                        batch.forEach(clazz -> {
-                            System.out.println("onError" + clazz.getName());
-                        });
+                        log.error("重新定义失败：" + index + "----" + throwable.toString());
                         return null;
                     }
 

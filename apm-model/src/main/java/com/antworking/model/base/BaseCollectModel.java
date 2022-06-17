@@ -35,6 +35,9 @@ public class BaseCollectModel {
     }
 
     public void putChildes(BaseCollectModel children) {
+        if (childes == null) {
+            childes = new LinkedList<BaseCollectModel>();
+        }
         this.childes.add(children);
     }
 
@@ -135,9 +138,21 @@ public class BaseCollectModel {
     }
 
 
-
     @Override
     public String toString() {
         return "BaseCollectModel =====>  " + new Gson().toJson(this);
+    }
+
+    public void reset() {
+       this.id =null;
+       this.startTime=null;
+       this.endTime=null;
+       this.timeUse=null;
+       this.host=null;
+       this.appName=null;
+       this.order=null;
+       this.node=null;
+       this.label=null;
+       this.crux=false;
     }
 }

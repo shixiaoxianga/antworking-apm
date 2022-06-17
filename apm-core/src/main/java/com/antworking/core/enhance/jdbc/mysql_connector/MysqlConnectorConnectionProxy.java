@@ -1,7 +1,7 @@
 package com.antworking.core.enhance.jdbc.mysql_connector;
 
 import com.antworking.core.AntWorkingContextManager;
-import com.antworking.core.method.MethodTools;
+import com.antworking.core.tools.CollectionModelTools;
 import com.antworking.model.base.BaseCollectModel;
 import com.antworking.model.base.error.ErrorDescribeModel;
 import com.antworking.model.base.jdbc.JdbcDescribeModel;
@@ -12,20 +12,22 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class MysqlConnectorConnectionProxy implements InvocationHandler {
 
-    private Object target;
-    private BaseCollectModel model;
+    //应该有线程安全问题
+    private BaseCollectModel jdbcModel;
     private JdbcDescribeModel jdbc;
-    private Throwable e;
-    //statement
+    //statement des
     MethodDescribeModel methodDescribeModel = null;
+
+
+    private Object target;
     private Method method;
     private Object[] args;
     private Object result;
+    private Throwable e;
     private boolean autoCommit;
     private final static String[] connection_agent_affair_methods = new String[]{"commit", "rollback"};
     private final static String connection_agent_set_auto_commit_method = "setAutoCommit";
@@ -35,7 +37,15 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
 
     public MysqlConnectorConnectionProxy(Object target, BaseCollectModel model) {
         this.target = target;
-        this.model = model;
+        //作用域于事务
+        init();
+
+
+    }
+    private void init(){
+        this.jdbcModel = new BaseCollectModel();
+        //没有开启自动提交只构建一个实例
+        CollectionModelTools.INSTANCE.createBaseCollectModel(jdbcModel, method, args, target.getClass(), null);
     }
 
     @Override
@@ -46,7 +56,7 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
             this.result = method.invoke(target, args);
         } catch (Throwable e) {
             this.e = e;
-            MethodTools.INSTANCE.end(e, model, target, args, method);
+            end();
             throw e;
         }
         transactional();
@@ -56,23 +66,6 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
 
 
     public void transactional() {
-/*        if (method.getName().equals(connection_agent_get_auto_commit_method)) {
-            MethodDescribeModel getCommentMethod = new MethodDescribeModel();
-            getCommentMethod.setName(method.getName());
-            getCommentMethod.setClazz(target.getClass().getName());
-            getCommentMethod.setReturnClazz(result.getClass().getName()+"_"+result);
-            model.putMethods(getCommentMethod);
-        }*/
-/*
-        if (method.getName().equals(connection_agent_set_auto_commit_method)) {
-            MethodDescribeModel setCommentMethod = new MethodDescribeModel();
-            setCommentMethod.setName(method.getName()+"_"+args[0]);
-            setCommentMethod.setParamClazz(method.getParameterTypes());
-            setCommentMethod.setClazz(target.getClass().getName());
-            model.putMethods(setCommentMethod);
-        }
-*/
-
         for (String affairMethodName : connection_agent_affair_methods) {
             if (affairMethodName.equals(method.getName())) {
                 MethodDescribeModel affairMethod = new MethodDescribeModel();
@@ -80,22 +73,33 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
                 affairMethod.setParamClazz(method.getParameterTypes());
                 affairMethod.setClazz(target.getClass().getName());
                 methodDescribeModel.setData(jdbc);
-                model.putMethods(affairMethod);
-                MethodTools.INSTANCE.end(null, model, target, args, method);
+                jdbcModel.putMethods(affairMethod);
+                System.out.println("因为执行了事务，提交子节点model");
+                end();
+                //下一个做准备
+                init();
             }
         }
     }
 
+
     public void statement() {
-        System.out.println(this.result);
         for (String statement : connection_agent_statement_method) {
             if (statement.equals(method.getName())) {
-                handlerCommit();
+
+                //自动提交事务的作用域
+                if (getAutoCommit()) {
+                    jdbcModel = new BaseCollectModel();
+                    CollectionModelTools.INSTANCE.createBaseCollectModel(jdbcModel, method, args, target.getClass(), methodDescribeModel);
+                }
                 this.methodDescribeModel = new MethodDescribeModel();
+                //作用域于statement
                 this.jdbc = new JdbcDescribeModel();
+
+                handlerCommit();
                 this.result = Proxy.newProxyInstance(this.getClass().getClassLoader(),
                         new Class[]{java.sql.PreparedStatement.class, java.sql.Statement.class, java.sql.CallableStatement.class},
-                        new MysqlConnectorStatementProxy(result, model, jdbc, methodDescribeModel));
+                        new MysqlConnectorStatementProxy(result, jdbcModel, jdbc, methodDescribeModel, getAutoCommit()));
 
 
                 methodDescribeModel.setParam(args);
@@ -110,20 +114,25 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
                     error.setClazz(e.getClass().getName());
                     methodDescribeModel.setError(error);
                 }
-                model.putMethods(methodDescribeModel);
+                jdbcModel.putMethods(methodDescribeModel);
 
-                //自动提交
+
+/*                //自动提交
                 if (getAutoCommit()) {
-                    MethodTools.INSTANCE.end(null, model, target, args, method);
-                    model.setStartTime(System.currentTimeMillis());
-                    model.setChildes(new LinkedList<>());
-                    model.setId(null);
-                    model.setOrder(AntWorkingContextManager.getOrder());
-                    model.setMethods(new LinkedList<>());
-                }
+
+                    end();
+
+                    methodDescribeModel = new MethodDescribeModel();
+                    this.model = new BaseCollectModel();
+                    CollectionModelTools.INSTANCE.createBaseCollectModel(model, method, args, target.getClass(), methodDescribeModel);
+                }*/
 
             }
         }
+    }
+
+    private void end() {
+        CollectionModelTools.INSTANCE.childrenEnd(e, jdbcModel, target, args, method);
     }
 
     private void handlerCommit() {
@@ -131,7 +140,7 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
 
         final boolean autoCommit = getAutoCommit();
         getCommentMethod.setName("antworking_setCommit(" + autoCommit + ")");
-        model.putMethods(getCommentMethod);
+        jdbcModel.putMethods(getCommentMethod);
     }
 
 

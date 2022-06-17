@@ -2,7 +2,7 @@ package com.antworking.core.interceptor;
 
 import com.antworking.core.AntWorkingContextManager;
 import com.antworking.core.enhance.AbstractClassEnhance;
-import com.antworking.core.method.MethodTools;
+import com.antworking.core.tools.CollectionModelTools;
 import com.antworking.model.base.BaseCollectModel;
 import com.antworking.model.base.error.ErrorDescribeModel;
 import com.antworking.model.base.method.MethodDescribeModel;
@@ -27,6 +27,7 @@ public class ClassEnhanceInterceptor {
 
     private static AbstractClassEnhance enhance;
     private Throwable e;
+
     public ClassEnhanceInterceptor(AbstractClassEnhance enhance) {
         ClassEnhanceInterceptor.enhance = enhance;
     }
@@ -38,45 +39,45 @@ public class ClassEnhanceInterceptor {
                               @SuperCall Callable<Object> callable) {
         MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
         Object result = null;
-        final BaseCollectModel model = beforeBuild(method, args, clazz, methodDescribeModel);
-        enhance.invokeMethodBefore(clazz, method, args, model);
+        // TODO: 2022/6/17 这里判断 AntWorkingContextManager.get();=null 则不拦截。在servlet中set
+        BaseCollectModel model = AntWorkingContextManager.get();
+        if (model == null) {
+            model = CollectionModelTools.INSTANCE.linkStartCreateBaseCollectModel(method, args, clazz, methodDescribeModel);
+        } else {
+            CollectionModelTools.INSTANCE.createBaseCollectModel(model, method, args, clazz, methodDescribeModel);
+        }
+        enhance.invokeMethodBefore(clazz, method, args,model);
         try {
             result = callable.call();
         } catch (Throwable e) {
-            this.e=e;
-            enhance.invokeMethodException(clazz, method, args, e, afterBuild(method, args, clazz, model, e, methodDescribeModel));
+            this.e = e;
+            afterBuild(method, args, clazz, model, e, methodDescribeModel);
+            enhance.invokeMethodException(clazz, method, args, e,model);
+            CollectionModelTools.INSTANCE.totalEnd(e, model, clazz, args, method);
             log.debug("invoker class :{}  method : {} args: {} error:{}", clazz.getName(), method.getName(), Arrays.toString(args), e);
             e.printStackTrace();
         } finally {
-            if(this.e==null){
-                result = enhance.invokeMethodAfter(clazz, method, args, result, afterBuild(method, args, clazz, model, null, methodDescribeModel));
+            if (this.e == null) {
+                result = enhance.invokeMethodAfter(clazz, method, args, result,model);
+                afterBuild(method, args, clazz, model, e, methodDescribeModel);
+                CollectionModelTools.INSTANCE.totalEnd(e, model, clazz, args, method);
                 log.debug("invoker {} {} method args：{}", clazz.getName(), method.getName(), Arrays.toString(args));
             }
         }
         return result;
     }
 
-    private BaseCollectModel beforeBuild(Method method,
-                                         Object[] args,
-                                         Class<?> clazz,
-                                         MethodDescribeModel methodDescribeModel) {
-        BaseCollectModel model = new BaseCollectModel();
-        model.setOrder(AntWorkingContextManager.getOrder());
-        model.setStartTime(System.currentTimeMillis());
-        methodDescribeModel.setCrux(true);
-        MethodTools.INSTANCE.buildMethodDes(methodDescribeModel,clazz, args, method);
-        return model;
-    }
 
-    private BaseCollectModel afterBuild(Method method,
-                                        Object[] args,
-                                        Class<?> clazz,
-                                        BaseCollectModel model,
-                                        Throwable e,
-                                        MethodDescribeModel methodDescribeModel) {
+    private void afterBuild(Method method,
+                            Object[] args,
+                            Class<?> clazz,
+                            BaseCollectModel model,
+                            Throwable e,
+                            MethodDescribeModel methodDescribeModel) {
         model.setEndTime(System.currentTimeMillis());
         if (e != null) {
-            ErrorDescribeModel error = new ErrorDescribeModel();
+            ErrorDescribeModel error
+                    = new ErrorDescribeModel();
             error.setTimeStamp(System.currentTimeMillis());
             error.setStacks(Arrays.stream(e.getStackTrace()).map(Object::toString).toArray(String[]::new));
             error.setMessage(e.getMessage());
@@ -84,6 +85,5 @@ public class ClassEnhanceInterceptor {
             methodDescribeModel.setError(error);
         }
         model.putMethods(methodDescribeModel);
-        return model;
     }
 }

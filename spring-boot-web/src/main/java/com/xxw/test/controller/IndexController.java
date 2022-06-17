@@ -15,7 +15,7 @@ public class IndexController {
 
     @Autowired
     private UserDao userDao;
-//    @Transactional
+    @Transactional
     @GetMapping("test2")
     public String test2(String a){
         userDao.findUser("1","xxw");

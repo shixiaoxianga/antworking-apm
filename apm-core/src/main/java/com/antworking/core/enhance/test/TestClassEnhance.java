@@ -1,5 +1,6 @@
 package com.antworking.core.enhance.test;
 
+import com.antworking.common.ConstantNode;
 import com.antworking.core.enhance.AbstractClassEnhance;
 import com.antworking.core.matchers.AbstractMethodMatchers;
 import com.antworking.model.base.BaseCollectModel;
@@ -27,7 +28,8 @@ public class TestClassEnhance extends AbstractClassEnhance {
 
     @Override
     public void invokeMethodBefore(Class<?> clazz, Method method, Object[] args, BaseCollectModel model) {
-
+        model.setNode("myController");
+        model.setCrux(false);
     }
 
     @Override

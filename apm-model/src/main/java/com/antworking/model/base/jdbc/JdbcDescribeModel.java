@@ -25,6 +25,11 @@ public class JdbcDescribeModel {
         this.params.add(paramValues);
     }
 
+    public void reset() {
+        this.sql=null;
+        this.params=null;
+    }
+
     public static class ParamValues {
         public ParamValues(int index, String value) {
             this.index = index;

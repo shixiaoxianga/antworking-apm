@@ -3,10 +3,8 @@ package com.antworking.core.enhance.jdbc.mysql_connector;
 import com.antworking.common.ConstantNode;
 import com.antworking.core.AntWorkingContextManager;
 import com.antworking.core.enhance.AbstractClassEnhance;
-import com.antworking.core.matchers.AbstractMethodMatchers;
-import com.antworking.core.method.MethodTools;
+import com.antworking.core.tools.CollectionModelTools;
 import com.antworking.model.base.BaseCollectModel;
-import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.slf4j.Logger;
@@ -14,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.concurrent.Callable;
 
 /**
  * @author XiangXiaoWei
@@ -47,13 +44,12 @@ public class NonRegisteringDriverClassEnhance extends AbstractClassEnhance {
         if (result instanceof java.sql.Connection) {
             return Proxy.newProxyInstance(this.getClass().getClassLoader(),
                     new Class[]{java.sql.Connection.class},
-                    new MysqlConnectorConnectionProxy(result, model));
+                    new MysqlConnectorConnectionProxy(result,model));
         }
         return result;
     }
 
     @Override
     public void invokeMethodException(Class<?> clazz, Method method, Object[] args, Throwable e, BaseCollectModel model) {
-        MethodTools.INSTANCE.end(e,model,clazz,args,method);
     }
 }

@@ -6,6 +6,7 @@ import com.antworking.model.base.BaseCollectModel;
 import org.junit.platform.commons.util.ClassFilter;
 import org.junit.platform.commons.util.ReflectionUtils;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,14 +18,37 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AntWorkingContextManager {
 
 
-
     private final static List<IFilter> filters = new ArrayList<>();
     private final static List<MessageProcessor> processors = new ArrayList<>();
+
+    private static final ThreadLocal<BaseCollectModel> session = new ThreadLocal<>();
+    private static final ThreadLocal<AtomicInteger> invokerOrder = new ThreadLocal<>();
 
     AntWorkingContextManager() {
 
         initFilter();
         initMessageProcessor();
+    }
+
+    // TODO: 2022/6/17 读写锁
+
+    public static BaseCollectModel get() {
+        synchronized (session) {
+            return session.get();
+        }
+    }
+
+    public static void linkModel(BaseCollectModel model) {
+        BaseCollectModel threadLocalModel = get();
+        if(threadLocalModel!=null){
+            threadLocalModel.putChildes(model);
+        }
+    }
+
+    public static void set(BaseCollectModel model) {
+        synchronized (session){
+            session.set(model);
+        }
     }
 
     private void initMessageProcessor() {
@@ -33,7 +57,7 @@ public class AntWorkingContextManager {
                 ClassFilter.of(o -> MessageProcessor.class.isAssignableFrom(o) && !
                         o.isInterface())
         );
-        processClass.forEach(clazz->{
+        processClass.forEach(clazz -> {
             try {
                 processors.add((MessageProcessor) clazz.newInstance());
             } catch (Exception e) {
@@ -48,7 +72,7 @@ public class AntWorkingContextManager {
                 ClassFilter.of(o -> IFilter.class.isAssignableFrom(o) && !
                         o.isInterface())
         );
-        processClass.forEach(clazz->{
+        processClass.forEach(clazz -> {
             try {
                 filters.add((IFilter) clazz.newInstance());
             } catch (Exception e) {
@@ -58,10 +82,7 @@ public class AntWorkingContextManager {
     }
 
 
-    private static final ThreadLocal<BaseCollectModel> session = new ThreadLocal<>();
-    private static final ThreadLocal<AtomicInteger> invokerOrder = new ThreadLocal<>();
-
-    public static void push(BaseCollectModel data){
+    public static void push(BaseCollectModel data) {
         try {
 
         } finally {
@@ -69,14 +90,15 @@ public class AntWorkingContextManager {
             session.remove();
         }
     }
-    public static int getOrder(){
-        if(invokerOrder.get()==null){
+
+    public static int getOrder() {
+        if (invokerOrder.get() == null) {
             invokerOrder.set(new AtomicInteger(0));
         }
         return invokerOrder.get().getAndIncrement();
     }
 
-    public static void remove(){
+    public static void remove() {
         session.remove();
     }
 
