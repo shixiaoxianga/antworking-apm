@@ -75,7 +75,7 @@ public class AntWorkingAgent {
     private static void classEnhance(Instrumentation instrumentation) {
         log.info("start scan enhanceClass...");
         List<Class<?>> enhanceClass = ReflectionUtils.findAllClassesInPackage(
-                "com.antworking",
+                "com.antworking.core.enhance",
                 ClassFilter.of(o -> {
                     return AbstractClassEnhance.class.isAssignableFrom(o)
                             && !Modifier.isAbstract(o.getModifiers()) && !o.isInterface();
@@ -108,23 +108,6 @@ public class AntWorkingAgent {
         log.info(FileReadUtil.readResourcesFile("antworking"));
     }
 
-    public static class Transformation implements AgentBuilder.Transformer {
 
-        public AbstractClassEnhance classEnhance;
-
-        public Transformation(AbstractClassEnhance classEnhance) {
-            this.classEnhance = classEnhance;
-        }
-
-        @Override
-        public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder,
-                                                TypeDescription typeDescription,
-                                                ClassLoader classLoader,
-                                                JavaModule module) {
-            return builder
-                    .method(classEnhance.buildMethodMatchers())
-                    .intercept(MethodDelegation.to(new ClassEnhanceInterceptor(classEnhance)));
-        }
-    }
 
 }

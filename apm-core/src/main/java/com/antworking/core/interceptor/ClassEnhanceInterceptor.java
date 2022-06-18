@@ -25,11 +25,11 @@ import java.util.concurrent.Callable;
 public class ClassEnhanceInterceptor {
     private static final Logger log = LoggerFactory.getLogger(ClassEnhanceInterceptor.class);
 
-    private static AbstractClassEnhance enhance;
+    private AbstractClassEnhance enhance;
     private Throwable e;
 
     public ClassEnhanceInterceptor(AbstractClassEnhance enhance) {
-        ClassEnhanceInterceptor.enhance = enhance;
+        this.enhance = enhance;
     }
 
     @RuntimeType
@@ -39,32 +39,38 @@ public class ClassEnhanceInterceptor {
                               @SuperCall Callable<Object> callable) {
         MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
         Object result = null;
-        // TODO: 2022/6/17 这里判断 AntWorkingContextManager.get();=null 则不拦截。在servlet中set
         BaseCollectModel model = AntWorkingContextManager.get();
-        if (model == null) {
-            model = CollectionModelTools.INSTANCE.linkStartCreateBaseCollectModel(method, args, clazz, methodDescribeModel);
-        } else {
-            CollectionModelTools.INSTANCE.createBaseCollectModel(model, method, args, clazz, methodDescribeModel);
+        model = enhance.invokeMethodBefore(clazz, method, args, model, methodDescribeModel);
+        if(model==null){
+            model = CollectionModelTools.INSTANCE.createBaseCollectModel(null, method, args, clazz, methodDescribeModel);
         }
-        enhance.invokeMethodBefore(clazz, method, args,model);
         try {
             result = callable.call();
         } catch (Throwable e) {
             this.e = e;
             afterBuild(method, args, clazz, model, e, methodDescribeModel);
-            enhance.invokeMethodException(clazz, method, args, e,model);
-            CollectionModelTools.INSTANCE.totalEnd(e, model, clazz, args, method);
+            enhance.invokeMethodException(clazz, method, args, e, model, methodDescribeModel);
+
             log.debug("invoker class :{}  method : {} args: {} error:{}", clazz.getName(), method.getName(), Arrays.toString(args), e);
             e.printStackTrace();
         } finally {
             if (this.e == null) {
-                result = enhance.invokeMethodAfter(clazz, method, args, result,model);
-                afterBuild(method, args, clazz, model, e, methodDescribeModel);
-                CollectionModelTools.INSTANCE.totalEnd(e, model, clazz, args, method);
+                afterBuild(method, args, clazz, model, null, methodDescribeModel);
+                result = enhance.invokeMethodAfter(clazz, method, args, result, model, methodDescribeModel);
                 log.debug("invoker {} {} method args：{}", clazz.getName(), method.getName(), Arrays.toString(args));
             }
         }
         return result;
+    }
+
+    private Object call(Callable<Object> callable) {
+        Object call = null;
+        try {
+            call = callable.call();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return call;
     }
 
 

@@ -5,6 +5,7 @@ import com.antworking.core.AntWorkingContextManager;
 import com.antworking.core.enhance.AbstractClassEnhance;
 import com.antworking.core.tools.CollectionModelTools;
 import com.antworking.model.base.BaseCollectModel;
+import com.antworking.model.base.method.MethodDescribeModel;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.slf4j.Logger;
@@ -34,22 +35,21 @@ public class NonRegisteringDriverClassEnhance extends AbstractClassEnhance {
     }
 
     @Override
-    public void invokeMethodBefore(Class<?> clazz, Method method, Object[] args, BaseCollectModel model) {
-        model.setNode(ConstantNode.MYSQL_CONNECTOR);
-        model.setCrux(true);
+    public BaseCollectModel invokeMethodBefore(Class<?> clazz, Method method, Object[] args, BaseCollectModel model, MethodDescribeModel methodDescribeModel) {
+        return model;
     }
 
     @Override
-    public Object invokeMethodAfter(Class<?> clazz, Method method, Object[] args, Object result, BaseCollectModel model) {
+    public Object invokeMethodAfter(Class<?> clazz, Method method, Object[] args, Object result, BaseCollectModel model, MethodDescribeModel methodDescribeModel) {
         if (result instanceof java.sql.Connection) {
             return Proxy.newProxyInstance(this.getClass().getClassLoader(),
                     new Class[]{java.sql.Connection.class},
-                    new MysqlConnectorConnectionProxy(result,model));
+                    new MysqlConnectorConnectionProxy(result));
         }
         return result;
     }
 
     @Override
-    public void invokeMethodException(Class<?> clazz, Method method, Object[] args, Throwable e, BaseCollectModel model) {
+    public void invokeMethodException(Class<?> clazz, Method method, Object[] args, Throwable e, BaseCollectModel model, MethodDescribeModel methodDescribeModel) {
     }
 }

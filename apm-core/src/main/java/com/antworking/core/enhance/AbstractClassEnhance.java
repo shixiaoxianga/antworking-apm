@@ -2,6 +2,7 @@ package com.antworking.core.enhance;
 
 import com.antworking.core.matchers.AbstractMethodMatchers;
 import com.antworking.model.base.BaseCollectModel;
+import com.antworking.model.base.method.MethodDescribeModel;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
@@ -21,22 +22,25 @@ public abstract class AbstractClassEnhance {
     public abstract ElementMatcher<? super MethodDescription> buildMethodMatchers();
 
 
-    public abstract void invokeMethodBefore(Class<?> clazz,
+    public abstract BaseCollectModel invokeMethodBefore(Class<?> clazz,
                                             Method method,
                                             Object[] args,
-                                            BaseCollectModel model);
+                                            BaseCollectModel model,
+                                            MethodDescribeModel methodDescribeModel);
 
     public abstract Object invokeMethodAfter(Class<?> clazz,
-                                           Method method,
-                                           Object[] args,
-                                           Object result,
-                                           BaseCollectModel model);
+                                             Method method,
+                                             Object[] args,
+                                             Object result,
+                                             BaseCollectModel model,
+                                             MethodDescribeModel methodDescribeModel);
 
     public abstract void invokeMethodException(Class<?> clazz,
                                                Method method,
                                                Object[] args,
                                                Throwable e,
-                                               BaseCollectModel model);
+                                               BaseCollectModel model,
+                                               MethodDescribeModel methodDescribeModel);
 
 
     protected ElementMatcher<? super MethodDescription> arrayToMatcher(String[] methodNames) {

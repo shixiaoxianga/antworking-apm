@@ -1,0 +1,146 @@
+package com.antworking.core.enhance.tomcat;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Method;
+import java.util.Map;
+
+public class HttpServletRequestAdapter {
+        private final Object target;
+        private final Method _getRequestURI;
+        private final Method _getRequestURL;
+        private final Method _getParameterMap;
+        private final Method _getMethod;
+        private final Method _getHeader;
+        private final Method _getRemoteAddr;
+        private final Method _getRequestMethod;
+        private final Method _getReaderMethod;
+        private final Method _getInputStreamMethod;
+        private final static String targetClassName = "javax.servlet.http.HttpServletRequest";
+
+        public HttpServletRequestAdapter(Object target) {
+            this.target = target;
+            try {
+                Class<?> targetClass = target.getClass().getClassLoader().loadClass(targetClassName);
+                _getRequestURI = targetClass.getMethod("getRequestURI");
+                _getParameterMap = targetClass.getMethod("getParameterMap");
+                _getMethod = targetClass.getMethod("getMethod");
+                _getHeader = targetClass.getMethod("getHeader", String.class);
+                _getRemoteAddr = targetClass.getMethod("getRemoteAddr");
+                _getRequestURL = targetClass.getMethod("getRequestURL");
+                _getRequestMethod = targetClass.getMethod("getMethod");
+                _getReaderMethod = targetClass.getMethod("getReader");
+                _getInputStreamMethod = targetClass.getMethod("getInputStream");
+
+            } catch (NoSuchMethodException e) {
+                throw new IllegalArgumentException("error :" + e.getMessage() + ". probable cause the target is not belong javax.servlet.http.HttpServletRequest ");
+            } catch (ClassNotFoundException e) {
+                throw new IllegalArgumentException("error :" + e.getMessage() + ". probable cause the target is not belong javax.servlet.http.HttpServletRequest ");
+            }
+        }
+
+
+        public String getRequestURI() {
+            try {
+                return (String) _getRequestURI.invoke(target);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public String getRequestURL() {
+            try {
+                return _getRequestURL.invoke(target).toString();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public Map<String, String[]> getParameterMap() {
+            try {
+                return (Map<String, String[]>) _getParameterMap.invoke(target);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        public String getRequestMethod() {
+            try {
+                return (String) _getRequestMethod.invoke(target);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public String getMethod() {
+            try {
+                return (String) _getMethod.invoke(target);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public String getHeader(String name) {
+            try {
+                return (String) _getHeader.invoke(target, name);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public String getRemoteAddr() {
+            try {
+                return (String) _getRemoteAddr.invoke(target);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+/*
+        public String getRequestBody() {
+            try {
+                StringBuilder data = new StringBuilder();
+                String line = null;
+                BufferedReader reader = null;
+
+                reader = (BufferedReader)_getReaderMethod.invoke(target);
+                while (null != (line = reader.readLine()))
+                    data.append(line);
+                return data.toString();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+*/
+
+        public String getRequestBody() {
+            try {
+                //CoyoteInputStream
+                InputStream is = null;
+                is = (InputStream) _getInputStreamMethod.invoke(target);
+                StringBuilder sb = new StringBuilder();
+                byte[] b = new byte[is.available()];
+                for (int n; (n = is.read(b)) != -1; ) {
+                    sb.append(new String(b, 0, n));
+                }
+                return sb.toString();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public String getClientIp() {
+            String ip = getHeader("x-forwarded-for");
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = getHeader("Proxy-Client-IP");
+            }
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = getHeader("WL-Proxy-Client-IP");
+            }
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = getRemoteAddr();
+            }
+            return ip;
+        }
+
+    }
+

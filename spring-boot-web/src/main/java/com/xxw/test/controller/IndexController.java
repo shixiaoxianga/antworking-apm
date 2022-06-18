@@ -6,7 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sun.net.www.http.HttpClient;
+import sun.net.www.protocol.http.HttpURLConnection;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RequestMapping("/")
@@ -29,6 +32,8 @@ public class IndexController {
 
     @GetMapping("test1")
     public void test1(){
+
+
         userDao.findUser("1","xxw");
         System.out.println("-------------------");
         userDao.findUserById("2");
@@ -52,6 +57,14 @@ public class IndexController {
         System.out.println("error...................");
        throw new RuntimeException("模拟异常");
 
+    }
+
+    public void a() throws IOException {
+/*        final HttpClient aNew = HttpClient.New();
+        aNew.parseHTTP()
+        HttpURLConnection connection = new HttpURLConnection();
+        connection.connect();
+        connection.getOutputStream().write();*/
     }
 
 }

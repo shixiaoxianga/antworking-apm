@@ -1,5 +1,6 @@
 package com.antworking.core.enhance.jdbc.mysql_connector;
 
+import com.antworking.common.ConstantNode;
 import com.antworking.core.AntWorkingContextManager;
 import com.antworking.core.tools.CollectionModelTools;
 import com.antworking.model.base.BaseCollectModel;
@@ -35,7 +36,7 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
     private final static String[] connection_agent_statement_method = new String[]{"prepareStatement", "prepareCall"};
 
 
-    public MysqlConnectorConnectionProxy(Object target, BaseCollectModel model) {
+    public MysqlConnectorConnectionProxy(Object target) {
         this.target = target;
         //作用域于事务
         init();
@@ -44,6 +45,8 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
     }
     private void init(){
         this.jdbcModel = new BaseCollectModel();
+        jdbcModel.setNode(ConstantNode.MYSQL_CONNECTOR);
+        jdbcModel.setCrux(true);
         //没有开启自动提交只构建一个实例
         CollectionModelTools.INSTANCE.createBaseCollectModel(jdbcModel, method, args, target.getClass(), null);
     }
@@ -90,6 +93,8 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
                 //自动提交事务的作用域
                 if (getAutoCommit()) {
                     jdbcModel = new BaseCollectModel();
+                    jdbcModel.setNode(ConstantNode.MYSQL_CONNECTOR);
+                    jdbcModel.setCrux(true);
                     CollectionModelTools.INSTANCE.createBaseCollectModel(jdbcModel, method, args, target.getClass(), methodDescribeModel);
                 }
                 this.methodDescribeModel = new MethodDescribeModel();
