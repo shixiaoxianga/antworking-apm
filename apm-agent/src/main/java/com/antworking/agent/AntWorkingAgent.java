@@ -1,6 +1,7 @@
 package com.antworking.agent;
 
 import com.antworking.core.enhance.AbstractClassEnhance;
+import com.antworking.core.enhance.http.java_net.sendhttp.HttpProxy;
 import com.antworking.core.interceptor.ClassEnhanceInterceptor;
 import com.antworking.core.listener.AgentListener;
 import com.antworking.util.FileReadUtil;
@@ -31,6 +32,7 @@ public class AntWorkingAgent {
 
     public static void premain(String arg, Instrumentation instrumentation) {
         welcome();
+        HttpProxy.registerProtocol();;
         classEnhance(instrumentation);
 //        test(instrumentation);
     }

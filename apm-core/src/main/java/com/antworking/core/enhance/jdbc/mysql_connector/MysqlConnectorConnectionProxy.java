@@ -77,7 +77,6 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
                 affairMethod.setClazz(target.getClass().getName());
                 methodDescribeModel.setData(jdbc);
                 jdbcModel.putMethods(affairMethod);
-                System.out.println("因为执行了事务，提交子节点model");
                 end();
                 //下一个做准备
                 init();

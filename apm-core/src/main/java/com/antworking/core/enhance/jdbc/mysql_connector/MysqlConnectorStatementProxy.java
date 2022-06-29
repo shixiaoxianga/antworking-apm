@@ -59,7 +59,6 @@ public class MysqlConnectorStatementProxy implements InvocationHandler {
                 methodDescribeModel.setData(jdbc);
                 //自动提交
                 if (autoCommit) {
-                    System.out.println("因为开启了自动提交，提交子节点model");
                     CollectionModelTools.INSTANCE.childrenEnd(null, jdbcModel, target, args, method);
                     this.methodDescribeModel = new MethodDescribeModel();
 //                    CollectionModelTools.INSTANCE.createBaseCollectModel(jdbcModel, method, args, target.getClass(),null);
@@ -74,7 +73,9 @@ public class MysqlConnectorStatementProxy implements InvocationHandler {
             if (param.equals(method.getName())) {
                 int i = (int) args[0];
                 Object o = args[1];
-                jdbc.putParams(new JdbcDescribeModel.ParamValues(i, o.toString()));
+                String val =null;
+                if(o!=null)val=o.toString();
+                jdbc.putParams(new JdbcDescribeModel.ParamValues(i, val));
             }
         }
     }
