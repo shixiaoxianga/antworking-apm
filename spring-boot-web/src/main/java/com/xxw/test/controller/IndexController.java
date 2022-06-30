@@ -10,6 +10,7 @@ import sun.net.www.http.HttpClient;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 @RequestMapping("/")
@@ -49,6 +50,12 @@ public class IndexController {
 
         HttpUtils.sendPost("http://qzone-music.qq.com/fcg-bin/cgi_playlist_xml.fcg?uin=QQ号码&json=1&g_tk=1916754934","");
 
+
+        HttpUtil httpUtil = new HttpUtil();
+        HashMap map = new HashMap();
+        map.put("tel","131760");
+        httpUtil.sendGet("https://tcc.taobao.com/cc/json/mobile_tel_segment.htm",map);
+        httpUtil.sendPost("http://qzone-music.qq.com/fcg-bin/cgi_playlist_xml.fcg?uin=QQ号码&json=1&g_tk=1916754934",new HashMap<>());
     }
 
 

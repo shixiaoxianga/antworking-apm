@@ -17,6 +17,7 @@
         <module>apm-logger</module>
         <module>apm-model</module>
         <module>spring-boot-web</module>
+        <module>apm-plugs</module>
     </modules>
 
     <properties>

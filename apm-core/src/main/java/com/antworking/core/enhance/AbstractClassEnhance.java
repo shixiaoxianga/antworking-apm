@@ -4,6 +4,7 @@ import com.antworking.core.matchers.AbstractMethodMatchers;
 import com.antworking.model.base.BaseCollectModel;
 import com.antworking.model.base.method.MethodDescribeModel;
 import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
@@ -17,9 +18,13 @@ import java.util.concurrent.Callable;
 public abstract class AbstractClassEnhance {
 
 
-    public abstract String getClassName();
+    public abstract void init();
+
+    public abstract String interceptorClass();
 
     public abstract ElementMatcher<? super MethodDescription> buildMethodMatchers();
+
+    public abstract ElementMatcher<? super TypeDescription> buildTypeMatchers();
 
 
     public abstract BaseCollectModel invokeMethodBefore(Class<?> clazz,
