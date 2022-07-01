@@ -1,4 +1,3 @@
-/*
 package com.antworking.plugin.jdk.jdbc;
 
 import com.antworking.core.enhance.AbstractClassEnhance;
@@ -14,16 +13,12 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-*/
-/**
- * @author XiangXiaoWei
- * date 2022/6/14
- *//*
+public class JavaSqlDriverClassEnhance extends AbstractClassEnhance {
+    private static final Logger log = LoggerFactory.getLogger(JavaSqlDriverClassEnhance.class);
+    private final static String[] prepared_statement_class = {"com.mysql.cj.jdbc.NonRegisteringDriver","com.microsoft.sqlserver.jdbc.SQLServerDriver"};
+    private final static String[] driver_methods = new String[]{"connect"};
 
-public class NonRegisteringDriverClassEnhance extends AbstractClassEnhance {
-    private static final Logger log = LoggerFactory.getLogger(NonRegisteringDriverClassEnhance.class);
-    private final static String prepared_statement_class = "com.mysql.cj.jdbc.NonRegisteringDriver";
-    private final static String[] non_registering_driver_methods = new String[]{"connect"};
+    private final static ThreadLocal<BaseCollectModel> jdbcSession = new ThreadLocal<>();
 
     @Override
     public void init() {
@@ -37,12 +32,12 @@ public class NonRegisteringDriverClassEnhance extends AbstractClassEnhance {
 
     @Override
     public ElementMatcher<? super MethodDescription> buildMethodMatchers() {
-        return arrayMethodToMatcher(non_registering_driver_methods);
+        return arrayMethodToMatcher(driver_methods);
     }
 
     @Override
     public ElementMatcher<? super TypeDescription> buildTypeMatchers() {
-        return ElementMatchers.named(prepared_statement_class);
+        return ElementMatchers.named(prepared_statement_class[0]).or(ElementMatchers.named(prepared_statement_class[1]));
     }
 
     @Override
@@ -55,13 +50,13 @@ public class NonRegisteringDriverClassEnhance extends AbstractClassEnhance {
         if (result instanceof java.sql.Connection) {
             return Proxy.newProxyInstance(this.getClass().getClassLoader(),
                     new Class[]{java.sql.Connection.class},
-                    new MysqlConnectorConnectionProxy(result));
+                    new JavaSqlConnectionProxy(result,jdbcSession));
         }
         return result;
     }
 
     @Override
     public void invokeMethodException(Class<?> clazz, Method method, Object[] args, Throwable e, BaseCollectModel model, MethodDescribeModel methodDescribeModel) {
+
     }
 }
-*/

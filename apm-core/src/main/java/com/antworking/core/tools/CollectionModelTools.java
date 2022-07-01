@@ -86,7 +86,6 @@ public enum CollectionModelTools {
                                                    Class<?> clazz,
                                                    MethodDescribeModel methodDescribeModel) {
         if (methodDescribeModel != null) {
-            methodDescribeModel.setCrux(true);
             CollectionModelTools.INSTANCE.buildMethodDes(methodDescribeModel, clazz, args, method);
         }
         if (model == null) {

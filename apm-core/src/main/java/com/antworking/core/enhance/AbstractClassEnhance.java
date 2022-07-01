@@ -48,10 +48,18 @@ public abstract class AbstractClassEnhance {
                                                MethodDescribeModel methodDescribeModel);
 
 
-    protected ElementMatcher<? super MethodDescription> arrayToMatcher(String[] methodNames) {
+    protected ElementMatcher<? super MethodDescription> arrayMethodToMatcher(String[] methodNames) {
         ElementMatcher<? super MethodDescription> matchers = null;
         for (String methodName : methodNames) {
             matchers = ElementMatchers.named(methodName);
+        }
+        return matchers;
+    }
+
+    protected ElementMatcher<? super TypeDescription> arrayToClassMatcher(String[] clazz) {
+        ElementMatcher<? super TypeDescription> matchers = null;
+        for (String cla : clazz) {
+            matchers = ElementMatchers.named(cla);
         }
         return matchers;
     }
