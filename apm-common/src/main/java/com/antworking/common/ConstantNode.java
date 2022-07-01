@@ -7,5 +7,6 @@ package com.antworking.common;
 public class ConstantNode {
 
     public final static String MYSQL_CONNECTOR = "mysql_connector";
+    public final static String TOMCAT = "tomcat";
 
 }

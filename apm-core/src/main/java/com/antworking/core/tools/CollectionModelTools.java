@@ -52,6 +52,8 @@ public enum CollectionModelTools {
             methodDescribeModel.setError(error);
             model.putMethods(methodDescribeModel);
         }
+
+        log.info("整个节点Model=====》" + AntWorkingContextManager.get());
     }
 
 
@@ -74,37 +76,38 @@ public enum CollectionModelTools {
             methodDescribeModel.setError(error);
             model.putMethods(methodDescribeModel);
         }
-
-        // TODO: 2022/6/17 校验此数据是否是在请求线程中不是则忽略
-        AntWorkingContextManager.linkModel(model);
-        log.info("整个节点Model=====》" + AntWorkingContextManager.get());
+        if(AntWorkingContextManager.get()!=null){
+            AntWorkingContextManager.linkModel(model);
+        }
     }
 
 
-    public void createBaseCollectModel(BaseCollectModel model,
-                                       Method method,
-                                       Object[] args,
-                                       Class<?> clazz,
-                                       MethodDescribeModel methodDescribeModel) {
+    public BaseCollectModel createBaseCollectModel(BaseCollectModel model,
+                                                   Method method,
+                                                   Object[] args,
+                                                   Class<?> clazz,
+                                                   MethodDescribeModel methodDescribeModel) {
         if (methodDescribeModel != null) {
             methodDescribeModel.setCrux(true);
             CollectionModelTools.INSTANCE.buildMethodDes(methodDescribeModel, clazz, args, method);
         }
+        if (model == null) {
+            model = new BaseCollectModel();
+        }
         model.setOrder(AntWorkingContextManager.getOrder());
         model.setStartTime(System.currentTimeMillis());
-        //改为结束后link
-//        AntWorkingContextManager.linkModel(model);
+        return model;
     }
 
     //此方法适用于采集开始
-    public BaseCollectModel linkStartCreateBaseCollectModel(Method method,
-                                                   Object[] args,
-                                                   Class<?> clazz,
-                                                   MethodDescribeModel methodDescribeModel) {
+    public BaseCollectModel linkStartCreateBaseCollectModel(BaseCollectModel model,
+                                                            Method method,
+                                                            Object[] args,
+                                                            Class<?> clazz,
+                                                            MethodDescribeModel methodDescribeModel) {
         methodDescribeModel.setCrux(true);
         CollectionModelTools.INSTANCE.buildMethodDes(methodDescribeModel, clazz, args, method);
-
-        BaseCollectModel model = new BaseCollectModel();
+        if(model==null)model = new BaseCollectModel();
         model.setOrder(AntWorkingContextManager.getOrder());
         model.setStartTime(System.currentTimeMillis());
         AntWorkingContextManager.set(model);

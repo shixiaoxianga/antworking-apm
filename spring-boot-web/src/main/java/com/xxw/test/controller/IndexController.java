@@ -6,7 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sun.net.www.http.HttpClient;
+import sun.net.www.protocol.http.HttpURLConnection;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 @RequestMapping("/")
@@ -29,6 +33,8 @@ public class IndexController {
 
     @GetMapping("test1")
     public void test1(){
+
+
         userDao.findUser("1","xxw");
         System.out.println("-------------------");
         userDao.findUserById("2");
@@ -44,6 +50,12 @@ public class IndexController {
 
         HttpUtils.sendPost("http://qzone-music.qq.com/fcg-bin/cgi_playlist_xml.fcg?uin=QQ号码&json=1&g_tk=1916754934","");
 
+
+        HttpUtil httpUtil = new HttpUtil();
+        HashMap map = new HashMap();
+        map.put("tel","131760");
+        httpUtil.sendGet("https://tcc.taobao.com/cc/json/mobile_tel_segment.htm",map);
+        httpUtil.sendPost("http://qzone-music.qq.com/fcg-bin/cgi_playlist_xml.fcg?uin=QQ号码&json=1&g_tk=1916754934",new HashMap<>());
     }
 
 
@@ -52,6 +64,14 @@ public class IndexController {
         System.out.println("error...................");
        throw new RuntimeException("模拟异常");
 
+    }
+
+    public void a() throws IOException {
+/*        final HttpClient aNew = HttpClient.New();
+        aNew.parseHTTP()
+        HttpURLConnection connection = new HttpURLConnection();
+        connection.connect();
+        connection.getOutputStream().write();*/
     }
 
 }

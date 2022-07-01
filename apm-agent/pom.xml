@@ -71,11 +71,11 @@
                                 </filter>
                             </filters>
                             <relocations>
-                                <relocation>
+<!--                                <relocation>
                                     <pattern>${shade.net.bytebuddy.source}</pattern>
                                     <shadedPattern>${shade.net.bytebuddy.target}</shadedPattern>
+                                </relocation>-->
 
-                                </relocation>
                                 <relocation>
                                     <pattern>lombok</pattern>
                                     <shadedPattern>${shade.package}.org.projectlombok</shadedPattern>

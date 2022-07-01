@@ -1,6 +1,6 @@
-package com.antworking.core.enhance.jdbc.mysql_connector;
+package com.antworking.plugin.jdk.jdbc;
 
-import com.antworking.core.AntWorkingContextManager;
+import com.antworking.common.ConstantNode;
 import com.antworking.core.tools.CollectionModelTools;
 import com.antworking.model.base.BaseCollectModel;
 import com.antworking.model.base.error.ErrorDescribeModel;
@@ -12,7 +12,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.LinkedList;
 
 public class MysqlConnectorConnectionProxy implements InvocationHandler {
 
@@ -35,7 +34,7 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
     private final static String[] connection_agent_statement_method = new String[]{"prepareStatement", "prepareCall"};
 
 
-    public MysqlConnectorConnectionProxy(Object target, BaseCollectModel model) {
+    public MysqlConnectorConnectionProxy(Object target) {
         this.target = target;
         //作用域于事务
         init();
@@ -44,6 +43,8 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
     }
     private void init(){
         this.jdbcModel = new BaseCollectModel();
+        jdbcModel.setNode(ConstantNode.MYSQL_CONNECTOR);
+        jdbcModel.setCrux(true);
         //没有开启自动提交只构建一个实例
         CollectionModelTools.INSTANCE.createBaseCollectModel(jdbcModel, method, args, target.getClass(), null);
     }
@@ -74,7 +75,6 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
                 affairMethod.setClazz(target.getClass().getName());
                 methodDescribeModel.setData(jdbc);
                 jdbcModel.putMethods(affairMethod);
-                System.out.println("因为执行了事务，提交子节点model");
                 end();
                 //下一个做准备
                 init();
@@ -90,6 +90,8 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
                 //自动提交事务的作用域
                 if (getAutoCommit()) {
                     jdbcModel = new BaseCollectModel();
+                    jdbcModel.setNode(ConstantNode.MYSQL_CONNECTOR);
+                    jdbcModel.setCrux(true);
                     CollectionModelTools.INSTANCE.createBaseCollectModel(jdbcModel, method, args, target.getClass(), methodDescribeModel);
                 }
                 this.methodDescribeModel = new MethodDescribeModel();
