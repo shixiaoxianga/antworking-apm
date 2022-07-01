@@ -28,6 +28,67 @@
     </dependencies>
 
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>../../antworking-apm/plugin</outputDirectory>
+                    <excludes>
+                    </excludes>
+                </configuration>
+            </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+
+                                <excludes>
+                                    <exclude>org.slf4j:*</exclude>
+                                </excludes>
+
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>ch.qos.logback:logback-classic</artifact>
+                                    <excludes>
+                                        <exclude>org/slf4j/impl/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <relocations>
+                                <relocation>
+                                    <pattern>${shade.net.bytebuddy.source}</pattern>
+                                    <shadedPattern>${shade.net.bytebuddy.target}</shadedPattern>
+                                </relocation>
+
+                                <relocation>
+                                    <pattern>lombok</pattern>
+                                    <shadedPattern>${shade.package}.org.projectlombok</shadedPattern>
+                                </relocation>
+
+
+                                <relocation>
+                                    <pattern>gson</pattern>
+                                    <shadedPattern>${shade.package}.com.google.code.gson</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>

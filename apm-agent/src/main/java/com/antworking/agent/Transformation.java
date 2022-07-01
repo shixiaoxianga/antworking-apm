@@ -31,8 +31,9 @@ public class Transformation implements AgentBuilder.Transformer {
                     .intercept(MethodDelegation.to(new ClassEnhanceInterceptor(classEnhance)));
         }
         try {
+            final Class<?> aClass = Class.forName(classEnhance.interceptorClass(), true, new AntWorkingClassLoad());
             return definition
-                    .intercept(Advice.to(new AntWorkingClassLoad().loadClass(classEnhance.interceptorClass())));
+                    .intercept(Advice.to(aClass));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
