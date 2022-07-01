@@ -52,7 +52,7 @@ public class HttpServletClassEnhance extends AbstractClassEnhance {
 
         tomcatModel.setMethodName(request.getMethod());
         tomcatModel.setClientIp(request.getClientIp());
-        tomcatModel.setParamType(new Gson().toJson(request.getParameterMap()));
+//        tomcatModel.setParamType(new Gson().toJson(request.getParameterMap()));
         tomcatModel.setReqUri(request.getRequestURI());
         tomcatModel.setReqUrl(request.getRequestURL());
         methodDescribeModel.setData(tomcatModel);
@@ -64,12 +64,12 @@ public class HttpServletClassEnhance extends AbstractClassEnhance {
         tomcatModel.setRepCode(response.getResponseCode());
         model.setNode(ConstantNode.TOMCAT);
         model.setCrux(true);
-        CollectionModelTools.INSTANCE.totalEnd(null, model, clazz, args, method);
+        CollectionModelTools.INSTANCE.totalEnd(null, model, clazz, args, method,methodDescribeModel);
         return result;
     }
 
     @Override
     public void invokeMethodException(Class<?> clazz, Method method, Object[] args, Throwable e, BaseCollectModel model,MethodDescribeModel methodDescribeModel) {
-        CollectionModelTools.INSTANCE.totalEnd(e, model, clazz, args, method);
+        CollectionModelTools.INSTANCE.totalEnd(e, model, clazz, args, method,methodDescribeModel);
     }
 }

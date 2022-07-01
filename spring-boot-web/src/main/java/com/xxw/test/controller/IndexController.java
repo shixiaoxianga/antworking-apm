@@ -45,8 +45,13 @@ public class IndexController {
 
     @GetMapping("sendHttp")
     public void send(){
+
+        HttpUtils.sendGet("http://127.0.0.1:6060/test1","");
+        HttpUtils.sendGet("http://127.0.0.1:6060/test2","");
+
         //发送Http请求
         HttpUtils.sendGet("https://tcc.taobao.com/cc/json/mobile_tel_segment.htm","tel=131760");
+
 
         HttpUtils.sendPost("http://qzone-music.qq.com/fcg-bin/cgi_playlist_xml.fcg?uin=QQ号码&json=1&g_tk=1916754934","");
 

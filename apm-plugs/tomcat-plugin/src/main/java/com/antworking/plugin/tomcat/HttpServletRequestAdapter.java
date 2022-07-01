@@ -4,13 +4,14 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpServletRequestAdapter {
         private final Object target;
         private final Method _getRequestURI;
         private final Method _getRequestURL;
-        private final Method _getParameterMap;
+        private final Method    _getParameterMap;
         private final Method _getMethod;
         private final Method _getHeader;
         private final Method _getRemoteAddr;
@@ -59,7 +60,14 @@ public class HttpServletRequestAdapter {
 
         public Map<String, String[]> getParameterMap() {
             try {
-                return (Map<String, String[]>) _getParameterMap.invoke(target);
+                Map<String, String[]> invoke = (Map<String, String[]>)_getParameterMap.invoke(target);
+                Map<String, String[]> map_new = new HashMap<>();
+                //遍历集合
+                for (String s : invoke.keySet()) {
+                    String[] values = invoke.get(s);
+                    map_new.put(s, values);
+                }
+                return map_new;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

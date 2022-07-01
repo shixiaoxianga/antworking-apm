@@ -1,6 +1,9 @@
 package com.antworking.core.classload;
 
 import com.antworking.common.ConstantAgent;
+import com.antworking.core.interceptor.ClassEnhanceInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -14,7 +17,7 @@ import java.util.jar.JarFile;
  * date 2022/6/29
  */
 public class AntWorkingClassLoad extends ClassLoader {
-
+    private static final Logger log = LoggerFactory.getLogger(AntWorkingClassLoad.class);
     public static final List<Jar> jars = new ArrayList<>();
     //增强类
     public static final List<Class<?>> plugins = new LinkedList<>();
@@ -56,7 +59,9 @@ public class AntWorkingClassLoad extends ClassLoader {
 
 
     public static void scanPlugin() {
-        String jarPath = new File(System.getProperty("user.dir")).getAbsoluteFile() + "\\" + ConstantAgent.PLUGIN_FOLDER;
+        String absolutePath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getAbsolutePath();
+        String jarPath = absolutePath + "\\" + ConstantAgent.PLUGIN_FOLDER;
+        log.info("plugin path:{}",jarPath);
         final File file = new File(jarPath);
         final File[] files = file.listFiles();
         for (File jarFile : files) {

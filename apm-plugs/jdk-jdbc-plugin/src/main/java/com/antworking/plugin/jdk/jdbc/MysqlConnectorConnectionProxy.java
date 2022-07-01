@@ -7,11 +7,13 @@ import com.antworking.model.base.error.ErrorDescribeModel;
 import com.antworking.model.base.jdbc.JdbcDescribeModel;
 import com.antworking.model.base.method.MethodDescribeModel;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class MysqlConnectorConnectionProxy implements InvocationHandler {
 
@@ -101,7 +103,7 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
                 handlerCommit();
                 this.result = Proxy.newProxyInstance(this.getClass().getClassLoader(),
                         new Class[]{java.sql.PreparedStatement.class, java.sql.Statement.class, java.sql.CallableStatement.class},
-                        new MysqlConnectorStatementProxy(result, jdbcModel, jdbc, methodDescribeModel, getAutoCommit()));
+                        new MysqlConnectorStatementProxy(getTarget(result), jdbcModel, jdbc, methodDescribeModel, getAutoCommit()));
 
 
                 methodDescribeModel.setParam(args);
@@ -131,6 +133,30 @@ public class MysqlConnectorConnectionProxy implements InvocationHandler {
 
             }
         }
+    }
+
+
+    //获取原始对象
+    public Object getTarget(Object proxy) {
+        try {
+            Field field = null;
+            try {
+                field = proxy.getClass().getSuperclass().getDeclaredField("h");
+            } catch (NoSuchFieldException ex) {
+                return proxy;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            field.setAccessible(true);
+            //获取指定对象中此字段的值
+            MysqlConnectorStatementProxy personProxy = (MysqlConnectorStatementProxy) field.get(proxy);
+            Field person = personProxy.getClass().getDeclaredField("target");
+            person.setAccessible(true);
+            return person.get(personProxy);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     private void end() {

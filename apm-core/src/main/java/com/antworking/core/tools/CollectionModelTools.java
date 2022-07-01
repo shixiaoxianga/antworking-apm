@@ -38,7 +38,7 @@ public enum CollectionModelTools {
     }
 
 
-    public void totalEnd(Throwable e, BaseCollectModel model, Class<?> clazz, Object[] args, Method method) {
+    public void totalEnd(Throwable e, BaseCollectModel model, Class<?> clazz, Object[] args, Method method,MethodDescribeModel methodDescribeModel) {
         model.setEndTime(System.currentTimeMillis());
         if (e != null) {
             ErrorDescribeModel error = new ErrorDescribeModel();
@@ -46,11 +46,8 @@ public enum CollectionModelTools {
             error.setStacks(Arrays.stream(e.getStackTrace()).map(Object::toString).toArray(String[]::new));
             error.setMessage(e.getMessage());
             error.setClazz(e.getClass().getName());
-
-            MethodDescribeModel methodDescribeModel =
-                    CollectionModelTools.INSTANCE.buildMethodDes(clazz, args, method);
+            CollectionModelTools.INSTANCE.buildMethodDes(methodDescribeModel,clazz, args, method);
             methodDescribeModel.setError(error);
-            model.putMethods(methodDescribeModel);
         }
 
         log.info("整个节点Model=====》" + AntWorkingContextManager.get());
@@ -77,6 +74,7 @@ public enum CollectionModelTools {
             model.putMethods(methodDescribeModel);
         }
         if(AntWorkingContextManager.get()!=null){
+            log.info("linkModel thread:{}",Thread.currentThread().getName());
             AntWorkingContextManager.linkModel(model);
         }
     }
