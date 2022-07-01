@@ -83,10 +83,10 @@
                                 </filter>
                             </filters>
                             <relocations>
-                                <!--                                <relocation>
-                                                                    <pattern>${shade.net.bytebuddy.source}</pattern>
-                                                                    <shadedPattern>${shade.net.bytebuddy.target}</shadedPattern>
-                                                                </relocation>-->
+                                <relocation>
+                                    <pattern>${shade.net.bytebuddy.source}</pattern>
+                                    <shadedPattern>${shade.net.bytebuddy.target}</shadedPattern>
+                                </relocation>
 
                                 <relocation>
                                     <pattern>lombok</pattern>
