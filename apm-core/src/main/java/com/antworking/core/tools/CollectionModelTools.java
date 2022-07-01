@@ -51,6 +51,7 @@ public enum CollectionModelTools {
         }
 
         log.info("整个节点Model=====》" + AntWorkingContextManager.get());
+        AntWorkingContextManager.push(AntWorkingContextManager.get());
     }
 
 
