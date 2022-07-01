@@ -15,6 +15,10 @@ public class JdbcDescribeModel {
     // sql 语句
     private String sql;
 
+    private String database;
+
+    private String url;
+
     public List<ParamValues> params;
 
 
@@ -38,6 +42,22 @@ public class JdbcDescribeModel {
 
         public int index;
         public String value;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
     }
 
     public String getSql() {

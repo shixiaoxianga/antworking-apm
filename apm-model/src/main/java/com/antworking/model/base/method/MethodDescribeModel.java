@@ -22,7 +22,36 @@ public class MethodDescribeModel {
     private String[] paramClazz;
 
 
+    private Long startTime;
+    private Long endTime;
+    private Long timeUse;
+
     private ErrorDescribeModel error;
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.timeUse = endTime - startTime;
+        this.endTime = endTime;
+    }
+
+    public Long getTimeUse() {
+        return timeUse;
+    }
+
+    public void setTimeUse(Long timeUse) {
+        this.timeUse = timeUse;
+    }
 
     public ErrorDescribeModel getError() {
         return error;

@@ -32,24 +32,28 @@ public class JavaSqlStatementProxy implements InvocationHandler {
     private final static String[] prepared_statement_methods = new String[]{"execute", "executeUpdate", "executeQuery"};
 
 
-
-    public JavaSqlStatementProxy(Object target, BaseCollectModel jdbcModel,boolean autoCommit) {
+    public JavaSqlStatementProxy(Object target, BaseCollectModel jdbcModel, boolean autoCommit, JdbcDescribeModel jdbcDescribeModel) {
         this.target = target;
         //此作用域由connection控制
         this.jdbcModel = jdbcModel;
         this.autoCommit = autoCommit;
+
+        this.jdbcDescribeModel = jdbcDescribeModel;
         //初始化节点对象数据
         this.initObj();
     }
-    private void initObj(){
+
+    private void initObj() {
         this.methodDescribeModel = new MethodDescribeModel();
-        this.jdbcDescribeModel = new JdbcDescribeModel();
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         this.method = method;
         this.args = args;
+
+        methodDescribeModel.setStartTime(System.currentTimeMillis());
+
         try {
             result = method.invoke(target, args);
         } catch (Throwable e) {
@@ -57,19 +61,19 @@ public class JavaSqlStatementProxy implements InvocationHandler {
             CollectionModelTools.INSTANCE.childrenEnd(e, jdbcModel, target, args, method);
             throw e;
         }
+
+        methodDescribeModel.setEndTime(System.currentTimeMillis());
         setVal();
         execute();
         return result;
     }
 
 
-
     private void execute() {
         for (String execute : prepared_statement_methods) {
             if (execute.equals(method.getName())) {
-                jdbcDescribeModel.setSql(Arrays.toString(args));
                 methodDescribeModel.setData(jdbcDescribeModel);
-                saveMethod(jdbcModel,methodDescribeModel);
+                saveMethod(jdbcModel, methodDescribeModel);
                 //如果不是自动提交需要等待 提交或回滚事务结束
                 if (autoCommit) {
                     CollectionModelTools.INSTANCE.childrenEnd(null, jdbcModel, target, args, method);
@@ -100,8 +104,8 @@ public class JavaSqlStatementProxy implements InvocationHandler {
             if (param.equals(method.getName())) {
                 int i = (int) args[0];
                 Object o = args[1];
-                String val =null;
-                if(o!=null)val=o.toString();
+                String val = null;
+                if (o != null) val = o.toString();
                 jdbcDescribeModel.putParams(new JdbcDescribeModel.ParamValues(i, val));
             }
         }
