@@ -65,7 +65,9 @@ public class MethodDescribeModel {
     }
 
     public void setParam(Object[] args) {
-        this.param = Arrays.stream(args).map(Object::toString).toArray(String[]::new);
+        if(args!=null){
+            this.param = Arrays.stream(args).map(Object::toString).toArray(String[]::new);
+        }
     }
 
     public String getReturnClazz() {

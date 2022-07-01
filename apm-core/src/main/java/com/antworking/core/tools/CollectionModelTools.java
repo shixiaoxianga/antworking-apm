@@ -74,7 +74,6 @@ public enum CollectionModelTools {
             model.putMethods(methodDescribeModel);
         }
         if(AntWorkingContextManager.get()!=null){
-            log.info("linkModel thread:{}",Thread.currentThread().getName());
             AntWorkingContextManager.linkModel(model);
         }
     }

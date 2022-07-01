@@ -76,9 +76,17 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
     private void statement() {
         for (String statement : connection_agent_statement_method) {
             if (statement.equals(method.getName())) {
+                BaseCollectModel jdbcModel = null;
+                if (getAutoCommit()) {
+                    //初始化基本信息
+                    jdbcModel = new BaseCollectModel();
+                }else {
+                    jdbcModel = jdbcSession.get();
+                    if(jdbcModel==null){
+                        jdbcModel = new BaseCollectModel();
+                    }
+                }
 
-                //初始化基本信息
-                BaseCollectModel jdbcModel = new BaseCollectModel();
                 MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
                 jdbcModel.setNode(ConstantNode.MYSQL_CONNECTOR);
                 jdbcModel.setCrux(true);
@@ -86,10 +94,10 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
 
                 proxyStatement(jdbcModel);
 
-                handlerCommit(jdbcModel);
+//                handlerCommit(jdbcModel);
 
                 //记录当前方法信息
-                saveMethod(jdbcModel, methodDescribeModel);
+//                saveMethod(jdbcModel, methodDescribeModel);
 
                 jdbcSession.set(jdbcModel);
             }

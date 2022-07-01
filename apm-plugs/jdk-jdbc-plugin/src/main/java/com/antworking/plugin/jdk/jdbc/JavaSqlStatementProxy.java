@@ -2,11 +2,13 @@ package com.antworking.plugin.jdk.jdbc;
 
 import com.antworking.core.tools.CollectionModelTools;
 import com.antworking.model.base.BaseCollectModel;
+import com.antworking.model.base.error.ErrorDescribeModel;
 import com.antworking.model.base.jdbc.JdbcDescribeModel;
 import com.antworking.model.base.method.MethodDescribeModel;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class JavaSqlStatementProxy implements InvocationHandler {
 
@@ -65,6 +67,9 @@ public class JavaSqlStatementProxy implements InvocationHandler {
     private void execute() {
         for (String execute : prepared_statement_methods) {
             if (execute.equals(method.getName())) {
+                jdbcDescribeModel.setSql(Arrays.toString(args));
+                methodDescribeModel.setData(jdbcDescribeModel);
+                saveMethod(jdbcModel,methodDescribeModel);
                 //如果不是自动提交需要等待 提交或回滚事务结束
                 if (autoCommit) {
                     CollectionModelTools.INSTANCE.childrenEnd(null, jdbcModel, target, args, method);
@@ -72,6 +77,22 @@ public class JavaSqlStatementProxy implements InvocationHandler {
                 break;
             }
         }
+    }
+
+    private void saveMethod(BaseCollectModel jdbcModel, MethodDescribeModel methodDescribeModel) {
+        methodDescribeModel.setParam(args);
+        methodDescribeModel.setName(method.getName());
+        methodDescribeModel.setReturnClazz(method.getReturnType().getName());
+        methodDescribeModel.setClazz(target.getClass().getName());
+        if (e != null) {
+            ErrorDescribeModel error = new ErrorDescribeModel();
+            error.setTimeStamp(System.currentTimeMillis());
+            error.setStacks(e.getStackTrace());
+            error.setMessage(e.getMessage());
+            error.setClazz(e.getClass().getName());
+            methodDescribeModel.setError(error);
+        }
+        jdbcModel.putMethods(methodDescribeModel);
     }
 
     private void setVal() {
