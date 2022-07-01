@@ -23,11 +23,11 @@ public class IndexController {
     @GetMapping("test2")
     public String test2(String a){
         userDao.findUser("1","xxw");
-        System.out.println("-------------------");
+        System.out.println("test2-----------1");
         userDao.findUserById("2");
-        System.out.println("-------------------");
+        System.out.println("test2-----------2");
         userDao.insertUser(UUID.randomUUID().toString(),"老外","10");
-        System.out.println("-------------------");
+        System.out.println("test2-----------2");
         return a;
     }
 
@@ -36,11 +36,11 @@ public class IndexController {
 
 
         userDao.findUser("1","xxw");
-        System.out.println("-------------------");
+        System.out.println("test1-----------1");
         userDao.findUserById("2");
-        System.out.println("-------------------");
+        System.out.println("test1-----------2");
         userDao.insertUser(UUID.randomUUID().toString(),"老外","10");
-        System.out.println("-------------------");
+        System.out.println("test1---------------3");
     }
 
     @GetMapping("sendHttp")
