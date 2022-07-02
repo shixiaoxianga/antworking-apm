@@ -2,9 +2,12 @@ package com.antworking.core;
 
 import com.antworking.core.filter.IFilter;
 import com.antworking.core.processor.MessageProcessor;
+import com.antworking.core.tools.CollectionModelTools;
 import com.antworking.model.base.BaseCollectModel;
 import org.junit.platform.commons.util.ClassFilter;
 import org.junit.platform.commons.util.ReflectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -16,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * date 2022/6/11
  */
 public class AntWorkingContextManager {
-
+    private static final Logger log = LoggerFactory.getLogger(AntWorkingContextManager.class);
 
     private final static List<IFilter> filters = new ArrayList<>();
     private final static List<MessageProcessor> processors = new ArrayList<>();
