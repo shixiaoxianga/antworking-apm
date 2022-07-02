@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
@@ -21,6 +22,13 @@ public class AntWorkingClassLoad extends ClassLoader {
     public static final List<Jar> jars = new ArrayList<>();
     //增强类
     public static final List<Class<?>> plugins = new LinkedList<>();
+
+    public AntWorkingClassLoad(ClassLoader parent) {
+        super(parent);
+    }
+
+    public AntWorkingClassLoad() {
+    }
 
     public static void put(File jarFile) {
         try {
@@ -46,6 +54,43 @@ public class AntWorkingClassLoad extends ClassLoader {
     }
 
     @Override
+    protected URL findResource(String name) {
+        for (Jar jar : jars) {
+            JarEntry entry = jar.jarFile.getJarEntry(name);
+            if (entry != null) {
+                try {
+                    return new URL("jar:file:" + jar.sourceFile.getAbsolutePath() + "!/" + name);
+                } catch (MalformedURLException ignored) {
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected Enumeration<URL> findResources(String name) throws IOException {
+        List<URL> allResources = new LinkedList<>();
+        for (Jar jar : jars) {
+            JarEntry entry = jar.jarFile.getJarEntry(name);
+            if (entry != null) {
+                allResources.add(new URL("jar:file:" + jar.sourceFile.getAbsolutePath() + "!/" + name));
+            }
+        }
+
+        final Iterator<URL> iterator = allResources.iterator();
+        return new Enumeration<URL>() {
+            @Override
+            public boolean hasMoreElements() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public URL nextElement() {
+                return iterator.next();
+            }
+        };
+    }
+    @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         String clazzPath = name.replace(".", "/").concat(".class");
         for (Jar jar : jars) {
@@ -70,6 +115,7 @@ public class AntWorkingClassLoad extends ClassLoader {
         }
         return null;
     }
+
 
 
     public static void scanPlugin() {
