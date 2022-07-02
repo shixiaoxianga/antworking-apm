@@ -19,8 +19,7 @@ public class HttpServletClassEnhance extends AbstractClassEnhance {
 
     private final String CLASS_NAME="javax.servlet.http.HttpServlet";
 
-    HttpServletRequestAdapter request ;
-    HttpServletResponseAdapter response  ;
+
 
     @Override
     public void init() {
@@ -44,11 +43,12 @@ public class HttpServletClassEnhance extends AbstractClassEnhance {
 
     @Override
     public BaseCollectModel invokeMethodBefore(Class<?> clazz, Method method, Object[] args, BaseCollectModel model, MethodDescribeModel methodDescribeModel) {
+        HttpServletRequestAdapter request ;
+
         model = CollectionModelTools.INSTANCE.linkStartCreateBaseCollectModel(model, method, args, clazz, methodDescribeModel);
         Object req = args[0];
-        Object resp = args[1];
+
         request = new HttpServletRequestAdapter(req);
-        response  = new HttpServletResponseAdapter(resp);
         TomcatReqDescribeModel tomcatModel = new TomcatReqDescribeModel();
         tomcatModel.setMethodName(request.getMethod());
         tomcatModel.setClientIp(request.getClientIp());
@@ -61,6 +61,9 @@ public class HttpServletClassEnhance extends AbstractClassEnhance {
 
     @Override
     public Object invokeMethodAfter(Class<?> clazz, Method method, Object[] args, Object result, BaseCollectModel model,MethodDescribeModel methodDescribeModel) {
+        HttpServletResponseAdapter response  ;
+        Object resp = args[1];
+        response  = new HttpServletResponseAdapter(resp);
         ((TomcatReqDescribeModel)methodDescribeModel.getData()).setRepCode(response.getResponseCode());
         model.setNode(ConstantNode.TOMCAT);
         model.setCrux(true);
