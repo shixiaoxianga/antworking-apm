@@ -1,5 +1,6 @@
 package com.antworking.model.base.jdbc;
 
+import com.antworking.util.JsonUtil;
 import com.google.gson.Gson;
 
 import java.util.LinkedList;
@@ -74,5 +75,11 @@ public class JdbcDescribeModel {
 
     public void setParams(List<ParamValues> params) {
         this.params = params;
+    }
+
+
+    @Override
+    public String toString() {
+        return JsonUtil.toJsonString(this);
     }
 }

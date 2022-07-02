@@ -1,6 +1,7 @@
 package com.antworking.model.base.method;
 
 import com.antworking.model.base.error.ErrorDescribeModel;
+import com.antworking.util.JsonUtil;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
@@ -125,7 +126,7 @@ public class MethodDescribeModel {
 
     @Override
     public String toString() {
-        return "MethodDescribeModel =====>  " + new Gson().toJson(this);
+        return JsonUtil.toJsonString(this);
     }
 
     public void setParamClazz(Class<?>[] parameterTypes) {

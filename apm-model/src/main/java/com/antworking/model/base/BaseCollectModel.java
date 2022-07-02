@@ -1,6 +1,7 @@
 package com.antworking.model.base;
 
 import com.antworking.model.base.method.MethodDescribeModel;
+import com.antworking.util.JsonUtil;
 import com.google.gson.Gson;
 
 import java.util.LinkedList;
@@ -140,7 +141,7 @@ public class BaseCollectModel {
 
     @Override
     public String toString() {
-        return "BaseCollectModel =====>  " + new Gson().toJson(this);
+        return JsonUtil.toJsonString(this);
     }
 
     public void reset() {

@@ -1,5 +1,6 @@
 package com.antworking.model.base.error;
 
+import com.antworking.util.JsonUtil;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
@@ -49,9 +50,8 @@ public class ErrorDescribeModel {
 
     @Override
     public String toString() {
-        return "ErrorDescribeModel =====>  "+ new Gson().toJson(this);
+        return JsonUtil.toJsonString(this);
     }
-
     public void setStacks(StackTraceElement[] stackTrace) {
         this.stacks=Arrays.stream(stackTrace).map(Object::toString).toArray(String[]::new);
     }

@@ -1,5 +1,6 @@
 package com.antworking.model.base.tomcat;
 
+import com.antworking.util.JsonUtil;
 import com.google.gson.Gson;
 
 /**
@@ -86,6 +87,6 @@ public class TomcatReqDescribeModel {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return JsonUtil.toJsonString(this);
     }
 }
