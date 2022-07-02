@@ -29,13 +29,14 @@ public class HttpUrlConnectionClassEnhance extends AbstractClassEnhance {
 
     @Override
     public ElementMatcher<? super MethodDescription> buildMethodMatchers() {
-//        return ElementMatchers.named("connect");
-        return ElementMatchers.any();
+        return ElementMatchers.named("connect").or(ElementMatchers.named("openConnection"));
+//        return ElementMatchers.any();
     }
 
     @Override
     public ElementMatcher<? super TypeDescription> buildTypeMatchers() {
-        return ElementMatchers.nameEndsWith(".HttpURLConnection");
+        return ElementMatchers.named("sun.net.www.protocol.https.HttpsURLConnectionImpl")
+                .or(ElementMatchers.named("sun.net.www.protocol.http.HttpURLConnection"));
     }
 
     @Override

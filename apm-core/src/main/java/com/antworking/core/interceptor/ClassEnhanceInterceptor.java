@@ -26,7 +26,6 @@ public class ClassEnhanceInterceptor {
     private static final Logger log = LoggerFactory.getLogger(ClassEnhanceInterceptor.class);
 
     private AbstractClassEnhance enhance;
-    private Throwable e;
 
     public ClassEnhanceInterceptor(AbstractClassEnhance enhance) {
         this.enhance = enhance;
@@ -37,6 +36,7 @@ public class ClassEnhanceInterceptor {
                               @AllArguments Object[] args,
                               @Origin Class<?> clazz,
                               @SuperCall Callable<Object> callable) {
+        Throwable throwable = null;
         MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
         Object result = null;
         BaseCollectModel model = AntWorkingContextManager.get();
@@ -47,14 +47,14 @@ public class ClassEnhanceInterceptor {
         try {
             result = callable.call();
         } catch (Throwable e) {
-            this.e = e;
+            throwable = e;
             afterBuild(method, args, clazz, model, e, methodDescribeModel);
             enhance.invokeMethodException(clazz, method, args, e, model, methodDescribeModel);
 
             log.debug("invoker class :{}  method : {} args: {} error:{}", clazz.getName(), method.getName(), Arrays.toString(args), e);
             e.printStackTrace();
         } finally {
-            if (this.e == null) {
+            if (throwable == null) {
                 afterBuild(method, args, clazz, model, null, methodDescribeModel);
                 result = enhance.invokeMethodAfter(clazz, method, args, result, model, methodDescribeModel);
                 log.debug("invoker {} {} method args：{}", clazz.getName(), method.getName(), Arrays.toString(args));

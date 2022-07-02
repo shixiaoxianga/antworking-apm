@@ -4,6 +4,7 @@ import com.antworking.common.ConstantNode;
 import com.antworking.core.tools.CollectionModelTools;
 import com.antworking.model.base.BaseCollectModel;
 import com.antworking.model.base.error.ErrorDescribeModel;
+import com.antworking.model.base.jdbc.JdbcDescribeModel;
 import com.antworking.model.base.method.MethodDescribeModel;
 
 import java.lang.reflect.Field;
@@ -128,9 +129,16 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
     }
 
     private void proxyStatement(BaseCollectModel jdbcModel) {
+        final JdbcDescribeModel jdbcDescribeModel = new JdbcDescribeModel();
+        jdbcDescribeModel.setSql((String) args[0]);
+        try {
+            jdbcDescribeModel.setUrl(connection.getMetaData().getURL());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         this.methodResult = Proxy.newProxyInstance(this.getClass().getClassLoader(),
                 new Class[]{java.sql.PreparedStatement.class, java.sql.Statement.class, java.sql.CallableStatement.class},
-                new JavaSqlStatementProxy(getTarget(methodResult), jdbcModel, getAutoCommit()));
+                new JavaSqlStatementProxy(getTarget(methodResult), jdbcModel, getAutoCommit(), jdbcDescribeModel));
     }
 
 

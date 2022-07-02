@@ -30,6 +30,20 @@ public class AntWorkingClassLoad extends ClassLoader {
         }
     }
 
+    @Override
+    public InputStream getResourceAsStream(String clazzPath) {
+        for (Jar jar : jars) {
+            if (jar.jarFile.getJarEntry(clazzPath) != null) {
+                try {
+                    URL url = new URL("jar:file:" + jar.sourceFile.getAbsolutePath() + "!/" + clazzPath);
+                    return url.openStream();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return super.getResourceAsStream(clazzPath);
+    }
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -61,7 +75,7 @@ public class AntWorkingClassLoad extends ClassLoader {
     public static void scanPlugin() {
         String absolutePath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getAbsolutePath();
         String jarPath = absolutePath + "\\" + ConstantAgent.PLUGIN_FOLDER;
-        log.info("plugin path:{}",jarPath);
+        log.info("plugin path:{}", jarPath);
         final File file = new File(jarPath);
         final File[] files = file.listFiles();
         for (File jarFile : files) {

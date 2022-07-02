@@ -18,7 +18,7 @@ public class HttpServletClassEnhance extends AbstractClassEnhance {
 
 
     private final String CLASS_NAME="javax.servlet.http.HttpServlet";
-    TomcatReqDescribeModel tomcatModel = new TomcatReqDescribeModel();
+
     HttpServletRequestAdapter request ;
     HttpServletResponseAdapter response  ;
 
@@ -49,7 +49,7 @@ public class HttpServletClassEnhance extends AbstractClassEnhance {
         Object resp = args[1];
         request = new HttpServletRequestAdapter(req);
         response  = new HttpServletResponseAdapter(resp);
-
+        TomcatReqDescribeModel tomcatModel = new TomcatReqDescribeModel();
         tomcatModel.setMethodName(request.getMethod());
         tomcatModel.setClientIp(request.getClientIp());
 //        tomcatModel.setParamType(new Gson().toJson(request.getParameterMap()));
@@ -61,7 +61,7 @@ public class HttpServletClassEnhance extends AbstractClassEnhance {
 
     @Override
     public Object invokeMethodAfter(Class<?> clazz, Method method, Object[] args, Object result, BaseCollectModel model,MethodDescribeModel methodDescribeModel) {
-        tomcatModel.setRepCode(response.getResponseCode());
+        ((TomcatReqDescribeModel)methodDescribeModel.getData()).setRepCode(response.getResponseCode());
         model.setNode(ConstantNode.TOMCAT);
         model.setCrux(true);
         CollectionModelTools.INSTANCE.totalEnd(null, model, clazz, args, method,methodDescribeModel);

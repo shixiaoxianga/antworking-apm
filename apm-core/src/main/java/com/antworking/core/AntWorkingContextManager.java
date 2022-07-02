@@ -30,7 +30,6 @@ public class AntWorkingContextManager {
         initMessageProcessor();
     }
 
-    // TODO: 2022/6/17 读写锁
 
     public static BaseCollectModel get() {
         synchronized (session) {
@@ -84,10 +83,9 @@ public class AntWorkingContextManager {
 
     public static void push(BaseCollectModel data) {
         try {
-
+            // TODO: 2022/7/1 push
         } finally {
-            invokerOrder.remove();
-            session.remove();
+            remove();
         }
     }
 
@@ -100,6 +98,7 @@ public class AntWorkingContextManager {
 
     public static void remove() {
         session.remove();
+        invokerOrder.remove();
     }
 
 
