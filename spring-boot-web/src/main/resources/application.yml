@@ -4,9 +4,9 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: root
-    url: jdbc:mysql://127.0.0.1:3306/wei-apm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
+    url: jdbc:mysql://127.0.0.1:3306/apm-dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
   rabbitmq:
-    addresses: 192.168.65.129:5672
+    addresses: 127.0.0.1:5672
     connection-timeout: 15000
     password: root
     username: root

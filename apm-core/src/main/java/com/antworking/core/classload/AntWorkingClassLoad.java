@@ -2,6 +2,7 @@ package com.antworking.core.classload;
 
 import com.antworking.common.ConstantAgent;
 import com.antworking.core.interceptor.ClassEnhanceInterceptor;
+import com.antworking.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,7 +121,7 @@ public class AntWorkingClassLoad extends ClassLoader {
 
     public static void scanPlugin() {
         String absolutePath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getAbsolutePath();
-        String jarPath = absolutePath + "/" + ConstantAgent.PLUGIN_FOLDER;
+        String jarPath = absolutePath + FileUtil.getPlatFormSlash() + ConstantAgent.PLUGIN_FOLDER;
         log.info("plugin path:{}", jarPath);
         final File file = new File(jarPath);
         final File[] files = file.listFiles();
