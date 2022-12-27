@@ -120,7 +120,7 @@ public class AntWorkingClassLoad extends ClassLoader {
 
     public static void scanPlugin() {
         String absolutePath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getAbsolutePath();
-        String jarPath = absolutePath + "\\" + ConstantAgent.PLUGIN_FOLDER;
+        String jarPath = absolutePath + "/" + ConstantAgent.PLUGIN_FOLDER;
         log.info("plugin path:{}", jarPath);
         final File file = new File(jarPath);
         final File[] files = file.listFiles();
