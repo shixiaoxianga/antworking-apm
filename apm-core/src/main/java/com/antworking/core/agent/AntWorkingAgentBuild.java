@@ -9,13 +9,13 @@ import java.lang.instrument.Instrumentation;
  * date 2022/12/29 13:45
  */
 public interface AntWorkingAgentBuild {
-    public void ignore(AgentBuilder agentBuilder);
+    public AgentBuilder ignore(AgentBuilder agentBuilder);
 
-   public void listener(AgentBuilder agentBuilder);
+   public AgentBuilder listener(AgentBuilder agentBuilder);
 
-   public void initialization(AgentBuilder agentBuilder);
+   public AgentBuilder initialization(AgentBuilder agentBuilder);
 
-   public void inject(AgentBuilder agentBuilder,Instrumentation instrumentation);
+   public AgentBuilder inject(AgentBuilder agentBuilder,Instrumentation instrumentation);
 
     AgentBuilder applyPlugin(AgentBuilder agentBuilder);
 }

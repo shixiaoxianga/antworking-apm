@@ -38,28 +38,28 @@ public class DefaultAntWorkingAgentBuild implements AntWorkingAgentBuild {
     }
 
     @Override
-    public void ignore(AgentBuilder agentBuilder) {
+    public AgentBuilder ignore(AgentBuilder agentBuilder) {
         // TODO: 2022/12/29 额外添加配置忽略
-        agentBuilder
+        return agentBuilder
                 .ignore(ElementMatchers.named("net.bytebuddy"))
                 .ignore(ElementMatchers.named("com.intellij"));
     }
 
     @Override
-    public void listener(AgentBuilder agentBuilder) {
-        agentBuilder.with(new AntWorkingAgentListener());
+    public AgentBuilder listener(AgentBuilder agentBuilder) {
+        return agentBuilder.with(new AntWorkingAgentListener());
     }
 
     @Override
-    public void initialization(AgentBuilder agentBuilder) {
-        agentBuilder.with(AgentBuilder.InitializationStrategy.NoOp.INSTANCE);
+    public AgentBuilder initialization(AgentBuilder agentBuilder) {
+        return agentBuilder.with(AgentBuilder.InitializationStrategy.NoOp.INSTANCE);
     }
 
     @Override
-    public void inject(AgentBuilder agentBuilder, Instrumentation instrumentation) {
+    public AgentBuilder inject(AgentBuilder agentBuilder, Instrumentation instrumentation) {
         ClassInjector.UsingUnsafe.Factory factory = ClassInjector.UsingUnsafe.Factory.resolve(instrumentation);
         factory.make(null, null).injectRaw(classByteMap);
-        agentBuilder.with(new AgentBuilder.InjectionStrategy.UsingUnsafe.OfFactory(factory));
+        return agentBuilder.with(new AgentBuilder.InjectionStrategy.UsingUnsafe.OfFactory(factory));
     }
 
     @Override
