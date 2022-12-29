@@ -10,6 +10,8 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.utility.JavaModule;
 
+import java.security.ProtectionDomain;
+
 public class Transformation implements AgentBuilder.Transformer {
 
     public AbstractClassEnhance classEnhance;
@@ -22,7 +24,8 @@ public class Transformation implements AgentBuilder.Transformer {
     public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder,
                                             TypeDescription typeDescription,
                                             ClassLoader classLoader,
-                                            JavaModule module) {
+                                            JavaModule module,
+                                            ProtectionDomain protectionDomain) {
         DynamicType.Builder.MethodDefinition.ImplementationDefinition<?> definition = builder
                 .method(classEnhance.buildMethodMatchers());
 
