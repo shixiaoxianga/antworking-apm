@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>com.antworking.apm</groupId>
-            <artifactId>apm-util</artifactId>
+            <artifactId>apm-tools</artifactId>
         </dependency>
     </dependencies>
 

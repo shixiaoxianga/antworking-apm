@@ -11,9 +11,6 @@
     <packaging>pom</packaging>
     <artifactId>apm-plugs</artifactId>
     <modules>
-        <module>jdk-jdbc-plugin</module>
-        <module>jdk-http-plugin</module>
-        <module>tomcat-plugin</module>
     </modules>
 
     <dependencies>
