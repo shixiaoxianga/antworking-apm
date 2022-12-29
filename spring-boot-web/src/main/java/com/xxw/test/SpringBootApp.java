@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 public class SpringBootApp {
 
     public static void main(String[] args) {
-        System.out.println(System.getProperty("java.protocol.handler.pkgs"));
+//        System.out.println(System.getProperty("java.protocol.handler.pkgs"));
         SpringApplication.run(SpringBootApp.class,args);
     }
 }

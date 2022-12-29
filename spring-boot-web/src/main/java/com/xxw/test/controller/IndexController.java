@@ -12,6 +12,8 @@ import sun.net.www.protocol.http.HttpURLConnection;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RequestMapping("/")
 @RestController
@@ -69,6 +71,13 @@ public class IndexController {
         System.out.println("error...................");
        throw new RuntimeException("模拟异常");
 
+    }
+    @GetMapping("x")
+    public void thread(){
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        executorService.submit(() -> {
+            System.out.println("run...");
+        });
     }
 
     public void a() throws IOException {

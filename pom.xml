@@ -18,6 +18,7 @@
         <module>apm-model</module>
         <module>spring-boot-web</module>
         <module>apm-plugs</module>
+        <module>apm-test-model</module>
     </modules>
 
     <properties>
@@ -25,7 +26,7 @@
         <shade.net.bytebuddy.source>net.bytebuddy</shade.net.bytebuddy.source>
         <shade.net.bytebuddy.target>${shade.package}.${shade.net.bytebuddy.source}</shade.net.bytebuddy.target>
 
-        <bytebuddy.version>1.12.10</bytebuddy.version>
+        <bytebuddy.version>1.12.20</bytebuddy.version>
         <junit.version>4.12</junit.version>
         <lombok.version>1.18.22</lombok.version>
         <junit-platform-commons.version>1.7.2</junit-platform-commons.version>

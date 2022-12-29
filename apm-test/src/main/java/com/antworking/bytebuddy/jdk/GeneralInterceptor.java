@@ -11,11 +11,6 @@ import java.util.concurrent.Callable;
 
 public class GeneralInterceptor {
 
-    private BootstrapAgent agent;
-
-    public GeneralInterceptor(BootstrapAgent agent) {
-        this.agent = agent;
-    }
 
     @RuntimeType
     public Object intercept(@AllArguments Object[] allArguments,
