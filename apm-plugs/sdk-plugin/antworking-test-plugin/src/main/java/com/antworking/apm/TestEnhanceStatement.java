@@ -34,7 +34,7 @@ public class TestEnhanceStatement extends AbstractEnhanceStatement {
         return builder.method(ElementMatchers.any())
                 .intercept(MethodDelegation.withDefaultConfiguration()
                         .filter(ElementMatchers.named("interceptor"))
-                        .to(new AwMethodIntercept()));
+                        .to(new AwMethodIntercept(new MethodInterceptHandlerImpl())));
     }
 
     public static void main(String[] args) throws Exception {
