@@ -26,4 +26,8 @@ public abstract class AbstractEnhanceStatement implements EnhanceStatement {
                                                     ClassLoader classLoader,
                                                     JavaModule module,
                                                     ProtectionDomain protectionDomain);
+
+    public String defaultInterceptMethodName() {
+        return "interceptor";
+    }
 }

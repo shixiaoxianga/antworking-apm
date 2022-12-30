@@ -20,8 +20,7 @@ public class TestEnhanceStatement extends AbstractEnhanceStatement {
 
     @Override
     public ElementMatcher<? super TypeDescription> doMatcherClass() {
-        return ElementMatchers.named("com.xxw.test.controller.IndexController")
-                .or(ElementMatchers.named("java.util.concurrent.ThreadPoolExecutor"));
+        return ElementMatchers.named("com.xxw.test.controller.IndexController");
     }
 
     @Override

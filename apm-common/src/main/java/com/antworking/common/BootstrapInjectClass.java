@@ -5,6 +5,8 @@ public class BootstrapInjectClass {
 
     public static String[] awClass = {
             "com.antworking.core.interceptor.AwMethodIntercept",
+            "com.antworking.core.handler.IMethodInterceptHandler",
+            "com.antworking.core.handler.AbstractMethodInterceptHandler",
             "com.antworking.logger.AwLog",
             "com.antworking.logger.AbstractAwLog",
             "com.antworking.logger.LoggerFactory",

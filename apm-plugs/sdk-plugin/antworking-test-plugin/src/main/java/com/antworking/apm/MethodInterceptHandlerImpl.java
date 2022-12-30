@@ -1,5 +1,6 @@
 package com.antworking.apm;
 
+import com.antworking.core.handler.AbstractMethodInterceptHandler;
 import com.antworking.core.handler.IMethodInterceptHandler;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
@@ -8,28 +9,26 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-public class MethodInterceptHandlerImpl implements IMethodInterceptHandler {
+public class MethodInterceptHandlerImpl extends AbstractMethodInterceptHandler {
     private final AwLog log = LoggerFactory.getLogger(MethodInterceptHandlerImpl.class);
 
     @Override
-    public void before(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doBefore(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
 
     }
 
     @Override
-    public Object after(Method method, Object[] params, Class<?> clazz, Callable<Object> callable, Object result) {
-        log.info("methodName: {} args: {} clazz: {} res:{} ",
-                method.getName(), Arrays.toString(params), clazz, result);
+    public Object doAfter(Method method, Object[] params, Class<?> clazz, Callable<Object> callable, Object result) {
         return null;
     }
 
     @Override
-    public void _catch(Throwable e, Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doCatch(Throwable e, Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
 
     }
 
     @Override
-    public void _final(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doFinal(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
 
     }
 }

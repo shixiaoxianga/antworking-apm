@@ -18,6 +18,8 @@
         <module>spring-boot-web</module>
         <module>apm-plugs</module>
         <module>apm-example</module>
+        <module>apm-web</module>
+        <module>apm-data</module>
     </modules>
 
     <properties>
