@@ -53,17 +53,18 @@
 
                                 <excludes>
                                     <exclude>org.slf4j:*</exclude>
+<!--                                    <exclude>com.antworking.apm:apm-logger</exclude>-->
                                 </excludes>
 
                             </artifactSet>
-                            <filters>
-                                <filter>
-                                    <artifact>ch.qos.logback:logback-classic</artifact>
-                                    <excludes>
-                                        <exclude>org/slf4j/impl/**</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
+<!--                            <filters>-->
+<!--                                <filter>-->
+<!--                                    <artifact>ch.qos.logback:logback-classic</artifact>-->
+<!--                                    <excludes>-->
+<!--                                        <exclude>org/slf4j/impl/**</exclude>-->
+<!--                                    </excludes>-->
+<!--                                </filter>-->
+<!--                            </filters>-->
                             <relocations>
                                 <relocation>
                                     <pattern>${shade.net.bytebuddy.source}</pattern>

@@ -77,7 +77,7 @@ public abstract class AbstractAwLog implements AwLog {
 
     @Override
     public boolean isDebugEnabled() {
-        return true;
+        return false;
     }
 
     @Override

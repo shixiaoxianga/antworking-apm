@@ -13,9 +13,10 @@ public interface AntWorkingAgentBuild {
 
    public AgentBuilder listener(AgentBuilder agentBuilder);
 
-   public AgentBuilder initialization(AgentBuilder agentBuilder);
 
    public AgentBuilder inject(AgentBuilder agentBuilder,Instrumentation instrumentation);
 
     AgentBuilder applyPlugin(AgentBuilder agentBuilder);
+
+    AgentBuilder strategy(AgentBuilder agentBuilder);
 }

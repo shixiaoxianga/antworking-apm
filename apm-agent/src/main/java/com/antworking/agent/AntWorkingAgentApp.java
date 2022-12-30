@@ -35,7 +35,7 @@ public class AntWorkingAgentApp {
     private static void initByteBuddy(Instrumentation instrumentation) {
         AgentBuilder agentBuilder = new AgentBuilder.Default();
         agentBuilder = AntWorkingFactory.INSTANCE.factoryAWBuild().ignore(agentBuilder);
-        agentBuilder = AntWorkingFactory.INSTANCE.factoryAWBuild().initialization(agentBuilder);
+        agentBuilder = AntWorkingFactory.INSTANCE.factoryAWBuild().strategy(agentBuilder);
         agentBuilder = AntWorkingFactory.INSTANCE.factoryAWBuild().listener(agentBuilder);
         agentBuilder = AntWorkingFactory.INSTANCE.factoryAWBuild().ignore(agentBuilder);
         agentBuilder = AntWorkingFactory.INSTANCE.factoryAWBuild().inject(agentBuilder, instrumentation);

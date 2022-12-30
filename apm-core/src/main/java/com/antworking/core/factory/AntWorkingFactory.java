@@ -15,7 +15,7 @@ public enum AntWorkingFactory {
     INSTANCE;
 
     public AntWorkingAgentBuild factoryAWBuild() {
-        return new DefaultAntWorkingAgentBuild();
+        return DefaultAntWorkingAgentBuild.INSTANCE;
     }
 
 

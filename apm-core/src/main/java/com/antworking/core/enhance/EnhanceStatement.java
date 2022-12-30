@@ -14,5 +14,9 @@ import java.security.ProtectionDomain;
 public interface EnhanceStatement {
     ElementMatcher<? super TypeDescription> matcherClass();
 
-    DynamicType.Builder<?> define(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain);
+    DynamicType.Builder<?> define(DynamicType.Builder<?> builder,
+                                  TypeDescription typeDescription,
+                                  ClassLoader classLoader,
+                                  JavaModule module,
+                                  ProtectionDomain protectionDomain);
 }
