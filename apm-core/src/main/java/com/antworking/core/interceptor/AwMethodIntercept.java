@@ -19,7 +19,11 @@ public class AwMethodIntercept {
                               @AllArguments Object[] args,
                               @Origin Class<?> clazz,
                               @SuperCall Callable<Object> callable) throws Exception {
-        log.info("methodName :{} args:{} clazz:{}", method.getName(), Arrays.toString(args), clazz);
-        return callable.call();
+        Object result = callable.call();
+        log.info("methodName :{} args:{} clazz:{} res:{} ",
+                method.getName(),
+                Arrays.toString(args),
+                clazz, result);
+        return result;
     }
 }

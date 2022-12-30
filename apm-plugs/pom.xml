@@ -12,6 +12,7 @@
     <artifactId>apm-plugs</artifactId>
     <modules>
         <module>sdk-plugin</module>
+        <module>bootstrap-plugin</module>
     </modules>
 
     <dependencies>
@@ -52,8 +53,10 @@
                             <artifactSet>
 
                                 <excludes>
-                                    <exclude>org.slf4j:*</exclude>
-<!--                                    <exclude>com.antworking.apm:apm-logger</exclude>-->
+                                    <exclude>com.antworking.apm:apm-logger</exclude>
+                                    <exclude>com.antworking.apm:apm-common</exclude>
+                                    <exclude>com.antworking.apm:apm-core</exclude>
+                                    <exclude>com.antworking.apm:apm-util</exclude>
                                 </excludes>
 
                             </artifactSet>

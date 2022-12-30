@@ -13,12 +13,15 @@ import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 
 import java.security.ProtectionDomain;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class TestEnhanceStatement extends AbstractEnhanceStatement {
     private final AwLog log = LoggerFactory.getLogger(TestEnhanceStatement.class);
+
     @Override
     public ElementMatcher<? super TypeDescription> doMatcherClass() {
-        return ElementMatchers.named("com.xxw.test.controller.IndexController");
+        return ElementMatchers.named("com.xxw.test.controller.IndexController")
+                .or(ElementMatchers.named("java.util.concurrent.ThreadPoolExecutor"));
     }
 
     @Override
@@ -27,7 +30,7 @@ public class TestEnhanceStatement extends AbstractEnhanceStatement {
                                            ClassLoader classLoader,
                                            JavaModule module,
                                            ProtectionDomain protectionDomain) {
-        log.debug("define class: {}",typeDescription.getName());
+        log.debug("define class: {}", typeDescription.getName());
         return builder.method(ElementMatchers.any())
                 .intercept(MethodDelegation.withDefaultConfiguration()
                         .filter(ElementMatchers.named("interceptor"))
