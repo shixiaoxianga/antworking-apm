@@ -15,6 +15,7 @@
         <module>antworking-test-plugin</module>
         <module>tomcat-plugin</module>
         <module>jdbc-plugin</module>
+        <module>redis-template-plugin</module>
     </modules>
 
     <properties>

@@ -1,4 +1,4 @@
-package com.antworking.javasql.model;
+package com.antworking.plugin.javasql.model;
 
 import com.antworking.util.JsonUtil;
 import com.google.gson.Gson;

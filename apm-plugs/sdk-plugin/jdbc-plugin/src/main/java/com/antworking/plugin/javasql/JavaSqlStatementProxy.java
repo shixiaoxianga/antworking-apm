@@ -1,16 +1,14 @@
-package com.antworking.javasql;
+package com.antworking.plugin.javasql;
 
 import com.antworking.core.collect.AwCollectManager;
 import com.antworking.core.common.ConstantAppNode;
-import com.antworking.javasql.model.JdbcDescribeModel;
+import com.antworking.plugin.javasql.model.JdbcDescribeModel;
 import com.antworking.model.collect.CollectDataBaseModel;
 import com.antworking.model.collect.MethodDescribeModel;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JavaSqlStatementProxy implements InvocationHandler {

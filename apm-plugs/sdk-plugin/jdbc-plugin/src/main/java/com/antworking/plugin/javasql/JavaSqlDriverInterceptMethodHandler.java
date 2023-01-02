@@ -1,4 +1,4 @@
-package com.antworking.javasql;
+package com.antworking.plugin.javasql;
 
 import com.antworking.core.collect.AwCollectManager;
 import com.antworking.core.common.ConstantAppNode;
@@ -6,12 +6,9 @@ import com.antworking.core.handler.AbstractMethodInterceptHandler;
 import com.antworking.model.collect.CollectDataBaseModel;
 import com.antworking.model.collect.ErrorDescribeModel;
 import com.antworking.model.collect.MethodDescribeModel;
-import com.antworking.model.core.AppNode;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class JavaSqlDriverInterceptMethodHandler extends AbstractMethodInterceptHandler {

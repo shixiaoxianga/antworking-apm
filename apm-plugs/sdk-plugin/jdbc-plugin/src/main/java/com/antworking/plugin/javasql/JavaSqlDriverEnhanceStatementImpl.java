@@ -1,4 +1,4 @@
-package com.antworking.javasql;
+package com.antworking.plugin.javasql;
 
 import com.antworking.core.enhance.AbstractEnhanceStatement;
 import com.antworking.core.interceptor.AwMethodIntercept;

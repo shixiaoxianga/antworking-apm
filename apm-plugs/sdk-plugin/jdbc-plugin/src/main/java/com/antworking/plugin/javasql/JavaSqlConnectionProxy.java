@@ -1,8 +1,7 @@
-package com.antworking.javasql;
+package com.antworking.plugin.javasql;
 
 import com.antworking.core.collect.AwCollectManager;
-import com.antworking.core.common.ConstantAppNode;
-import com.antworking.javasql.model.JdbcDescribeModel;
+import com.antworking.plugin.javasql.model.JdbcDescribeModel;
 import com.antworking.model.collect.CollectDataBaseModel;
 import com.antworking.model.collect.MethodDescribeModel;
 

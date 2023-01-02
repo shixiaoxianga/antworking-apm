@@ -12,7 +12,8 @@ import java.security.ProtectionDomain;
 
 public class AwTransform implements AgentBuilder.Transformer {
     private AwLog log = LoggerFactory.getLogger(AwTransform.class);
-    private final EnhanceStatement statement ;
+    private final EnhanceStatement statement;
+
     public AwTransform(EnhanceStatement statement) {
         this.statement = statement;
     }
@@ -23,7 +24,9 @@ public class AwTransform implements AgentBuilder.Transformer {
                                             ClassLoader classLoader,
                                             JavaModule module,
                                             ProtectionDomain protectionDomain) {
-        log.debug("transform name:{}",typeDescription.getName());
-        return statement.define(builder,typeDescription,classLoader,module,protectionDomain);
+        log.debug("transform class name:{}", typeDescription.getName());
+        DynamicType.Builder<?> define = statement.define(builder, typeDescription, classLoader, module, protectionDomain);
+        if (define == null) return builder;
+        return define;
     }
 }

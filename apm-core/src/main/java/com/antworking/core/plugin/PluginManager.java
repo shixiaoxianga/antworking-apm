@@ -2,6 +2,7 @@ package com.antworking.core.plugin;
 
 import com.antworking.common.ConstantAw;
 import com.antworking.core.classload.AntWorkingClassLoad;
+import com.antworking.core.enhance.EnhanceStatement;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
 import com.antworking.util.FileUtil;
@@ -10,10 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.jar.JarFile;
 
 public enum PluginManager {
@@ -35,14 +33,17 @@ public enum PluginManager {
         for (File jarFile : files) {
             try {
                 log.info("loaded plugin file name:{}", jarFile.getName());
-                URL url = new URL("jar:file:" + jarFile.getAbsolutePath() + "!/" + "plugins.antworking");
-                InputStream inputStream = url.openStream();
-                byte[] b = new byte[inputStream.available()];
-                inputStream.read(b);
-                String clazz = new String(b);
+                URL url = new URL("jar:file:" + jarFile.getAbsolutePath() + "!/" + "plugins.antworking.properties");
                 put(jarFile);
-                Class<?> aClass = AntWorkingClassLoad.INSTANCE.loadClass(clazz);
-                enhanceStatement.add(aClass);
+                Properties properties = new Properties();
+                InputStream inputStream = url.openStream();
+                properties.load(inputStream);
+                String val = (String) properties.get(EnhanceStatement.class.getName());
+                String[] clazzArr = val.split(",");
+                for (String clazz : clazzArr) {
+                    Class<?> aClass = AntWorkingClassLoad.INSTANCE.loadClass(clazz);
+                    enhanceStatement.add(aClass);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
