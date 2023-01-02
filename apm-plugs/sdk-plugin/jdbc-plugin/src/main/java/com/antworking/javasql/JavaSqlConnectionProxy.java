@@ -1,11 +1,19 @@
 package com.antworking.javasql;
 
+import com.antworking.core.collect.AwCollectManager;
+import com.antworking.core.common.ConstantAppNode;
+import com.antworking.javasql.model.JdbcDescribeModel;
+import com.antworking.model.collect.CollectDataBaseModel;
+import com.antworking.model.collect.MethodDescribeModel;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JavaSqlConnectionProxy implements InvocationHandler {
 
@@ -20,6 +28,7 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
     private Object methodResult;
     private Method method;
     private Object[] args;
+
     private Throwable e;
 
     public JavaSqlConnectionProxy(Object target) {
@@ -37,8 +46,7 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
             this.e = e;
             throw e;
         }
-
-//        statement();
+        statement();
         //处理事务
         transactional();
         return this.methodResult;
@@ -47,7 +55,15 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
     public void transactional() {
         for (String affairMethodName : connection_agent_affair_methods) {
             if (affairMethodName.equals(method.getName())) {
-
+                List<CollectDataBaseModel> modelList = JavaSqlStatementProxy.jdbcSession.get();
+                modelList.forEach(model -> {
+                    ((JdbcDescribeModel)
+                            (((MethodDescribeModel)
+                                    model.getData())).getData())
+                            .setAutoCommit(affairMethodName);
+                });
+                modelList.forEach(AwCollectManager::put);
+                JavaSqlStatementProxy.jdbcSession.remove();
             }
         }
     }
@@ -71,9 +87,14 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
     }
 
     private void proxyStatement() {
-        this.methodResult = Proxy.newProxyInstance(this.getClass().getClassLoader(),
-                new Class[]{java.sql.PreparedStatement.class, java.sql.Statement.class, java.sql.CallableStatement.class},
-                new JavaSqlStatementProxy(getTarget(methodResult), getAutoCommit()));
+        try {
+            this.methodResult = Proxy.newProxyInstance(this.getClass().getClassLoader(),
+                    new Class[]{java.sql.PreparedStatement.class, java.sql.Statement.class, java.sql.CallableStatement.class},
+                    new JavaSqlStatementProxy(getTarget(methodResult), getAutoCommit()
+                            , new JdbcDescribeModel(args[0].toString(), "", connection.getMetaData().getURL(), new ArrayList<>())));
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     //获取原始对象

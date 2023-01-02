@@ -20,7 +20,8 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
         CollectDataBaseModel model = null;
         TomcatReqDescribeModel tomcat = new TomcatReqDescribeModel();
         if (AwCollectManager.get() == null) {
-            model = CollectDataBaseModel.init(true, tomcat, ConstantAppNode.TOMCAT.setVersion("未知"));
+            model = CollectDataBaseModel.init(true, tomcat, ConstantAppNode.TOMCAT.setVersion("未知"),
+                    Thread.currentThread().getName());
             AwCollectManager.create(model);
         }
         HttpServletRequestAdapter request;

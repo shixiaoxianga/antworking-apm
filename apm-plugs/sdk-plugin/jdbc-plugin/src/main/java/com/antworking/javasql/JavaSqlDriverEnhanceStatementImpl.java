@@ -12,7 +12,10 @@ import net.bytebuddy.utility.JavaModule;
 import java.security.ProtectionDomain;
 
 public class JavaSqlDriverEnhanceStatementImpl extends AbstractEnhanceStatement {
-    private final static String[] prepared_statement_class = {"com.mysql.cj.jdbc.NonRegisteringDriver","com.microsoft.sqlserver.jdbc.SQLServerDriver"};
+    private final static String[] prepared_statement_class = {
+            "com.mysql.cj.jdbc.NonRegisteringDriver",
+            "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+    };
     private final static String[] driver_methods = new String[]{"connect"};
 
     @Override

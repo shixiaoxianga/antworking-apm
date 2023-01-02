@@ -61,9 +61,26 @@ public class AwCollectManager {
         AntWorkingFactory.INSTANCE.writeFactory().write(models);
     }
 
+    /**
+     * describe：web结束使用
+     * @author AXiang
+     * date 2022/12/31 23:36
+     */
     public static void write() {
         List<CollectDataBaseModel> models = get();
         AntWorkingFactory.INSTANCE.writeFactory().write(models);
+    }
+
+    /**
+     * describe：非web节点提交使用
+     * @author AXiang
+     * date 2022/12/31 23:36
+     */
+    public static void finish() {
+        List<CollectDataBaseModel> models = get();
+        if (models.size() == 1) {
+            AntWorkingFactory.INSTANCE.writeFactory().write(models);
+        }
     }
 
     public static CollectDataBaseModel getNode(String nodeName) {

@@ -9,8 +9,11 @@ import com.antworking.model.core.AppNode;
 public class ConstantAppNode {
     public final static String _TOMCAT = "Tomcat";
     public final static String _MYSQL_DRIVE = "MysqlDrive";
+    public final static String _SQL_DRIVE_CONNECT = "JavaSqlDriveConnect";
 
     public final static AppNode TOMCAT = new AppNode(1,_TOMCAT);
-    public final static AppNode MYSQL_DRIVE = new AppNode(2,_MYSQL_DRIVE);
+    public final static AppNode SQL_DRIVE_CONNECT = new AppNode(2,_SQL_DRIVE_CONNECT);
+
+    public final static AppNode SQL_DRIVE_STATEMENT = new AppNode(3,"JavaSqlStatement");
 
 }

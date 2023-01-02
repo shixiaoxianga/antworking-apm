@@ -1,7 +1,17 @@
 package com.antworking.javasql;
+
+import com.antworking.core.collect.AwCollectManager;
+import com.antworking.core.common.ConstantAppNode;
+import com.antworking.javasql.model.JdbcDescribeModel;
+import com.antworking.model.collect.CollectDataBaseModel;
+import com.antworking.model.collect.MethodDescribeModel;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class JavaSqlStatementProxy implements InvocationHandler {
 
@@ -11,6 +21,10 @@ public class JavaSqlStatementProxy implements InvocationHandler {
     private Object[] args;
     private Object result;
     private boolean autoCommit;
+    private long beginTime;
+
+    private JdbcDescribeModel jdbcDescribeModel;
+    public final static ThreadLocal<List<CollectDataBaseModel>> jdbcSession = new ThreadLocal<>();
 
     private final static String[] prepared_statement_setMethods =
             new String[]{"setNull", "setBoolean", "setByte", "setShort",
@@ -21,9 +35,13 @@ public class JavaSqlStatementProxy implements InvocationHandler {
     private final static String[] prepared_statement_methods = new String[]{"execute", "executeUpdate", "executeQuery"};
 
 
-    public JavaSqlStatementProxy(Object target,  boolean autoCommit) {
+    public JavaSqlStatementProxy(Object target, boolean autoCommit, JdbcDescribeModel jdbcDescribeModel) {
         this.target = target;
         this.autoCommit = autoCommit;
+        this.jdbcDescribeModel = jdbcDescribeModel;
+        if (jdbcSession.get() == null) {
+            jdbcSession.set(new ArrayList<>());
+        }
     }
 
 
@@ -31,7 +49,7 @@ public class JavaSqlStatementProxy implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         this.method = method;
         this.args = args;
-
+        beginTime = System.currentTimeMillis();
         try {
             result = method.invoke(target, args);
         } catch (Throwable e) {
@@ -47,8 +65,26 @@ public class JavaSqlStatementProxy implements InvocationHandler {
     private void execute() {
         for (String execute : prepared_statement_methods) {
             if (execute.equals(method.getName())) {
+                MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
+                methodDescribeModel.setName(method.getName());
+                methodDescribeModel.setParam(args);
+                methodDescribeModel.setClazz(target.getClass().getName());
+                methodDescribeModel.setReturnClazz(result.getClass().getName());
+                methodDescribeModel.setData(jdbcDescribeModel);
+                CollectDataBaseModel model = CollectDataBaseModel.init(AwCollectManager.get() != null,
+                        methodDescribeModel,
+                        ConstantAppNode.SQL_DRIVE_STATEMENT,
+                        Thread.currentThread().getName());
+                model.setBeginTime(beginTime);
+                AwCollectManager.create(model);
                 //如果不是自动提交需要等待 提交或回滚事务结束
                 if (autoCommit) {
+                    jdbcDescribeModel.setAutoCommit("autoCommit");
+                    model.setEndTime(System.currentTimeMillis());
+                    AwCollectManager.put(model);
+                } else {
+                    model.setEndTime(System.currentTimeMillis());
+                    jdbcSession.get().add(model);
                 }
                 break;
             }
@@ -63,6 +99,7 @@ public class JavaSqlStatementProxy implements InvocationHandler {
                 Object o = args[1];
                 String val = null;
                 if (o != null) val = o.toString();
+                jdbcDescribeModel.getParams().add(new JdbcDescribeModel.ParamValues(i, val));
             }
         }
     }

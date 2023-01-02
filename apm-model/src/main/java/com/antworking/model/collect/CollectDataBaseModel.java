@@ -20,11 +20,14 @@ public class CollectDataBaseModel {
     private Long useTime;
     private Object data;
     private AppNode appNode;
+
+    private String threadName;
     private ErrorDescribeModel error;
 
-    public static CollectDataBaseModel init(boolean isWeb, Object data, AppNode appNode) {
+    public static CollectDataBaseModel init(boolean isWeb, Object data, AppNode appNode, String threadName) {
         CollectDataBaseModel model = new CollectDataBaseModel(UUID.randomUUID().toString(), isWeb, data, appNode);
         model.setBeginTime(System.currentTimeMillis());
+        model.setThreadName(threadName);
         return model;
     }
 
@@ -114,5 +117,13 @@ public class CollectDataBaseModel {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
     }
 }

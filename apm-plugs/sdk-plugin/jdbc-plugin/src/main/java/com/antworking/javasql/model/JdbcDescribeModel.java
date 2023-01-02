@@ -18,10 +18,19 @@ public class JdbcDescribeModel {
 
     private String database;
 
+    private String autoCommit;
+
     private String url;
 
     public List<ParamValues> params;
 
+    public String getAutoCommit() {
+        return autoCommit;
+    }
+
+    public void setAutoCommit(String autoCommit) {
+        this.autoCommit = autoCommit;
+    }
 
     public void putParams(ParamValues paramValues) {
         if (params==null) {
@@ -77,6 +86,12 @@ public class JdbcDescribeModel {
         this.params = params;
     }
 
+    public JdbcDescribeModel(String sql, String database, String url, List<ParamValues> params) {
+        this.sql = sql;
+        this.database = database;
+        this.url = url;
+        this.params = params;
+    }
 
     @Override
     public String toString() {

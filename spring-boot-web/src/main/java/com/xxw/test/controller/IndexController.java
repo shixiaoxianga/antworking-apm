@@ -30,6 +30,8 @@ public class IndexController {
         System.out.println("test2-----------2");
         userDao.insertUser(UUID.randomUUID().toString(),"老外","10");
         System.out.println("test2-----------2");
+        userDao.insertUser(UUID.randomUUID().toString(),"测试","11");
+        System.out.println("test3-----------3");
         return a;
     }
 
