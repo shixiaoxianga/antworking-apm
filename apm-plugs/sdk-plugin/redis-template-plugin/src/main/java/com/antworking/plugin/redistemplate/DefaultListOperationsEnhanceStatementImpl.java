@@ -19,8 +19,13 @@ public class DefaultListOperationsEnhanceStatementImpl extends AbstractEnhanceSt
     }
 
     @Override
-    public DynamicType.Builder<?> doDefine(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
-        return builder.method(ElementMatchers.any())
+    public DynamicType.Builder<?> doDefine(DynamicType.Builder<?> builder,
+                                           TypeDescription typeDescription,
+                                           ClassLoader classLoader,
+                                           JavaModule module,
+                                           ProtectionDomain protectionDomain) {
+        return builder.method(CommonMethodHandler.getMatch()
+                        .and(ElementMatchers.not(ElementMatchers.isDeclaredBy(Object.class))))
                 .intercept(MethodDelegation.withDefaultConfiguration()
                         .filter(ElementMatchers.named(defaultInterceptMethodName()))
                         .to(new AwMethodIntercept(new CommonMethodHandler())));

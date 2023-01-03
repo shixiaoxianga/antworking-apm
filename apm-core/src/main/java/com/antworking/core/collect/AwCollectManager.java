@@ -17,7 +17,7 @@ public class AwCollectManager {
 
 
     /**
-     * describe：创建当前线程对象，若以创建返回false
+     * describe：当前线程不存在节点则创建当前线程对象，若以创建返回false
      *
      * @author AXiang
      * date 2022/12/30 15:15
@@ -33,6 +33,12 @@ public class AwCollectManager {
         }
     }
 
+    /**
+     * describe：当前线程不存在节点的话直接写入，存在则追加
+     *
+     * @author AXiang
+     * date 2023/1/3 09:47
+     */
     public static void put(CollectDataBaseModel model) {
         if (get() == null) {
             List<CollectDataBaseModel> models = new ArrayList<>();
@@ -63,6 +69,7 @@ public class AwCollectManager {
 
     /**
      * describe：web结束使用
+     *
      * @author AXiang
      * date 2022/12/31 23:36
      */
@@ -73,10 +80,11 @@ public class AwCollectManager {
 
     /**
      * describe：非web节点提交使用
+     *
      * @author AXiang
      * date 2022/12/31 23:36
      */
-    public static void finish() {
+    public static void put() {
         List<CollectDataBaseModel> models = get();
         if (models.size() == 1) {
             AntWorkingFactory.INSTANCE.writeFactory().write(models);
@@ -85,7 +93,7 @@ public class AwCollectManager {
 
     public static CollectDataBaseModel getNode(String nodeName) {
         List<CollectDataBaseModel> list = get();
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = list.size() - 1; i >= 0; i--) {
             if (list.get(i).getAppNode().getFrame().equals(nodeName)) {
                 return list.get(i);
             }

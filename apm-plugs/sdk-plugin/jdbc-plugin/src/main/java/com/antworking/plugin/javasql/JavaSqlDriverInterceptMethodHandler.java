@@ -58,6 +58,6 @@ public class JavaSqlDriverInterceptMethodHandler extends AbstractMethodIntercept
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._SQL_DRIVE_CONNECT);
         assert model != null;
         model.setEndTime(System.currentTimeMillis());
-        AwCollectManager.finish();
+        AwCollectManager.put();
     }
 }

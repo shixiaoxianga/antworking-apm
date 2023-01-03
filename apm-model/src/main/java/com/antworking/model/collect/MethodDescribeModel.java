@@ -1,8 +1,10 @@
 package com.antworking.model.collect;
+
 import com.antworking.util.JsonUtil;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class MethodDescribeModel {
 
@@ -74,8 +76,8 @@ public class MethodDescribeModel {
     }
 
     public void setParam(Object[] args) {
-        if(args!=null){
-            this.param = Arrays.stream(args).map(Object::toString).toArray(String[]::new);
+        if (args != null && args.length != 0) {
+            this.param = Arrays.stream(args).filter(Objects::nonNull).map(Object::toString).toArray(String[]::new);
         }
     }
 

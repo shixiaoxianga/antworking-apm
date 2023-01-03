@@ -88,6 +88,8 @@ public class IndexController {
     public void redis(){
      redisTemplate.opsForValue().set("name","Xiang");
         System.out.println(redisTemplate.opsForValue().get("name"));
+        redisTemplate.opsForList().leftPush("listkey","index1Val");
+        System.out.println(redisTemplate.opsForList().index("listkey", 0));
     }
 
     public void a() throws IOException {

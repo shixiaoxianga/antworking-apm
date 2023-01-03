@@ -74,7 +74,6 @@ public class JavaSqlStatementProxy implements InvocationHandler {
                         ConstantAppNode.SQL_DRIVE_STATEMENT,
                         Thread.currentThread().getName());
                 model.setBeginTime(beginTime);
-                AwCollectManager.create(model);
                 //如果不是自动提交需要等待 提交或回滚事务结束
                 if (autoCommit) {
                     jdbcDescribeModel.setAutoCommit("autoCommit");
