@@ -24,10 +24,23 @@ public class AwCollectManager {
      */
     public static boolean create(CollectDataBaseModel model) {
         synchronized (collectData) {
+            boolean b = get() == null;
+            if (b) {
+                List<CollectDataBaseModel> models = new ArrayList<>();
+                models.add(model);
+                collectData.set(models);
+            }
+            return b;
+        }
+    }
+    public static boolean createOrAdd(CollectDataBaseModel model) {
+        synchronized (collectData) {
             if (get() == null) {
                 List<CollectDataBaseModel> models = new ArrayList<>();
                 models.add(model);
                 collectData.set(models);
+            }else {
+                get().add(model);
             }
             return collectData.get() == null;
         }
@@ -64,6 +77,7 @@ public class AwCollectManager {
     }
 
     private static void write(List<CollectDataBaseModel> models) {
+        remove();
         AntWorkingFactory.INSTANCE.writeFactory().write(models);
     }
 
@@ -75,6 +89,7 @@ public class AwCollectManager {
      */
     public static void write() {
         List<CollectDataBaseModel> models = get();
+        remove();
         AntWorkingFactory.INSTANCE.writeFactory().write(models);
     }
 
@@ -87,8 +102,12 @@ public class AwCollectManager {
     public static void put() {
         List<CollectDataBaseModel> models = get();
         if (models.size() == 1) {
-            AntWorkingFactory.INSTANCE.writeFactory().write(models);
+            write(models);
         }
+    }
+    public static void finish() {
+        List<CollectDataBaseModel> models = get();
+        write(models);
     }
 
     public static CollectDataBaseModel getNode(String nodeName) {

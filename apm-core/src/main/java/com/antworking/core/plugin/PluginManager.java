@@ -21,7 +21,9 @@ public enum PluginManager {
     public static final List<Class<?>> enhanceStatement = new LinkedList<>();
 
     public static void scanPlugin() {
-        String absolutePath = System.getProperty("user.dir") + FileUtil.getPlatFormSlash() + ConstantAw.APP_FOLDER;
+        // TODO: 2023/1/3 处理main方法运行的时候获取路径
+        String apmFillPath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getParent();
+        String absolutePath = apmFillPath + FileUtil.getPlatFormSlash() + ConstantAw.APP_FOLDER;
         String jarPath = absolutePath + FileUtil.getPlatFormSlash() + ConstantAw.PLUGIN_FOLDER;
         log.info("plugin path:{}", jarPath);
         final File file = new File(jarPath);

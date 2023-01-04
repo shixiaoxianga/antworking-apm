@@ -90,6 +90,9 @@ public class IndexController {
         System.out.println(redisTemplate.opsForValue().get("name"));
         redisTemplate.opsForList().leftPush("listkey","index1Val");
         System.out.println(redisTemplate.opsForList().index("listkey", 0));
+        new Thread(()->{
+            System.out.println(redisTemplate.opsForValue().get("name"));
+        }).start();
     }
 
     public void a() throws IOException {

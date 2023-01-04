@@ -49,14 +49,13 @@ public class CommonMethodHandler extends AbstractMethodInterceptHandler {
     public void doBefore(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
         MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
         methodDescribeModel.setClazz(clazz.getName());
-        methodDescribeModel.setStartTime(System.currentTimeMillis());
         methodDescribeModel.setParam(params);
         methodDescribeModel.setName(method.getName());
         CollectDataBaseModel model = CollectDataBaseModel.init(AwCollectManager.get() != null,
                 methodDescribeModel,
                 ConstantAppNode.REDIS_TEMPLATE,
                 Thread.currentThread().getName());
-        AwCollectManager.put(model);
+        AwCollectManager.createOrAdd(model);
     }
 
     @Override
@@ -81,5 +80,10 @@ public class CommonMethodHandler extends AbstractMethodInterceptHandler {
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._REDIS_TEMPLATE);
         assert model != null;
         model.setEndTime(System.currentTimeMillis());
+        if (AwCollectManager.isExist()) {
+            if (!AwCollectManager.get().get(0).isWeb()) {
+                AwCollectManager.finish();
+            }
+        }
     }
 }
