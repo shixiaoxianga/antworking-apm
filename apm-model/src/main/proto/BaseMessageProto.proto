@@ -1,0 +1,9 @@
+syntax = "proto3";
+option java_package = "com.antworking.model.grpc";
+option java_outer_classname = "BaseMessageProto";
+message BaseMessage{
+  string route = 1;
+  bytes content = 2;
+  // event（事件消息）、api（接口消息）
+  string kind = 3;
+}

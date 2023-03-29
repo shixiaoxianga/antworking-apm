@@ -1,0 +1,7 @@
+antworking:
+  netty:
+    serverPort: 2002
+    serverHost: 0.0.0.0
+    boosThread: 1
+    workThread: 10
+

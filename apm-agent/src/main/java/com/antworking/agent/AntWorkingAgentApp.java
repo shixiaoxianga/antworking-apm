@@ -2,6 +2,7 @@ package com.antworking.agent;
 
 import com.antworking.core.classload.AntWorkingClassLoad;
 import com.antworking.core.factory.AntWorkingFactory;
+import com.antworking.core.netty.ClientRun;
 import com.antworking.core.plugin.PluginManager;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
@@ -21,6 +22,7 @@ public class AntWorkingAgentApp {
 
     public static void premain(String arg, Instrumentation instrumentation) {
         welcome();
+        new ClientRun().run();
         initPlugin();
         initByteBuddy(instrumentation);
         log.info("AntWorking init end...");

@@ -1,0 +1,20 @@
+syntax = "proto3";
+import "AppNodeProto.proto";
+import "ErrorDescribeProto.proto";
+option java_package = "com.antworking.model.grpc";
+option java_outer_classname = "CollectDataModelProto";
+
+message CollectData{
+  string id = 1;
+  bool isWeb = 2;
+  int32 order = 3;
+  int64 beginTime = 4;
+  int64 endTime = 5;
+  int64 useTime = 6;
+  bytes data = 7;
+  AppNode appNode = 8;
+  string threadName = 9;
+  ErrorDescribe error = 10;
+}
+
+
