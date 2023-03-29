@@ -2,7 +2,6 @@ package com.antworking.core.plugin;
 
 import com.antworking.common.ConstantAw;
 import com.antworking.core.classload.AntWorkingClassLoad;
-import com.antworking.core.enhance.EnhanceStatement;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
 import com.antworking.util.FileUtil;
@@ -40,7 +39,9 @@ public enum PluginManager {
                 Properties properties = new Properties();
                 InputStream inputStream = url.openStream();
                 properties.load(inputStream);
-                String val = (String) properties.get(EnhanceStatement.class.getName());
+                // TODO: 2023/3/29 待处理
+//                String val = (String) properties.get(EnhanceStatement.class.getName());
+                String val = "";
                 String[] clazzArr = val.split(",");
                 for (String clazz : clazzArr) {
                     Class<?> aClass = AntWorkingClassLoad.INSTANCE.loadClass(clazz);

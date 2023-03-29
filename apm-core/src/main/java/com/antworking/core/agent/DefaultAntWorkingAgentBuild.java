@@ -1,12 +1,9 @@
 package com.antworking.core.agent;
 
 import com.antworking.common.BootstrapInjectClass;
-import com.antworking.core.classload.AntWorkingClassLoad;
-import com.antworking.core.enhance.EnhanceStatement;
 import com.antworking.core.plugin.PluginManager;
 import com.antworking.core.transform.AwTransform;
 import com.antworking.logger.AwLog;
-import com.antworking.logger.AwLogSysOut;
 import com.antworking.logger.LoggerFactory;
 import com.antworking.core.tools.ClassUtil;
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -15,7 +12,6 @@ import net.bytebuddy.matcher.ElementMatchers;
 
 import java.io.InputStream;
 import java.lang.instrument.Instrumentation;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -75,15 +71,7 @@ public enum DefaultAntWorkingAgentBuild implements AntWorkingAgentBuild {
 
     @Override
     public AgentBuilder applyPlugin(AgentBuilder agentBuilder) {
-        for (Class<?> clazz : PluginManager.enhanceStatement) {
-            try {
-                EnhanceStatement statement = (EnhanceStatement) clazz.newInstance();
-                agentBuilder = agentBuilder.type(statement.matcherClass())
-                        .transform(new AwTransform(statement));
-            } catch (Throwable e) {
-                log.error(e, "apply plugin error :{}", e.toString());
-            }
-        }
+        // TODO: 2023/3/29 逻辑待处理
         return agentBuilder;
     }
 
