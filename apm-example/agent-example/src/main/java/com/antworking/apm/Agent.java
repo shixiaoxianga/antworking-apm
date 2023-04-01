@@ -12,8 +12,8 @@ import java.lang.instrument.Instrumentation;
 public class Agent {
     public static void main(String[] args) {
         premain(args, ByteBuddyAgent.install());
-        new User().run();
-        User.run1();
+        new AwUser().run();
+        AwUser.run1();
     }
 
     private static void print() {

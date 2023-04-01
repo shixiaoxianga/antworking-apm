@@ -1,23 +1,18 @@
 package com.antworking.core.interceptor;
 
-import com.antworking.core.handler.IMethodInterceptHandler;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
-import net.bytebuddy.implementation.bind.annotation.AllArguments;
-import net.bytebuddy.implementation.bind.annotation.Origin;
-import net.bytebuddy.implementation.bind.annotation.RuntimeType;
-import net.bytebuddy.implementation.bind.annotation.SuperCall;
+import net.bytebuddy.implementation.bind.annotation.*;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-public class AwMethodIntercept {
-    private final AwLog log = LoggerFactory.getLogger(AwMethodIntercept.class);
+public class AwStaticMethodIntercept {
+    private final AwLog log = LoggerFactory.getLogger(AwStaticMethodIntercept.class);
 
-    IMethodInterceptHandler handler;
+    AwStaticMethodInterceptHandler handler;
 
-    public AwMethodIntercept(IMethodInterceptHandler handler) {
+    public AwStaticMethodIntercept(AwStaticMethodInterceptHandler handler) {
         this.handler = handler;
     }
 

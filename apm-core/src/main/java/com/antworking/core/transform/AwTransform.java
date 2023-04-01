@@ -1,6 +1,6 @@
 package com.antworking.core.transform;
 
-import com.antworking.core.enhance.EnhanceStatement;
+import com.antworking.core.enhance.AwEnhanceStatement;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -12,9 +12,9 @@ import java.security.ProtectionDomain;
 
 public class AwTransform implements AgentBuilder.Transformer {
     private AwLog log = LoggerFactory.getLogger(AwTransform.class);
-    private final EnhanceStatement statement;
+    private final AwEnhanceStatement statement;
 
-    public AwTransform(EnhanceStatement statement) {
+    public AwTransform(AwEnhanceStatement statement) {
         this.statement = statement;
     }
 

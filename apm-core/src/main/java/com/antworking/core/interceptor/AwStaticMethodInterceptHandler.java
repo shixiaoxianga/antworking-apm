@@ -1,4 +1,4 @@
-package com.antworking.core.handler;
+package com.antworking.core.interceptor;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
  * @author AXiang
  * date 2022/12/30 12:20
  */
-public interface IMethodInterceptHandler {
+public interface AwStaticMethodInterceptHandler {
 
     void before(Method method,
                 Object[] params,

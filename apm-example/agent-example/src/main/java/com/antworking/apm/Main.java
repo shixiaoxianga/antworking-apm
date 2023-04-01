@@ -1,9 +1,7 @@
-package com.antworking.test;
+package com.antworking.apm;
 
 public class Main {
-    public Object object;
     public static void main(String[] args) {
-
         System.out.println("Hello world!");
     }
 }

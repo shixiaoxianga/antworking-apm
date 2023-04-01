@@ -1,7 +1,8 @@
 package com.antworking.core.plugin;
 
-import com.antworking.common.ConstantAw;
+import com.antworking.common.AwConstant;
 import com.antworking.core.classload.AntWorkingClassLoad;
+import com.antworking.core.enhance.AwEnhanceStatement;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
 import com.antworking.util.FileUtil;
@@ -16,14 +17,15 @@ import java.util.jar.JarFile;
 public enum PluginManager {
     INSTANCE;
     private static final AwLog log = LoggerFactory.getLogger(PluginManager.class);
-    public static final List<PluginManager.Jar> jars = new ArrayList<>();
-    public static final List<Class<?>> enhanceStatement = new LinkedList<>();
+    public static final List<PluginJar> jars = new ArrayList<>();
+    public static final List<PluginInst> pluginInst = new LinkedList<>();
 
     public static void scanPlugin() {
         // TODO: 2023/1/3 处理main方法运行的时候获取路径
         String apmFillPath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getParent();
-        String absolutePath = apmFillPath + FileUtil.getPlatFormSlash() + ConstantAw.APP_FOLDER;
-        String jarPath = absolutePath + FileUtil.getPlatFormSlash() + ConstantAw.PLUGIN_FOLDER;
+        String absolutePath = apmFillPath + FileUtil.getPlatFormSlash() + AwConstant.APP_FOLDER;
+//        String jarPath = absolutePath + FileUtil.getPlatFormSlash() + AwConstant.PLUGIN_FOLDER;
+        String jarPath = "/Users/xiangzhongwei/development/my-project/java-code/antworking-apm/antworking-apm/plugin";
         log.info("plugin path:{}", jarPath);
         final File file = new File(jarPath);
         final File[] files = file.listFiles();
@@ -34,19 +36,18 @@ public enum PluginManager {
         for (File jarFile : files) {
             try {
                 log.info("loaded plugin file name:{}", jarFile.getName());
-                URL url = new URL("jar:file:" + jarFile.getAbsolutePath() + "!/" + "plugins.antworking.properties");
+                URL url = new URL("jar:file:" + jarFile.getAbsolutePath() + "!/" + "antworking.properties");
                 put(jarFile);
                 Properties properties = new Properties();
                 InputStream inputStream = url.openStream();
                 properties.load(inputStream);
-                // TODO: 2023/3/29 待处理
-//                String val = (String) properties.get(EnhanceStatement.class.getName());
-                String val = "";
-                String[] clazzArr = val.split(",");
+                PluginInst inst = new PluginInst();
+                String[] clazzArr = properties.get(AwConstant.AW_ENHANCE_STATEMENT).toString().split(",");
                 for (String clazz : clazzArr) {
                     Class<?> aClass = AntWorkingClassLoad.INSTANCE.loadClass(clazz);
-                    enhanceStatement.add(aClass);
+                    inst.getStatements().add((AwEnhanceStatement) aClass.newInstance());
                 }
+                pluginInst.add(inst);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -55,36 +56,12 @@ public enum PluginManager {
 
     public static void put(File jarFile) {
         try {
-            jars.add(new Jar(new JarFile(jarFile), jarFile));
+            jars.add(new PluginJar(new JarFile(jarFile), jarFile));
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
     }
 
-    public static class Jar {
-        public JarFile jarFile;
-        public File sourceFile;
 
-        public JarFile getJarFile() {
-            return jarFile;
-        }
-
-        public void setJarFile(JarFile jarFile) {
-            this.jarFile = jarFile;
-        }
-
-        public File getSourceFile() {
-            return sourceFile;
-        }
-
-        public void setSourceFile(File sourceFile) {
-            this.sourceFile = sourceFile;
-        }
-
-        public Jar(JarFile jarFile, File sourceFile) {
-            this.jarFile = jarFile;
-            this.sourceFile = sourceFile;
-        }
-    }
 }
 

@@ -11,7 +11,7 @@ import java.security.ProtectionDomain;
  * @author AXiang
  * date 2022/12/29 15:26
  */
-public interface EnhanceStatement {
+public interface AwEnhanceStatement {
     ElementMatcher<? super TypeDescription> matcherClass();
 
     DynamicType.Builder<?> define(DynamicType.Builder<?> builder,

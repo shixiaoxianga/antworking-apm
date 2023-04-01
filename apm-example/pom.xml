@@ -13,7 +13,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>jdk-intercept-test</module>
-        <module>agent</module>
+        <module>agent-example</module>
+        <module>test</module>
     </modules>
 
     <properties>

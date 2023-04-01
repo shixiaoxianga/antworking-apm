@@ -1,19 +1,16 @@
 package com.antworking.core.classload;
 
-import com.antworking.common.ConstantAw;
+import com.antworking.core.plugin.PluginJar;
 import com.antworking.core.plugin.PluginManager;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
-import com.antworking.util.FileUtil;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
-import static com.antworking.core.plugin.PluginManager.jars;
 
 /**
  * @author XiangXiaoWei
@@ -32,7 +29,7 @@ public class AntWorkingClassLoad extends ClassLoader {
 
     @Override
     public InputStream getResourceAsStream(String clazzPath) {
-        for (PluginManager.Jar jar : PluginManager.jars) {
+        for (PluginJar jar : PluginManager.jars) {
             if (jar.jarFile.getJarEntry(clazzPath) != null) {
                 try {
                     URL url = new URL("jar:file:" + jar.sourceFile.getAbsolutePath() + "!/" + clazzPath);
@@ -47,7 +44,7 @@ public class AntWorkingClassLoad extends ClassLoader {
 
     @Override
     protected URL findResource(String name) {
-        for (PluginManager.Jar jar : PluginManager.jars) {
+        for (PluginJar jar : PluginManager.jars) {
             JarEntry entry = jar.jarFile.getJarEntry(name);
             if (entry != null) {
                 try {
@@ -62,7 +59,7 @@ public class AntWorkingClassLoad extends ClassLoader {
     @Override
     protected Enumeration<URL> findResources(String name) throws IOException {
         List<URL> allResources = new LinkedList<>();
-        for (PluginManager.Jar jar : PluginManager.jars) {
+        for (PluginJar jar : PluginManager.jars) {
             JarEntry entry = jar.jarFile.getJarEntry(name);
             if (entry != null) {
                 allResources.add(new URL("jar:file:" + jar.sourceFile.getAbsolutePath() + "!/" + name));
@@ -86,7 +83,7 @@ public class AntWorkingClassLoad extends ClassLoader {
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         String clazzPath = name.replace(".", "/").concat(".class");
-        for (PluginManager.Jar jar : PluginManager.jars) {
+        for (PluginJar jar : PluginManager.jars) {
             if (jar.jarFile.getJarEntry(clazzPath) != null) {
                 try {
                     URL url = new URL("jar:file:" + jar.sourceFile.getAbsolutePath() + "!/" + clazzPath);

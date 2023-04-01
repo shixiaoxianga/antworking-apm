@@ -33,6 +33,6 @@ public class AntWorkingAgentListener implements AgentBuilder.Listener {
 
     @Override
     public void onComplete(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {
-        log.debug("agent complete name:{}",typeName);
+//        log.debug("agent complete name:{}",typeName);
     }
 }

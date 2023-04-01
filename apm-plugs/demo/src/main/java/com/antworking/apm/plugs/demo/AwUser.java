@@ -1,7 +1,8 @@
-package com.antworking.apm;
+package com.antworking.apm.plugs.demo;
 
-public class User {
+public class AwUser {
     public void run(){
+
         System.out.println("user run...");
     }
     public static void run1(){

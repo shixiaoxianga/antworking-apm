@@ -20,7 +20,6 @@
         <module>apm-example</module>
         <module>apm-web</module>
         <module>apm-data</module>
-        <module>apm-example/test</module>
     </modules>
 
     <properties>

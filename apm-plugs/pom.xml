@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <artifactId>apm-plugs</artifactId>
     <modules>
+        <module>demo</module>
     </modules>
 
     <dependencies>
@@ -31,7 +32,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <outputDirectory>../../../antworking-apm/plugin</outputDirectory>
+                    <outputDirectory>../antworking-apm/plugin</outputDirectory>
                     <excludes>
                     </excludes>
                 </configuration>
