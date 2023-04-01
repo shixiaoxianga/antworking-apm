@@ -5,6 +5,7 @@ import com.antworking.core.classload.AntWorkingClassLoad;
 import com.antworking.core.enhance.AwEnhanceStatement;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
+import com.antworking.util.EnvUtil;
 import com.antworking.util.FileUtil;
 
 import java.io.File;
@@ -21,11 +22,14 @@ public enum PluginManager {
     public static final List<PluginInst> pluginInst = new LinkedList<>();
 
     public static void scanPlugin() {
-        // TODO: 2023/1/3 处理main方法运行的时候获取路径
-        String apmFillPath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getParent();
-        String absolutePath = apmFillPath + FileUtil.getPlatFormSlash() + AwConstant.APP_FOLDER;
-//        String jarPath = absolutePath + FileUtil.getPlatFormSlash() + AwConstant.PLUGIN_FOLDER;
-        String jarPath = "/Users/xiangzhongwei/development/my-project/java-code/antworking-apm/antworking-apm/plugin";
+        String jarPath;
+        if (EnvUtil.isRunInJar()) {
+            jarPath = System.getProperty("user.dir") + FileUtil.getPlatFormSlash() + AwConstant.APP_FOLDER;
+        } else {
+            String apmFillPath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getParent();
+            String absolutePath = apmFillPath + FileUtil.getPlatFormSlash() + AwConstant.APP_FOLDER;
+            jarPath = absolutePath + FileUtil.getPlatFormSlash() + AwConstant.PLUGIN_FOLDER;
+        }
         log.info("plugin path:{}", jarPath);
         final File file = new File(jarPath);
         final File[] files = file.listFiles();
