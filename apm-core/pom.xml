@@ -16,9 +16,15 @@
             <groupId>com.antworking.apm</groupId>
             <artifactId>apm-common</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.antworking.apm</groupId>
-            <artifactId>apm-model</artifactId>
+            <artifactId>apm-collect-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.antworking.apm</groupId>
+            <artifactId>apm-common-model</artifactId>
         </dependency>
 
         <dependency>

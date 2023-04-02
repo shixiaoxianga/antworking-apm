@@ -1,18 +1,18 @@
 package com.antworking.apm.plugs.demo;
 
+import com.antworking.apm.model.collect.AwCollectTraceData;
 import com.antworking.core.interceptor.AbstractAntWorkingDynamicVariable;
 
 public class DemoUserAwDynamicVariable extends AbstractAntWorkingDynamicVariable {
-    private String str;
+
+
     @Override
-    public void set0(Object o) {
-        str = (String) o;
+    public void set0(AwCollectTraceData.Data o) {
+
     }
 
     @Override
-    public Object get0() {
-        return str;
+    public AwCollectTraceData.Data get0() {
+        return null;
     }
-
-
 }

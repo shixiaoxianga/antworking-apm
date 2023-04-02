@@ -3,6 +3,7 @@ package com.antworking.core.interceptor;
 import com.antworking.common.AwConstant;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
+import com.antworking.util.ClassUtil;
 import net.bytebuddy.implementation.bind.annotation.*;
 
 import java.lang.reflect.Method;
@@ -23,18 +24,17 @@ public class AwObjectMethodIntercept {
                               @AllArguments Object[] args,
                               @Origin Class<?> clazz,
                               @SuperCall Callable<Object> callable) throws Exception {
-        AntWorkingDynamicVariable variable =(AntWorkingDynamicVariable) _this.getClass().getDeclaredField(AwConstant.VARIABLE_NAME).get(_this);
-        handler.before(method, _this, args, clazz, callable,variable);
+        handler.before(method, _this, args, clazz, callable, ClassUtil.getVariable(_this));
         Object result;
         try {
             result = callable.call();
-            Object newRes = handler.after(method, _this, args, clazz, callable, result,variable);
+            Object newRes = handler.after(method, _this, args, clazz, callable, result, ClassUtil.getVariable(_this));
             return newRes == null ? result : newRes;
         } catch (Throwable e) {
-            handler._catch(e, _this, method, args, clazz, callable,variable);
+            handler._catch(e, _this, method, args, clazz, callable, ClassUtil.getVariable(_this));
             throw e;
         } finally {
-            handler._final(method, _this, args, clazz, callable,variable);
+            handler._final(method, _this, args, clazz, callable, ClassUtil.getVariable(_this));
         }
     }
 }

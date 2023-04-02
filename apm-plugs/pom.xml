@@ -12,6 +12,7 @@
     <artifactId>apm-plugs</artifactId>
     <modules>
         <module>demo</module>
+        <module>tps-plugins</module>
     </modules>
 
     <dependencies>

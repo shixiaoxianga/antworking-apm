@@ -1,0 +1,21 @@
+syntax = "proto3";
+option java_package = "com.antworking.apm.model.collect";
+option java_outer_classname = "AwSystemMessage";
+
+message SysData{
+  string javaVersion = 1;
+  string javaHome = 2;
+  string javaVm = 3;
+  string jvmArgs = 4;
+  string pid = 5;
+  string userDir = 6;
+  string userHome = 7;
+  string userName = 8;
+  string userTimezone = 9;
+  string javaCommand = 10;
+  string osName = 11;
+  string osArch = 12;
+
+  string appName = 13;
+  string appRunTime = 14;
+}

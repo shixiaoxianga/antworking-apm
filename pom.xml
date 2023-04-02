@@ -20,6 +20,7 @@
         <module>apm-example</module>
         <module>apm-web</module>
         <module>apm-data</module>
+        <module>aw-webapp</module>
     </modules>
 
     <properties>
@@ -51,6 +52,18 @@
             <dependency>
                 <groupId>com.antworking.apm</groupId>
                 <artifactId>apm-tools</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.antworking.apm</groupId>
+                <artifactId>apm-collect-model</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.antworking.apm</groupId>
+                <artifactId>apm-common-model</artifactId>
                 <version>1.0.0</version>
             </dependency>
 

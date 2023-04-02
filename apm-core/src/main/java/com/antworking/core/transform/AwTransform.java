@@ -24,7 +24,7 @@ public class AwTransform implements AgentBuilder.Transformer {
                                             ClassLoader classLoader,
                                             JavaModule module,
                                             ProtectionDomain protectionDomain) {
-        log.debug("transform class name:{}", typeDescription.getName());
+        log.info("transform class name:{}", typeDescription.getName());
         DynamicType.Builder<?> define = statement.define(builder, typeDescription, classLoader, module, protectionDomain);
         if (define == null) return builder;
         return define;

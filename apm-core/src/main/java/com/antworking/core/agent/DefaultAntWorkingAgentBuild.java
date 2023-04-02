@@ -7,7 +7,7 @@ import com.antworking.core.plugin.PluginManager;
 import com.antworking.core.transform.AwTransform;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
-import com.antworking.core.tools.ClassUtil;
+import com.antworking.util.ClassUtil;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.matcher.ElementMatchers;

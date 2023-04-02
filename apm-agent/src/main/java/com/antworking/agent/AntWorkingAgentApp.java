@@ -3,6 +3,8 @@ package com.antworking.agent;
 import com.antworking.core.classload.AntWorkingClassLoad;
 import com.antworking.core.factory.AntWorkingFactory;
 import com.antworking.core.plugin.PluginManager;
+import com.antworking.core.start.AwApplicationStart;
+import com.antworking.core.start.AwApplyStartManager;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
 import com.antworking.util.FileReadUtil;
@@ -23,7 +25,13 @@ public class AntWorkingAgentApp {
         welcome();
         initPlugin();
         initByteBuddy(instrumentation);
+        initApplication();
         log.info("AntWorking init end...");
+    }
+
+    private static void initApplication() {
+        AwApplyStartManager.starts.forEach(AwApplicationStart::init);
+        AwApplyStartManager.starts.forEach(AwApplicationStart::run);
     }
 
     private static void initPlugin() {

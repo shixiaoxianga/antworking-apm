@@ -1,0 +1,11 @@
+syntax = "proto3";
+option java_package = "com.antworking.apm.model.collect";
+option java_outer_classname = "RouterMessage";
+
+message Rm{
+  string route = 1;
+  //jsonstring
+  string content = 2;
+  // event（事件消息）、api（接口消息）
+  string kind = 3;
+}

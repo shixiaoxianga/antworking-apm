@@ -2,6 +2,8 @@ package com.antworking.core.factory;
 
 import com.antworking.core.agent.AntWorkingAgentBuild;
 import com.antworking.core.agent.DefaultAntWorkingAgentBuild;
+import com.antworking.core.comm.AwComm;
+import com.antworking.core.comm.SimpleAwComm;
 
 /**
  * @author AXiang
@@ -14,6 +16,10 @@ public enum AntWorkingFactory {
     public AntWorkingAgentBuild factoryAWBuild() {
         return DefaultAntWorkingAgentBuild.INSTANCE;
     }
+    public AwComm factoryAwComm() {
+        return new SimpleAwComm();
+    }
+
 
 
 }

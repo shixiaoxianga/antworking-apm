@@ -24,7 +24,7 @@ public enum PluginManager {
     public static void scanPlugin() {
         String jarPath;
         if (EnvUtil.isRunInJar()) {
-            jarPath = System.getProperty("user.dir") + FileUtil.getPlatFormSlash() + AwConstant.APP_FOLDER;
+            jarPath = System.getProperty("user.dir") + FileUtil.getPlatFormSlash() + AwConstant.APP_FOLDER  + FileUtil.getPlatFormSlash() + AwConstant.PLUGIN_FOLDER;
         } else {
             String apmFillPath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getParent();
             String absolutePath = apmFillPath + FileUtil.getPlatFormSlash() + AwConstant.APP_FOLDER;

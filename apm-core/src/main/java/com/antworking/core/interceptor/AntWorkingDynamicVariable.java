@@ -1,9 +1,11 @@
 package com.antworking.core.interceptor;
 
+import com.antworking.apm.model.collect.AwCollectTraceData;
+
 public interface AntWorkingDynamicVariable {
-    void set(Object o);
+    void set(AwCollectTraceData.Data o);
 
-    Object get();
+    AwCollectTraceData.Data get();
 
-    void write();
+    void write(AwCollectTraceData.Data data);
 }

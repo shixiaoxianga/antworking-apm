@@ -1,0 +1,28 @@
+syntax = "proto3";
+option java_package = "com.antworking.apm.model.collect";
+option java_outer_classname = "AwCollectTraceData";
+
+message Data{
+  string appName = 5;
+  string nodeId = 1;
+  string traceId = 2;
+  string parentTraceId = 3;
+  string nodeGroup = 4;
+  string nodeName = 6;
+
+  int64 startTime = 7;
+  int64 endTime = 9;
+  string useTime = 10;
+
+  string methodName = 11;
+  string methodClazz = 12;
+  string methodArgs = 13;
+  string methodRClazz = 14;
+
+  string error = 15;
+  string stackTrace = 16;
+  int32 order = 17;
+  string threadName = 18;
+
+  string content = 19;
+}
