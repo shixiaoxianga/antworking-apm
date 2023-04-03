@@ -12,37 +12,43 @@ import java.util.concurrent.Callable;
 public abstract class AbstractObjectMethodInterceptHandler implements AwObjectMethodInterceptHandler {
 
     @Override
-    public void before(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable) {
-        doBefore(method, _this,params, clazz, callable,variable);
+    public void before(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable,
+                       String nodeId) {
+        doBefore(method, _this,params, clazz, callable,variable,nodeId);
     }
 
     @Override
-    public Object after(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, Object result,AntWorkingDynamicVariable variable) {
-        return doAfter(method, _this, params, clazz, callable, result,variable);
+    public Object after(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, Object result,AntWorkingDynamicVariable variable,
+                        String nodeId) {
+        return doAfter(method, _this, params, clazz, callable, result,variable,nodeId);
     }
 
     @Override
-    public void _catch(Throwable e, Object _this, Method method, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable) {
-        doCatch(e, _this, method, params, clazz, callable,variable);
+    public void _catch(Throwable e, Object _this, Method method, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable,
+                       String nodeId) {
+        doCatch(e, _this, method, params, clazz, callable,variable,nodeId);
     }
 
     @Override
-    public void _final(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable) {
-        doFinal(method, _this, params, clazz, callable,variable);
+    public void _final(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable,
+                       String nodeId) {
+        doFinal(method, _this, params, clazz, callable,variable,nodeId);
     }
 
     public abstract void doBefore(Method method,
                                   Object _this,
                                   Object[] params,
                                   Class<?> clazz,
-                                  Callable<Object> callable,AntWorkingDynamicVariable variable);
+                                  Callable<Object> callable,AntWorkingDynamicVariable variable,
+                                  String nodeId);
 
     public abstract Object doAfter(Method method,
                                    Object _this,
                                    Object[] params,
                                    Class<?> clazz,
                                    Callable<Object> callable,
-                                   Object result,AntWorkingDynamicVariable variable);
+                                   Object result,AntWorkingDynamicVariable variable,
+                                   String nodeId);
 
     public abstract void doCatch(Throwable e,
                                  Object _this,
@@ -50,11 +56,13 @@ public abstract class AbstractObjectMethodInterceptHandler implements AwObjectMe
 
                                  Object[] params,
                                  Class<?> clazz,
-                                 Callable<Object> callable,AntWorkingDynamicVariable variable);
+                                 Callable<Object> callable,AntWorkingDynamicVariable variable,
+                                 String nodeId);
 
     public abstract void doFinal(Method method,
                                  Object _this,
                                  Object[] params,
                                  Class<?> clazz,
-                                 Callable<Object> callable,AntWorkingDynamicVariable variable);
+                                 Callable<Object> callable,AntWorkingDynamicVariable variable,
+                                 String nodeId);
 }

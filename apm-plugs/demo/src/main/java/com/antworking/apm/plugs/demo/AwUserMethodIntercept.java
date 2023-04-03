@@ -10,22 +10,26 @@ import java.util.concurrent.Callable;
 
 public class AwUserMethodIntercept extends AbstractObjectMethodInterceptHandler {
     @Override
-    public void doBefore(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, AntWorkingDynamicVariable variable) {
+    public void doBefore(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, AntWorkingDynamicVariable variable,
+                         String nodeId) {
         System.err.println(method.getName());
     }
 
     @Override
-    public Object doAfter(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, Object result,AntWorkingDynamicVariable variable) {
+    public Object doAfter(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, Object result,AntWorkingDynamicVariable variable,
+                          String nodeId) {
         return result;
     }
 
     @Override
-    public void doCatch(Throwable e, Object _this, Method method, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable) {
+    public void doCatch(Throwable e, Object _this, Method method, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable,
+                        String nodeId) {
 
     }
 
     @Override
-    public void doFinal(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable) {
+    public void doFinal(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable,AntWorkingDynamicVariable variable,
+                        String nodeId) {
 
     }
 }

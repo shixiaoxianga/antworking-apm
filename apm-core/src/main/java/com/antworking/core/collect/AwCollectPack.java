@@ -6,11 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class AwCollectPack {
-    public String traceId;
-    public AwCollectTraceData.Data data;
+import java.util.List;
+
+public interface AwCollectPack {
+    void addData(AwCollectTraceData.Data data);
+    AwCollectTraceData.Data getData(String nodeId);
+
+    void finish(String nodeId);
+    Integer addOrder();
+    String getTraceId();
+
+    void setData(AwCollectTraceData.Data data, String nodeId);
 }

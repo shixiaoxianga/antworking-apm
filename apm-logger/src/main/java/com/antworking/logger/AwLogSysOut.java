@@ -9,7 +9,7 @@ public class AwLogSysOut extends AbstractAwLog {
 
 
     public void print(String str, Object... args) {
-        str = str.replace("{}", "%s");
+//        str = str.replace("{}", "%$s");
         System.out.printf(str + "\n", args);
     }
 

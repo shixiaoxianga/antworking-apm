@@ -32,14 +32,15 @@ public class AwDataHandler {
     public static AwCollectTraceData.Data initData(Object[] mArgs,
                                                    Class<?> mClazz,
                                                    String method,
-                                                   AwNodeEnum nodeEnum
+                                                   AwNodeEnum nodeEnum,
+                                                   String nodeId
                                                    ) {
         return AwCollectTraceData
                 .Data
                 .newBuilder()
-                .setTraceId(UuidUtil.getId())
+                .setTraceId(AwCollectManager.getTraceId())
                 .setAppName(AwSysInfo.get().getAppName())
-                .setNodeId(UuidUtil.getId())
+                .setNodeId(nodeId)
                 .setParentTraceId("")
                 .setNodeGroup(nodeEnum.getGroup())
                 .setNodeName(nodeEnum.getNode())
@@ -47,7 +48,7 @@ public class AwDataHandler {
                 .setMethodName(method)
                 .setMethodClazz(mClazz.getName())
                 .setMethodArgs(Arrays.toString(mArgs))
-                .setOrder(AwCollectManager.addOrder())
+                .setOrder(AwCollectManager.get().addOrder())
                 .setThreadName(Thread.currentThread().getName())
                 .build();
     }

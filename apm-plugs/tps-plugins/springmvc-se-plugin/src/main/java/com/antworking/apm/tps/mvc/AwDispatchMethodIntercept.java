@@ -17,17 +17,16 @@ import java.util.concurrent.Callable;
 
 public class AwDispatchMethodIntercept extends AbstractObjectMethodInterceptHandler {
     @Override
-    public void doBefore(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, AntWorkingDynamicVariable variable) {
-        if (variable == null) {
-            variable = ClassUtil.setVariable(_this, new AwDispatchDynamicVariable());
-            variable.set(AwDataHandler.initData(params, clazz, method.getName(), AwNodeEnum.SPRING_MAC));
-            AwCollectManager.add(new AwCollectPack(variable.get().getTraceId(), variable.get()));
-        }
+    public void doBefore(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, AntWorkingDynamicVariable variable,
+                         String nodeId) {
+        AwCollectTraceData.Data data = AwDataHandler.initData(params, clazz, method.getName(), AwNodeEnum.SPRING_MAC,nodeId);
+        AwCollectManager.get().addData(data);
     }
 
     @Override
-    public Object doAfter(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, Object result, AntWorkingDynamicVariable variable) {
-        AwCollectTraceData.Data data = variable.get();
+    public Object doAfter(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, Object result, AntWorkingDynamicVariable variable,
+                          String nodeId) {
+        AwCollectTraceData.Data data = AwCollectManager.get().getData(nodeId);
 
         HttpServletRequestAdapter request;
         Object req = params[0];
@@ -43,29 +42,31 @@ public class AwDispatchMethodIntercept extends AbstractObjectMethodInterceptHand
         tomcatModel.setRepCode(response.getResponseCode());
         data = data.toBuilder()
                 .setContent(JsonUtil.toJsonString(tomcatModel)).build();
-        variable.set(data);
+        AwCollectManager.get().setData(data,nodeId);
         return result;
     }
 
     @Override
-    public void doCatch(Throwable e, Object _this, Method method, Object[] params, Class<?> clazz, Callable<Object> callable, AntWorkingDynamicVariable variable) {
-        AwCollectTraceData.Data data = variable.get();
+    public void doCatch(Throwable e, Object _this, Method method, Object[] params, Class<?> clazz, Callable<Object> callable, AntWorkingDynamicVariable variable,
+                        String nodeId) {
+        AwCollectTraceData.Data data =AwCollectManager.get().getData(nodeId);
         data = data.toBuilder()
                 .setError(e.toString())
                 .setStackTrace(Arrays.toString(Arrays.stream(e.getStackTrace()).map(Object::toString).toArray(String[]::new)))
                 .setContent("1").build();
-        variable.set(data);
+        AwCollectManager.get().setData(data,nodeId);
     }
 
     @Override
-    public void doFinal(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, AntWorkingDynamicVariable variable) {
-        AwCollectTraceData.Data data = variable.get();
+    public void doFinal(Method method, Object _this, Object[] params, Class<?> clazz, Callable<Object> callable, AntWorkingDynamicVariable variable,
+                        String nodeId) {
+        AwCollectTraceData.Data data = AwCollectManager.get().getData(nodeId);
+        long endTime = System.currentTimeMillis();
         data = data.toBuilder()
                 .setEndTime(System.currentTimeMillis())
-                .setUseTime(String.valueOf(data.getStartTime() - data.getEndTime()))
+                .setUseTime(String.valueOf((endTime - data.getStartTime())))
                 .build();
-        variable.set(data);
-        variable.write(data);
-        System.out.println(JsonUtil.toJsonString(data));
+        AwCollectManager.get().setData(data,nodeId);
+        AwCollectManager.get().finish(nodeId);
     }
 }

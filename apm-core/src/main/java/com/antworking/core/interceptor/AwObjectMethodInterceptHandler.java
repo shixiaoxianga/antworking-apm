@@ -14,7 +14,8 @@ public interface AwObjectMethodInterceptHandler {
                 Object[] params,
                 Class<?> clazz,
                 Callable<Object> callable,
-                AntWorkingDynamicVariable variable);
+                AntWorkingDynamicVariable variable,
+                String nodeId);
 
     Object after(Method method,
                  Object _this,
@@ -22,7 +23,8 @@ public interface AwObjectMethodInterceptHandler {
                  Class<?> clazz,
                  Callable<Object> callable,
                  Object result,
-                 AntWorkingDynamicVariable variable);
+                 AntWorkingDynamicVariable variable,
+                 String nodeId);
 
     void _catch(Throwable e,
                 Object _this,
@@ -31,12 +33,14 @@ public interface AwObjectMethodInterceptHandler {
                 Object[] params,
                 Class<?> clazz,
                 Callable<Object> callable,
-                AntWorkingDynamicVariable variable);
+                AntWorkingDynamicVariable variable,
+                String nodeId);
 
     void _final(Method method,
                 Object _this,
                 Object[] params,
                 Class<?> clazz,
                 Callable<Object> callable,
-                AntWorkingDynamicVariable variable);
+                AntWorkingDynamicVariable variable,
+                String nodeId);
 }
