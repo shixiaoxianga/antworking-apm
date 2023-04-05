@@ -20,7 +20,7 @@ public class AwInternalHttpClientMethodIntercept extends AbstractObjectMethodInt
     public void doBefore(Method method, Object _this, Object[] params, Class<?> clazz,
                          Callable<Object> callable, AntWorkingDynamicVariable variable,
                          String nodeId) {
-        AwCollectTraceData.Data data = AwDataHandler.initData(params, clazz, method.getName(), AwNodeEnum.HTTP_CLIENT,nodeId);
+        AwCollectTraceData.Data data = AwDataHandler.initData(params, clazz, method.getName(), AwNodeEnum.HTTP_CLIENT, nodeId);
         AwCollectManager.get().addData(data);
     }
 
@@ -29,6 +29,23 @@ public class AwInternalHttpClientMethodIntercept extends AbstractObjectMethodInt
                           Class<?> clazz, Callable<Object> callable, Object result,
                           AntWorkingDynamicVariable variable,
                           String nodeId) {
+        Object req = params[1];
+        InternalModel model = new InternalModel();
+
+        InternalRequestAdapter requestAdapter = new InternalRequestAdapter(req);
+        model.setUri(requestAdapter.getUri());
+        model.setProtocolVersion(requestAdapter.protocolVersion());
+        model.setMethod(requestAdapter.getMethod());
+        model.setRepHeader(requestAdapter.getAllHeader());
+
+        InternalResponseAdapter responseAdapter = new InternalResponseAdapter(result);
+        model.setRepHeader(responseAdapter.getAllHeader());
+        model.setCode(responseAdapter.getCode());
+
+        AwCollectTraceData.Data data = AwCollectManager.get().getData(nodeId);
+        data = data.toBuilder()
+                .setContent(JsonUtil.toJsonString(model)).build();
+        AwCollectManager.get().setData(data, nodeId);
         return result;
     }
 
@@ -46,7 +63,7 @@ public class AwInternalHttpClientMethodIntercept extends AbstractObjectMethodInt
                 .setError(e.toString())
                 .setStackTrace(Arrays.toString(Arrays.stream(e.getStackTrace()).map(Object::toString).toArray(String[]::new)))
                 .setContent("1").build();
-        AwCollectManager.get().setData(data,nodeId);
+        AwCollectManager.get().setData(data, nodeId);
     }
 
     @Override
@@ -63,7 +80,7 @@ public class AwInternalHttpClientMethodIntercept extends AbstractObjectMethodInt
                 .setEndTime(endTime)
                 .setUseTime(String.valueOf((endTime - data.getStartTime())))
                 .build();
-        AwCollectManager.get().setData(data,nodeId);
+        AwCollectManager.get().setData(data, nodeId);
         AwCollectManager.get().finish(nodeId);
     }
 }
