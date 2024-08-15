@@ -10,6 +10,8 @@ import com.antworking.utils.FileReadUtil;
 import net.bytebuddy.agent.builder.AgentBuilder;
 
 import java.lang.instrument.Instrumentation;
+import java.lang.management.ManagementFactory;
+import java.util.Properties;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
 
@@ -21,9 +23,20 @@ public class AntWorkingAgentApp {
         premain(null, ByteBuddyAgent.install());
     }
 
-    public static void premain(String arg, Instrumentation instrumentation) {
-        System.out.println("启动参数："+ arg);
+    public static void premain(String agentArgs, Instrumentation instrumentation) {
         welcome();
+
+        String[] jvmArgs = ManagementFactory.getRuntimeMXBean().getInputArguments().toArray(new String[0]);
+
+        for (String _arg : jvmArgs) {
+            System.out.println("JVM Options: "+_arg);
+        }
+
+        Properties props = System.getProperties();
+        System.out.println("\nSystem Properties:");
+        props.list(System.out);
+
+
 
 
 //        new ClientRun().run();

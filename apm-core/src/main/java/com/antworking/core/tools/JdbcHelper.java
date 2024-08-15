@@ -40,13 +40,10 @@ public class JdbcHelper {
      * @return 数据库连接
      * @throws SQLException 如果连接失败
      */
-    public synchronized Connection getConnection() throws SQLException {
+    public  Connection getConnection() throws SQLException {
         lock.lock();
         try {
-            log.info(String.valueOf(JdbcHelper.conn));
             if(JdbcHelper.conn == null){
-
-                System.out.println("Connecting to " + Thread.currentThread().getName() +"   "+ DB_URL);
                 Properties properties = new Properties();
                 properties.put("user", USER);
                 properties.put("password", PASS);
@@ -57,7 +54,6 @@ public class JdbcHelper {
                         DB_URL,
                         properties);
                 JdbcHelper.conn = connection;
-                log.info("赋值后："+String.valueOf(JdbcHelper.conn));
                 return connection;
             }
             return JdbcHelper.conn;
