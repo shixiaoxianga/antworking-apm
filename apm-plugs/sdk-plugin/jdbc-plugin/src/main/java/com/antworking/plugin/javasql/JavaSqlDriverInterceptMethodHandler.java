@@ -6,6 +6,7 @@ import com.antworking.core.handler.AbstractMethodInterceptHandler;
 import com.antworking.model.collect.CollectDataBaseModel;
 import com.antworking.model.collect.ErrorDescribeModel;
 import com.antworking.model.collect.MethodDescribeModel;
+import com.antworking.utils.TimeUtil;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -22,7 +23,8 @@ public class JavaSqlDriverInterceptMethodHandler extends AbstractMethodIntercept
         CollectDataBaseModel model = CollectDataBaseModel.init(AwCollectManager.get() != null,
                 methodDescribeModel,
                 ConstantAppNode.SQL_DRIVE_CONNECT,
-                Thread.currentThread().getName());
+                Thread.currentThread().getName(),
+                AwCollectManager.getTraceId());
         AwCollectManager.create(model);
     }
 
@@ -32,7 +34,7 @@ public class JavaSqlDriverInterceptMethodHandler extends AbstractMethodIntercept
             CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._SQL_DRIVE_CONNECT);
             assert model != null;
             MethodDescribeModel  methodDescribeModel= (MethodDescribeModel) model.getData();
-            methodDescribeModel.setEndTime(System.currentTimeMillis());
+            methodDescribeModel.setEndTime(TimeUtil.getCurrentTimeNano());
             methodDescribeModel.setReturnClazz(result.getClass().getName());
             return Proxy.newProxyInstance(this.getClass().getClassLoader(),
                     new Class[]{java.sql.Connection.class},
@@ -57,7 +59,7 @@ public class JavaSqlDriverInterceptMethodHandler extends AbstractMethodIntercept
     public void doFinal(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._SQL_DRIVE_CONNECT);
         assert model != null;
-        model.setEndTime(System.currentTimeMillis());
+        model.setEndTime(TimeUtil.getCurrentTimeNano());
         AwCollectManager.put();
     }
 }

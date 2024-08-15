@@ -15,10 +15,7 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.antworking.apm</groupId>
-            <artifactId>apm-tools</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.antworking.apm</groupId>
             <artifactId>apm-common</artifactId>
@@ -71,6 +68,7 @@
                                     <include>ch.qos.logback:logback-classic</include>
                                     <include>ch.qos.logback:logback-core</include>
                                     <include>com.google.code.gson:gson</include>
+                                    <include>mysql:mysql-connector-java</include>
                                 </includes>
 
                             </artifactSet>
@@ -93,10 +91,15 @@
                                     <shadedPattern>${shade.package}.org.projectlombok</shadedPattern>
                                 </relocation>
 
+                                <relocation>
+                                    <pattern>com.mysql</pattern>
+                                    <shadedPattern>${shade.package}.com.mysql</shadedPattern>
+                                </relocation>
+
 
                                 <relocation>
-                                    <pattern>gson</pattern>
-                                    <shadedPattern>${shade.package}.com.google.code.gson</shadedPattern>
+                                    <pattern>com.google</pattern>
+                                    <shadedPattern>${shade.package}.com.google</shadedPattern>
                                 </relocation>
 
                                 <!--         <relocation>

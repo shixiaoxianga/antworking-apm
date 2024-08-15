@@ -7,6 +7,7 @@ import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
 import com.antworking.model.collect.CollectDataBaseModel;
 import com.antworking.model.collect.ErrorDescribeModel;
+import com.antworking.utils.TimeUtil;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -21,7 +22,8 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
         TomcatReqDescribeModel tomcat = new TomcatReqDescribeModel();
         if (AwCollectManager.get() == null) {
             model = CollectDataBaseModel.init(true, tomcat, ConstantAppNode.TOMCAT.setVersion("未知"),
-                    Thread.currentThread().getName());
+                    Thread.currentThread().getName(),
+                    AwCollectManager.getTraceId());
             AwCollectManager.create(model);
         }
         HttpServletRequestAdapter request;
@@ -60,7 +62,7 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
     public void doFinal(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._TOMCAT);
         assert model != null;
-        model.setEndTime(System.currentTimeMillis());
+        model.setEndTime(TimeUtil.getCurrentTimeNano());
         AwCollectManager.write();
     }
 }

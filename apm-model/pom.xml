@@ -18,14 +18,11 @@
             <artifactId>apm-common</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.antworking.apm</groupId>
-            <artifactId>apm-tools</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.google.protobuf</groupId>-->
+<!--            <artifactId>protobuf-java</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

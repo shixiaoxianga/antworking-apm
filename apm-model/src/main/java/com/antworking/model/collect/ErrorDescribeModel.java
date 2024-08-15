@@ -1,7 +1,6 @@
 package com.antworking.model.collect;
 
-import com.antworking.util.JsonUtil;
-import com.google.gson.Gson;
+import com.antworking.utils.JsonUtil;
 
 import java.util.Arrays;
 

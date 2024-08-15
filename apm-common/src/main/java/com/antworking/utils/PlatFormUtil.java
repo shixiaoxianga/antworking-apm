@@ -1,4 +1,4 @@
-package com.antworking.util;
+package com.antworking.utils;
 
 public class PlatFormUtil {
 

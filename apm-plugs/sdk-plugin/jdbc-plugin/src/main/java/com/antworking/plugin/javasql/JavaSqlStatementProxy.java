@@ -5,6 +5,7 @@ import com.antworking.core.common.ConstantAppNode;
 import com.antworking.plugin.javasql.model.JdbcDescribeModel;
 import com.antworking.model.collect.CollectDataBaseModel;
 import com.antworking.model.collect.MethodDescribeModel;
+import com.antworking.utils.TimeUtil;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -47,7 +48,7 @@ public class JavaSqlStatementProxy implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         this.method = method;
         this.args = args;
-        beginTime = System.currentTimeMillis();
+        beginTime = TimeUtil.getCurrentTimeNano();
         try {
             result = method.invoke(target, args);
         } catch (Throwable e) {
@@ -72,15 +73,16 @@ public class JavaSqlStatementProxy implements InvocationHandler {
                 CollectDataBaseModel model = CollectDataBaseModel.init(AwCollectManager.get() != null,
                         methodDescribeModel,
                         ConstantAppNode.SQL_DRIVE_STATEMENT,
-                        Thread.currentThread().getName());
+                        Thread.currentThread().getName(),
+                        AwCollectManager.getTraceId());
                 model.setBeginTime(beginTime);
                 //如果不是自动提交需要等待 提交或回滚事务结束
                 if (autoCommit) {
                     jdbcDescribeModel.setAutoCommit("autoCommit");
-                    model.setEndTime(System.currentTimeMillis());
+                    model.setEndTime(TimeUtil.getCurrentTimeNano());
                     AwCollectManager.put(model);
                 } else {
-                    model.setEndTime(System.currentTimeMillis());
+                    model.setEndTime(TimeUtil.getCurrentTimeNano());
                     jdbcSession.get().add(model);
                 }
                 break;

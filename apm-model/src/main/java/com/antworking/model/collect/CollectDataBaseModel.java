@@ -1,8 +1,7 @@
 package com.antworking.model.collect;
 
 import com.antworking.model.core.AppNode;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.antworking.utils.TimeUtil;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
@@ -10,7 +9,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CollectDataBaseModel {
     private String id;
-    private boolean isWeb;
+    private String traceId;
+    private Boolean isWeb;
 
     private Integer order;
 
@@ -24,10 +24,11 @@ public class CollectDataBaseModel {
     private String threadName;
     private ErrorDescribeModel error;
 
-    public static CollectDataBaseModel init(boolean isWeb, Object data, AppNode appNode, String threadName) {
+    public static CollectDataBaseModel init(boolean isWeb, Object data, AppNode appNode, String threadName,String traceId) {
         CollectDataBaseModel model = new CollectDataBaseModel(UUID.randomUUID().toString(), isWeb, data, appNode);
-        model.setBeginTime(System.currentTimeMillis());
+        model.setBeginTime(TimeUtil.getCurrentTimeNano());
         model.setThreadName(threadName);
+        model.setTraceId(traceId);
         return model;
     }
 
@@ -44,6 +45,22 @@ public class CollectDataBaseModel {
         this.data = data;
         this.appNode = appNode;
         this.error = error;
+    }
+
+    public Boolean getWeb() {
+        return isWeb;
+    }
+
+    public void setWeb(Boolean web) {
+        isWeb = web;
+    }
+
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
     }
 
     public String getId() {

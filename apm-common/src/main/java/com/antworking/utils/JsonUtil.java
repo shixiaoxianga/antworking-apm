@@ -1,4 +1,4 @@
-package com.antworking.util;
+package com.antworking.utils;
 
 import com.google.gson.GsonBuilder;
 

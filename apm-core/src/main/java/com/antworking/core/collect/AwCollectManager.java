@@ -6,6 +6,8 @@ import com.antworking.model.core.AppNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author AXiang
@@ -14,8 +16,18 @@ import java.util.List;
 public class AwCollectManager {
 
     private final static ThreadLocal<List<CollectDataBaseModel>> collectData = new ThreadLocal<>();
+    private final static ThreadLocal<String> traceIdLocal = new ThreadLocal<>();
 
 
+
+    public static String getTraceId(){
+        String traceId = AwCollectManager.traceIdLocal.get();
+        if(Objects.isNull(traceId)){
+            traceIdLocal.set(UUID.randomUUID().toString());
+            return traceIdLocal.get();
+        }
+        return traceId;
+    }
     /**
      * describe：当前线程不存在节点则创建当前线程对象，若以创建返回false
      *
@@ -75,9 +87,15 @@ public class AwCollectManager {
             collectData.remove();
         }
     }
+    public static void removeTraceId() {
+        synchronized (traceIdLocal) {
+            traceIdLocal.remove();
+        }
+    }
 
     private static void write(List<CollectDataBaseModel> models) {
         remove();
+        removeTraceId();
         AntWorkingFactory.INSTANCE.writeFactory().write(models);
     }
 

@@ -24,10 +24,10 @@ public class DefaultStreamOperationsEnhanceStatementImpl extends AbstractEnhance
                                            ClassLoader classLoader,
                                            JavaModule module,
                                            ProtectionDomain protectionDomain) {
-        return builder.method(CommonMethodHandler.getMatch()
+        return builder.method(RedisCommonMethodHandler.getMatch()
                         .and(ElementMatchers.not(ElementMatchers.isDeclaredBy(Object.class))))
                 .intercept(MethodDelegation.withDefaultConfiguration()
                         .filter(ElementMatchers.named(defaultInterceptMethodName()))
-                        .to(new AwMethodIntercept(new CommonMethodHandler())));
+                        .to(new AwMethodIntercept(new RedisCommonMethodHandler())));
     }
 }

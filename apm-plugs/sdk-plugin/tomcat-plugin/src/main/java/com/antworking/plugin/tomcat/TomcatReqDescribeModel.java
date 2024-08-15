@@ -1,7 +1,6 @@
 package com.antworking.plugin.tomcat;
 
-import com.antworking.util.JsonUtil;
-import com.google.gson.Gson;
+import com.antworking.utils.JsonUtil;
 
 /**
  * @author XiangXiaoWei

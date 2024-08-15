@@ -1,8 +1,5 @@
-package com.antworking.util;
+package com.antworking.utils;
 
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class FileUtil {
 

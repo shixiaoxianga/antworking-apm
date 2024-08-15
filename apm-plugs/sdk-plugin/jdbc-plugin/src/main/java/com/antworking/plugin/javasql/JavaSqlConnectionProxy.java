@@ -18,6 +18,7 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
 
     private final static String[] connection_agent_statement_method = new String[]{"prepareStatement", "prepareCall"};
     private final static String[] connection_agent_affair_methods = new String[]{"commit", "rollback"};
+    private final static String[] connection_close_methods = new String[]{"close"};
 
 
     private Connection connection;
@@ -48,7 +49,16 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
         statement();
         //处理事务
         transactional();
+        closeConnection();
         return this.methodResult;
+    }
+
+    private void closeConnection() {
+        for (String affairMethodName : connection_close_methods) {
+            if (affairMethodName.equals(method.getName())) {
+                JavaSqlStatementProxy.jdbcSession.remove();
+            }
+        }
     }
 
     public void transactional() {
@@ -62,7 +72,7 @@ public class JavaSqlConnectionProxy implements InvocationHandler {
                             .setAutoCommit(affairMethodName);
                 });
                 modelList.forEach(AwCollectManager::put);
-                JavaSqlStatementProxy.jdbcSession.remove();
+                JavaSqlStatementProxy.jdbcSession.set(new ArrayList<>());
             }
         }
     }

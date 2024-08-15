@@ -2,7 +2,6 @@ package com.antworking.plugin.redistemplate;
 
 import com.antworking.core.enhance.AbstractEnhanceStatement;
 import com.antworking.core.interceptor.AwMethodIntercept;
-import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -25,10 +24,10 @@ public class DefaultClusterOperationsEnhanceStatementImpl extends AbstractEnhanc
                                            ClassLoader classLoader,
                                            JavaModule module,
                                            ProtectionDomain protectionDomain) {
-        return builder.method(CommonMethodHandler.getMatch()
+        return builder.method(RedisCommonMethodHandler.getMatch()
                         .and(ElementMatchers.not(ElementMatchers.isDeclaredBy(Object.class))))
                 .intercept(MethodDelegation.withDefaultConfiguration()
                         .filter(ElementMatchers.named(defaultInterceptMethodName()))
-                        .to(new AwMethodIntercept(new CommonMethodHandler())));
+                        .to(new AwMethodIntercept(new RedisCommonMethodHandler())));
     }
 }

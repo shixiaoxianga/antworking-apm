@@ -1,12 +1,12 @@
 package com.antworking.agent;
 
-import com.antworking.core.classload.AntWorkingClassLoad;
+import com.antworking.core.config.AwConfigManager;
 import com.antworking.core.factory.AntWorkingFactory;
-import com.antworking.core.netty.ClientRun;
 import com.antworking.core.plugin.PluginManager;
+import com.antworking.core.tools.AwPathManager;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
-import com.antworking.util.FileReadUtil;
+import com.antworking.utils.FileReadUtil;
 import net.bytebuddy.agent.builder.AgentBuilder;
 
 import java.lang.instrument.Instrumentation;
@@ -17,12 +17,17 @@ public class AntWorkingAgentApp {
     private static final AwLog log = LoggerFactory.getLogger(AntWorkingAgentApp.class);
 
     public static void main(String[] args) {
+
         premain(null, ByteBuddyAgent.install());
     }
 
     public static void premain(String arg, Instrumentation instrumentation) {
+        System.out.println("启动参数："+ arg);
         welcome();
-        new ClientRun().run();
+
+
+//        new ClientRun().run();
+        AwConfigManager.initConfig();
         initPlugin();
         initByteBuddy(instrumentation);
         log.info("AntWorking init end...");

@@ -3,9 +3,10 @@ package com.antworking.core.plugin;
 import com.antworking.common.ConstantAw;
 import com.antworking.core.classload.AntWorkingClassLoad;
 import com.antworking.core.enhance.EnhanceStatement;
+import com.antworking.core.tools.AwPathManager;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
-import com.antworking.util.FileUtil;
+import com.antworking.utils.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,9 +23,8 @@ public enum PluginManager {
 
     public static void scanPlugin() {
         // TODO: 2023/1/3 处理main方法运行的时候获取路径
-        String apmFillPath = new File(AntWorkingClassLoad.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getParentFile().getParent();
-        String absolutePath = apmFillPath + FileUtil.getPlatFormSlash() + ConstantAw.APP_FOLDER;
-        String jarPath = absolutePath + FileUtil.getPlatFormSlash() + ConstantAw.PLUGIN_FOLDER;
+        String apmFillPath = AwPathManager.getAwPath();
+        String jarPath = apmFillPath + FileUtil.getPlatFormSlash() + ConstantAw.PLUGIN_FOLDER;
         log.info("plugin path:{}", jarPath);
         final File file = new File(jarPath);
         final File[] files = file.listFiles();

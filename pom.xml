@@ -11,7 +11,6 @@
     <modules>
         <module>apm-agent</module>
         <module>apm-common</module>
-        <module>apm-tools</module>
         <module>apm-core</module>
         <module>apm-logger</module>
         <module>apm-model</module>
@@ -59,6 +58,12 @@
                 <groupId>com.antworking.apm</groupId>
                 <artifactId>apm-logger</artifactId>
                 <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.28</version>
             </dependency>
 
             <dependency>
@@ -134,11 +139,11 @@
                 <version>${google-json.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java</artifactId>
-                <version>${protobuf.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.google.protobuf</groupId>-->
+<!--                <artifactId>protobuf-java</artifactId>-->
+<!--                <version>${protobuf.version}</version>-->
+<!--            </dependency>-->
 
             <dependency>
                 <groupId>io.netty</groupId>
@@ -160,24 +165,24 @@
             </extension>
         </extensions>
         <plugins>
-            <plugin>
-                <groupId>org.xolstice.maven.plugins</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>0.6.1</version>
-                <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:3.21.7:exe:${os.detected.classifier}</protocArtifact>
-                    <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.51.0:exe:${os.detected.classifier}</pluginArtifact>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>compile-custom</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.xolstice.maven.plugins</groupId>-->
+<!--                <artifactId>protobuf-maven-plugin</artifactId>-->
+<!--                <version>0.6.1</version>-->
+<!--                <configuration>-->
+<!--                    <protocArtifact>com.google.protobuf:protoc:3.21.7:exe:${os.detected.classifier}</protocArtifact>-->
+<!--                    <pluginId>grpc-java</pluginId>-->
+<!--                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.51.0:exe:${os.detected.classifier}</pluginArtifact>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>compile</goal>-->
+<!--                            <goal>compile-custom</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>

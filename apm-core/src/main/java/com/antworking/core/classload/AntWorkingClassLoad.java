@@ -2,9 +2,10 @@ package com.antworking.core.classload;
 
 import com.antworking.common.ConstantAw;
 import com.antworking.core.plugin.PluginManager;
+import com.antworking.core.tools.AwPathManager;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
-import com.antworking.util.FileUtil;
+import com.antworking.utils.FileUtil;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -24,7 +25,7 @@ public class AntWorkingClassLoad extends ClassLoader {
     private static final AwLog log = LoggerFactory.getLogger(AntWorkingClassLoad.class);
 
     public AntWorkingClassLoad(ClassLoader parent) {
-        super(parent);
+//        super(parent);
     }
 
     public AntWorkingClassLoad() {
@@ -83,30 +84,102 @@ public class AntWorkingClassLoad extends ClassLoader {
         };
     }
 
+//    @Override
+//    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+//        if(!name.startsWith("com.antworking.")){
+//            return super.loadClass(name, resolve);
+//        }
+//        String clazzPath = name.replace(".", "/").concat(".class");
+//        for (PluginManager.Jar jar : PluginManager.jars) {
+//            if (jar.jarFile.getJarEntry(clazzPath) != null) {
+//                try {
+//                    byte[] data = getBytes( jar.sourceFile.getAbsolutePath(),clazzPath);
+//                    return defineClass(name, data, 0, data.length);
+//                } catch (Exception e) {
+//                    log.error("加载class失败",e);
+//                }
+//
+//            }
+//        }
+//        //core加载
+//
+//
+//        try {
+//            byte[] data = getBytes(AwPathManager.getAwPath()+File.separator+"apm-agent-1.0.0.jar",clazzPath);
+//            return defineClass(name, data, 0, data.length);
+//        } catch (Exception e) {
+//            log.error("加载class失败",e);
+//        }
+//        return null;
+//    }
+//
+//    @Override
+//    public Class<?> loadClass(String name) throws ClassNotFoundException {
+//        if(!name.startsWith("com.antworking.")){
+//            return super.loadClass(name);
+//        }
+//        String clazzPath = name.replace(".", "/").concat(".class");
+//        for (PluginManager.Jar jar : PluginManager.jars) {
+//            if (jar.jarFile.getJarEntry(clazzPath) != null) {
+//                try {
+//                    byte[] data = getBytes( jar.sourceFile.getAbsolutePath(),clazzPath);
+//                    return defineClass(name, data, 0, data.length);
+//                } catch (Exception e) {
+//                    log.error("加载class失败",e,e.toString());
+//                }
+//
+//            }
+//        }
+//        //core加载
+//
+//
+//        try {
+//            byte[] data = getBytes(AwPathManager.getAwPath()+File.separator+"apm-agent-1.0.0.jar",clazzPath);
+//            return defineClass(name, data, 0, data.length);
+//        } catch (Exception e) {
+//            log.error("加载class失败:{}",e.toString(),e);
+//        }
+//        return null;
+//    }
+
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         String clazzPath = name.replace(".", "/").concat(".class");
         for (PluginManager.Jar jar : PluginManager.jars) {
             if (jar.jarFile.getJarEntry(clazzPath) != null) {
                 try {
-                    URL url = new URL("jar:file:" + jar.sourceFile.getAbsolutePath() + "!/" + clazzPath);
-                    byte[] data;
-                    try (final BufferedInputStream is = new BufferedInputStream(
-                            url.openStream()); final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-                        int ch;
-                        while ((ch = is.read()) != -1) {
-                            baos.write(ch);
-                        }
-                        data = baos.toByteArray();
-                    }
+                    byte[] data = getBytes( jar.sourceFile.getAbsolutePath(),clazzPath);
                     return defineClass(name, data, 0, data.length);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("加载class失败",e);
                 }
 
             }
         }
+        //core加载
+
+
+        try {
+            byte[] data = getBytes(AwPathManager.getAwPath()+File.separator+"apm-agent-1.0.0.jar",clazzPath);
+            return defineClass(name, data, 0, data.length);
+        } catch (Exception e) {
+            log.error("加载class失败",e);
+        }
         return null;
+    }
+
+    private static byte[] getBytes(String jarPath,String clazzPath) throws IOException {
+        URL url = new URL("jar:file:" + jarPath + "!/" + clazzPath);
+        byte[] data;
+        try (final BufferedInputStream is = new BufferedInputStream(
+                url.openStream()); final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            int ch;
+            while ((ch = is.read()) != -1) {
+                baos.write(ch);
+            }
+            data = baos.toByteArray();
+        }
+        return data;
     }
 
 
