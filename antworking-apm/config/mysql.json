@@ -1,5 +1,5 @@
 {
-  "url": "jdbc:mysql://10.0.0.127:3307/factory_dev?allowPublicKeyRetrieval=true&autoReconnectForPools=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8",
+  "url": "jdbc:mysql://121.36.87.178:4706/danduola_tcl_jf?allowPublicKeyRetrieval=true&autoReconnectForPools=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8",
   "user": "root",
-  "password": "ddl_Number1."
+  "password": "ddl2022."
 }

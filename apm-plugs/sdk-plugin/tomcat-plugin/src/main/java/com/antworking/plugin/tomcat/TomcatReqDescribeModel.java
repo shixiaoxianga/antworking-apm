@@ -17,6 +17,15 @@ public class TomcatReqDescribeModel {
     private String reqMethod;
     private String clientIp;
     private Integer repCode;
+    private String params;
+
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
 
     public String getReqUri() {
         return reqUri;
