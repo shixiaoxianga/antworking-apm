@@ -63,6 +63,7 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
         assert model != null;
         model.setError(errorDescribeModel);
 
+        model.setEndTime(TimeUtil.getCurrentTimeNano());
         AwCollectManager.write();
     }
 
