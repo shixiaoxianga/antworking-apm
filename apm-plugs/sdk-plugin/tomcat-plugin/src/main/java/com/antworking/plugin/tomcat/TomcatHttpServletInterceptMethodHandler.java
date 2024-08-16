@@ -43,6 +43,12 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._TOMCAT);
         TomcatReqDescribeModel tomcat = (TomcatReqDescribeModel) model.getData();
         tomcat.setRepCode(response.getResponseCode());
+
+
+//        CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._TOMCAT);
+//        assert model != null;
+        model.setEndTime(TimeUtil.getCurrentTimeNano());
+        AwCollectManager.write();
         return null;
     }
 
@@ -56,13 +62,12 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
         errorDescribeModel.setTimeStamp(System.currentTimeMillis());
         assert model != null;
         model.setError(errorDescribeModel);
+
+        AwCollectManager.write();
     }
 
     @Override
     public void doFinal(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
-        CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._TOMCAT);
-        assert model != null;
-        model.setEndTime(TimeUtil.getCurrentTimeNano());
-        AwCollectManager.write();
+
     }
 }

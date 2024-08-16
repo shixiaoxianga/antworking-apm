@@ -108,6 +108,7 @@ public class AwCollectManager {
     public static void write() {
         List<CollectDataBaseModel> models = get();
         remove();
+        removeTraceId();
         AntWorkingFactory.INSTANCE.writeFactory().write(models);
     }
 
