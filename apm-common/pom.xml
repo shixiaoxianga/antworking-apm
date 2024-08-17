@@ -58,7 +58,10 @@
             <groupId>com.antworking.apm</groupId>
             <artifactId>apm-logger</artifactId>
         </dependency>
-
+<!--        <dependency>-->
+<!--            <groupId>commons-cli</groupId>-->
+<!--            <artifactId>commons-cli</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

@@ -6,11 +6,13 @@ import com.antworking.core.plugin.PluginManager;
 import com.antworking.core.tools.AwPathManager;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
+import com.antworking.utils.CommandManager;
 import com.antworking.utils.FileReadUtil;
 import net.bytebuddy.agent.builder.AgentBuilder;
 
 import java.lang.instrument.Instrumentation;
 import java.lang.management.ManagementFactory;
+import java.util.Arrays;
 import java.util.Properties;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
@@ -35,10 +37,9 @@ public class AntWorkingAgentApp {
         Properties props = System.getProperties();
         System.out.println("\nSystem Properties:");
         props.list(System.out);
+        System.setProperty("apm.jvm.args", Arrays.toString(jvmArgs));
 
-
-
-
+        CommandManager.analysisCmd();
 //        new ClientRun().run();
         AwConfigManager.initConfig();
         initPlugin();

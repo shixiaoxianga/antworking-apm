@@ -69,6 +69,7 @@
                                     <include>ch.qos.logback:logback-core</include>
                                     <include>com.google.code.gson:gson</include>
                                     <include>mysql:mysql-connector-java</include>
+<!--                                    <include>commons-cli:commons-cli</include>-->
                                 </includes>
 
                             </artifactSet>
@@ -95,6 +96,10 @@
                                     <pattern>com.mysql</pattern>
                                     <shadedPattern>${shade.package}.com.mysql</shadedPattern>
                                 </relocation>
+<!--                                <relocation>-->
+<!--                                    <pattern>org.apache.commons.cli</pattern>-->
+<!--                                    <shadedPattern>${shade.package}.org.apache.commons.cli</shadedPattern>-->
+<!--                                </relocation>-->
 
 
                                 <relocation>
