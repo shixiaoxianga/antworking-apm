@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ public class HttpServletRequestAdapter {
         private final Method _getRequestMethod;
         private final Method _getReaderMethod;
         private final Method _getInputStreamMethod;
+        private final Method _getHeaderNames;
         private final static String targetClassName = "javax.servlet.http.HttpServletRequest";
 
         public HttpServletRequestAdapter(Object target) {
@@ -33,6 +35,7 @@ public class HttpServletRequestAdapter {
                 _getRequestMethod = targetClass.getMethod("getMethod");
                 _getReaderMethod = targetClass.getMethod("getReader");
                 _getInputStreamMethod = targetClass.getMethod("getInputStream");
+                _getHeaderNames = targetClass.getMethod("getHeaderNames");
 
             } catch (NoSuchMethodException e) {
                 throw new IllegalArgumentException("error :" + e.getMessage() + ". probable cause the target is not belong javax.servlet.http.HttpServletRequest ");
@@ -75,6 +78,20 @@ public class HttpServletRequestAdapter {
         public String getRequestMethod() {
             try {
                 return (String) _getRequestMethod.invoke(target);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        public Map<String,String> getHeaders() {
+            Map<String,String> headerMap = new HashMap<>();
+            try {
+                Enumeration<String> invoke = (Enumeration<String>) _getHeaderNames.invoke(target);
+                while (invoke.hasMoreElements()) {
+                    String key = invoke.nextElement();
+                    Object header = _getHeader.invoke(target, key);
+                    headerMap.put(key, header.toString());
+                }
+                return headerMap;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

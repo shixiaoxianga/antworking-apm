@@ -7,9 +7,11 @@ import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
 import com.antworking.model.collect.CollectDataBaseModel;
 import com.antworking.model.collect.ErrorDescribeModel;
+import com.antworking.utils.JsonUtil;
 import com.antworking.utils.TimeUtil;
 
 import java.lang.reflect.Method;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInterceptHandler {
@@ -33,6 +35,9 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
         tomcat.setClientIp(request.getClientIp());
         tomcat.setReqUri(request.getRequestURI());
         tomcat.setReqUrl(request.getRequestURL());
+        tomcat.setReqParam(JsonUtil.toJsonString(request.getParameterMap()));
+        tomcat.setHeaders(request.getHeaders());
+        tomcat.setReqMethod(request.getRequestMethod());
     }
 
     @Override
@@ -48,6 +53,13 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
 //        CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._TOMCAT);
 //        assert model != null;
         model.setEndTime(TimeUtil.getCurrentTimeNano());
+
+//        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+//        List<String> stackTrace = new ArrayList<>();
+//        for (StackTraceElement stackTraceElement : trace) {
+//            stackTrace.add(stackTraceElement.toString());
+//        }
+//        tomcat.setStackTraces(stackTrace);
         AwCollectManager.write();
         return null;
     }
@@ -64,6 +76,15 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
         model.setError(errorDescribeModel);
 
         model.setEndTime(TimeUtil.getCurrentTimeNano());
+        TomcatReqDescribeModel data = (TomcatReqDescribeModel) model.getData();
+
+//        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+//        List<String> stackTrace = new ArrayList<>();
+//        for (StackTraceElement stackTraceElement : trace) {
+//            stackTrace.add(stackTraceElement.toString());
+//        }
+//        data.setStackTraces(stackTrace);
+
         AwCollectManager.write();
     }
 
