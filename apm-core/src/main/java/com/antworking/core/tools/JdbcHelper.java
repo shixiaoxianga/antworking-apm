@@ -7,6 +7,9 @@ import com.antworking.logger.LoggerFactory;
 
 import java.sql.*;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -20,7 +23,6 @@ public class JdbcHelper {
     private static final Lock lock = new ReentrantLock();
     public static  Connection conn ;
     public JdbcHelper(){
-
     }
     public JdbcHelper(String DB_URL, String USER, String PASS) {
         this.DB_URL = DB_URL;
@@ -31,7 +33,12 @@ public class JdbcHelper {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        //定时器保持连接
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
+        Runnable task = () -> executeQuery("select 1");
+
+        executor.scheduleAtFixedRate(task, 60, 60*60, TimeUnit.SECONDS);
     }
 
     /**
@@ -93,6 +100,7 @@ public class JdbcHelper {
             return rs;
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("APM查询错误",e);
         }
         return null;
     }
@@ -121,6 +129,7 @@ public class JdbcHelper {
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            log.error("APM更新错误",e);
         }
         return 0;
     }
