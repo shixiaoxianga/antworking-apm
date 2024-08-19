@@ -69,6 +69,7 @@ public class RedisCommonMethodHandler extends AbstractMethodInterceptHandler {
         methodDescribeModel.setClazz(clazz.getName());
         methodDescribeModel.setParam(params);
         methodDescribeModel.setName(method.getName());
+        methodDescribeModel.setStartTime(TimeUtil.getCurrentTimeNano());
         CollectDataBaseModel model = CollectDataBaseModel.init(AwCollectManager.get() != null,
                 methodDescribeModel,
                 ConstantAppNode.REDIS_TEMPLATE,
@@ -79,23 +80,28 @@ public class RedisCommonMethodHandler extends AbstractMethodInterceptHandler {
 
     @Override
     public Object doAfter(Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable, Object result) {
-        CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._SQL_DRIVE_CONNECT);
+        CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._REDIS_TEMPLATE);
         assert model != null;
         MethodDescribeModel  methodDescribeModel= (MethodDescribeModel) model.getData();
         methodDescribeModel.setEndTime(TimeUtil.getCurrentTimeNano());
-        methodDescribeModel.setReturnClazz(result.getClass().getName());
+        if(result!=null){
+            methodDescribeModel.setReturnClazz(result.getClass().getName());
+        }
+        model.setEndTime(TimeUtil.getCurrentTimeNano());
         return null;
     }
 
     @Override
     public void doCatch(Throwable e, Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable) {
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._REDIS_TEMPLATE);
+
         ErrorDescribeModel errorDescribeModel = new ErrorDescribeModel();
         errorDescribeModel.setClazz(clazz.getName());
         errorDescribeModel.setMessage(e.toString());
         errorDescribeModel.setStacks(e.getStackTrace());
         errorDescribeModel.setTimeStamp(System.currentTimeMillis());
         assert model != null;
+        model.setEndTime(TimeUtil.getCurrentTimeNano());
         model.setError(errorDescribeModel);
     }
 
