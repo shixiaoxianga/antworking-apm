@@ -3,10 +3,7 @@ package com.antworking.core.interceptor;
 import com.antworking.core.handler.IMethodInterceptHandler;
 import com.antworking.logger.AwLog;
 import com.antworking.logger.LoggerFactory;
-import net.bytebuddy.implementation.bind.annotation.AllArguments;
-import net.bytebuddy.implementation.bind.annotation.Origin;
-import net.bytebuddy.implementation.bind.annotation.RuntimeType;
-import net.bytebuddy.implementation.bind.annotation.SuperCall;
+import net.bytebuddy.implementation.bind.annotation.*;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -22,21 +19,23 @@ public class AwMethodIntercept {
     }
 
     @RuntimeType
-    public Object interceptor(@Origin Method method,
+    public Object interceptor(
+                              @This Object instance,
+                              @Origin Method method,
                               @AllArguments Object[] args,
                               @Origin Class<?> clazz,
                               @SuperCall Callable<Object> callable) throws Exception {
-        handler.before(method, args, clazz, callable);
+        handler.before(method, args, instance,clazz, callable);
         Object result;
         try {
             result = callable.call();
-            Object newRes = handler.after(method, args, clazz, callable, result);
+            Object newRes = handler.after(method, args,instance, clazz, callable, result);
             return newRes == null ? result : newRes;
         } catch (Throwable e) {
-            handler._catch(e, method, args, clazz, callable);
+            handler._catch(e, method, args, instance,clazz, callable);
             throw e;
         } finally {
-            handler._final(method, args, clazz, callable);
+            handler._final(method, args,instance, clazz, callable);
         }
     }
 }

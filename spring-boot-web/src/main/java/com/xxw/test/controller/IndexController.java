@@ -1,6 +1,7 @@
 package com.xxw.test.controller;
 
 import com.xxw.test.dao.UserDao;
+import com.xxw.test.util.CusHTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,8 +54,8 @@ public class IndexController {
     @GetMapping("sendHttp")
     public void send(){
 
-        HttpUtils.sendGet("http://127.0.0.1:6060/test1","");
-        HttpUtils.sendGet("http://127.0.0.1:6060/test2","");
+//        HttpUtils.sendGet("http://127.0.0.1:6060/test1","");
+//        HttpUtils.sendGet("http://127.0.0.1:6060/test2","");
 
         //发送Http请求
         HttpUtils.sendGet("https://tcc.taobao.com/cc/json/mobile_tel_segment.htm","tel=131760");
@@ -75,6 +76,15 @@ public class IndexController {
     public void error(){
         System.out.println("error...................");
        throw new RuntimeException("模拟异常");
+
+    }
+    @GetMapping("testhttp")
+    public void testhttp(){
+        HashMap<String, String> data = new HashMap<>();
+        data.put("aaaa","1111");
+        new CusHTTP().url("https://baidu.com").params("?a=1").data(data).headers(data).method("post").call();
+        System.out.println("testhttp...................");
+
 
     }
     @GetMapping("x")

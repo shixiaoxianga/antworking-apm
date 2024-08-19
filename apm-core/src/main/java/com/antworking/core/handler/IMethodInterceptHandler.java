@@ -11,22 +11,26 @@ public interface IMethodInterceptHandler {
 
     void before(Method method,
                 Object[] params,
+                Object instance,
                 Class<?> clazz,
                 Callable<Object> callable);
 
     Object after(Method method,
                  Object[] params,
+                 Object instance,
                  Class<?> clazz,
                  Callable<Object> callable,
                  Object result);
 
     void _catch(Throwable e, Method method,
                 Object[] params,
+                Object instance,
                 Class<?> clazz,
                 Callable<Object> callable);
 
     void _final(Method method,
                 Object[] params,
+                Object instance,
                 Class<?> clazz,
                 Callable<Object> callable);
 }

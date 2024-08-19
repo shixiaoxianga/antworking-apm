@@ -19,7 +19,7 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
     private final AwLog log = LoggerFactory.getLogger(TomcatHttpServletInterceptMethodHandler.class);
 
     @Override
-    public void doBefore(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doBefore(Method method, Object[] params,Object instance, Class<?> clazz, Callable<Object> callable) {
         CollectDataBaseModel model = null;
         TomcatReqDescribeModel tomcat = new TomcatReqDescribeModel();
         if (AwCollectManager.get() == null) {
@@ -41,7 +41,7 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
     }
 
     @Override
-    public Object doAfter(Method method, Object[] params, Class<?> clazz, Callable<Object> callable, Object result) {
+    public Object doAfter(Method method, Object[] params,Object instance, Class<?> clazz, Callable<Object> callable, Object result) {
         HttpServletResponseAdapter response;
         Object resp = params[1];
         response = new HttpServletResponseAdapter(resp);
@@ -65,11 +65,11 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
     }
 
     @Override
-    public void doCatch(Throwable e, Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doCatch(Throwable e, Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable) {
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._TOMCAT);
         ErrorDescribeModel errorDescribeModel = new ErrorDescribeModel();
         errorDescribeModel.setClazz(clazz.getName());
-        errorDescribeModel.setMessage(e.getMessage());
+        errorDescribeModel.setMessage(e.toString());
         errorDescribeModel.setStacks(e.getStackTrace());
         errorDescribeModel.setTimeStamp(System.currentTimeMillis());
         assert model != null;
@@ -89,7 +89,7 @@ public class TomcatHttpServletInterceptMethodHandler extends AbstractMethodInter
     }
 
     @Override
-    public void doFinal(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doFinal(Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable) {
 
     }
 }

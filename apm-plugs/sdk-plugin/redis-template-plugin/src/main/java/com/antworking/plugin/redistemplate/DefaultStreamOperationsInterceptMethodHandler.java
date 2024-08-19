@@ -7,22 +7,22 @@ import java.util.concurrent.Callable;
 
 public class DefaultStreamOperationsInterceptMethodHandler extends AbstractMethodInterceptHandler {
     @Override
-    public void doBefore(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doBefore(Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable) {
 
     }
 
     @Override
-    public Object doAfter(Method method, Object[] params, Class<?> clazz, Callable<Object> callable, Object result) {
+    public Object doAfter(Method method, Object[] params,Object instance, Class<?> clazz, Callable<Object> callable, Object result) {
         return null;
     }
 
     @Override
-    public void doCatch(Throwable e, Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doCatch(Throwable e, Method method, Object[] params,Object instance, Class<?> clazz, Callable<Object> callable) {
 
     }
 
     @Override
-    public void doFinal(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doFinal(Method method, Object[] params,Object instance, Class<?> clazz, Callable<Object> callable) {
 
     }
 }

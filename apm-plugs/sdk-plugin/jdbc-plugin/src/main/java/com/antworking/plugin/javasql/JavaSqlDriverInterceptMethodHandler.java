@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 
 public class JavaSqlDriverInterceptMethodHandler extends AbstractMethodInterceptHandler {
     @Override
-    public void doBefore(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doBefore(Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable) {
         MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
         methodDescribeModel.setClazz(clazz.getName());
         methodDescribeModel.setStartTime(System.currentTimeMillis());
@@ -29,7 +29,7 @@ public class JavaSqlDriverInterceptMethodHandler extends AbstractMethodIntercept
     }
 
     @Override
-    public Object doAfter(Method method, Object[] params, Class<?> clazz, Callable<Object> callable, Object result) {
+    public Object doAfter(Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable, Object result) {
         if (result instanceof java.sql.Connection) {
             CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._SQL_DRIVE_CONNECT);
             assert model != null;
@@ -44,11 +44,11 @@ public class JavaSqlDriverInterceptMethodHandler extends AbstractMethodIntercept
     }
 
     @Override
-    public void doCatch(Throwable e, Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doCatch(Throwable e, Method method, Object[] params,Object instance, Class<?> clazz, Callable<Object> callable) {
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._SQL_DRIVE_CONNECT);
         ErrorDescribeModel errorDescribeModel = new ErrorDescribeModel();
         errorDescribeModel.setClazz(clazz.getName());
-        errorDescribeModel.setMessage(e.getMessage());
+        errorDescribeModel.setMessage(e.toString());
         errorDescribeModel.setStacks(e.getStackTrace());
         errorDescribeModel.setTimeStamp(System.currentTimeMillis());
         assert model != null;
@@ -56,7 +56,7 @@ public class JavaSqlDriverInterceptMethodHandler extends AbstractMethodIntercept
     }
 
     @Override
-    public void doFinal(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doFinal(Method method, Object[] params,Object instance, Class<?> clazz, Callable<Object> callable) {
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._SQL_DRIVE_CONNECT);
         assert model != null;
         model.setEndTime(TimeUtil.getCurrentTimeNano());

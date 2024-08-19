@@ -24,7 +24,31 @@ public class RedisCommonMethodHandler extends AbstractMethodInterceptHandler {
             "execute",
             "rawKey",
             "keySerializer",
-            "deserializeValue"
+            "hashKeySerializer",
+            "hashValueSerializer",
+            "deserializeValue",
+            "stringSerializer",
+            "deserializeTupleValues",
+            "deserializeValues",
+            "deserializeHashKeys",
+            "deserializeHashValues",
+            "deserializeHashMap",
+            "deserializeKey",
+            "deserializeKeys",
+            "deserializeValue",
+            "deserializeHashValue",
+            "deserializeGeoResults",
+            "deserializeString",
+            "rawTupleValues",
+            "deserializeTuple",
+            "rawKey",
+            "getOperations",
+            "rawValues",
+            "rawHashKey",
+            "rawHashKeys",
+            "rawHashValue",
+            "rawKeys",
+            "hashValueSerializerPresent",
     };
 
     public static ElementMatcher.Junction<NamedElement> getMatch() {
@@ -40,7 +64,7 @@ public class RedisCommonMethodHandler extends AbstractMethodInterceptHandler {
     }
 
     @Override
-    public void doBefore(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doBefore(Method method, Object[] params,Object instance, Class<?> clazz, Callable<Object> callable) {
         MethodDescribeModel methodDescribeModel = new MethodDescribeModel();
         methodDescribeModel.setClazz(clazz.getName());
         methodDescribeModel.setParam(params);
@@ -54,16 +78,21 @@ public class RedisCommonMethodHandler extends AbstractMethodInterceptHandler {
     }
 
     @Override
-    public Object doAfter(Method method, Object[] params, Class<?> clazz, Callable<Object> callable, Object result) {
+    public Object doAfter(Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable, Object result) {
+        CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._SQL_DRIVE_CONNECT);
+        assert model != null;
+        MethodDescribeModel  methodDescribeModel= (MethodDescribeModel) model.getData();
+        methodDescribeModel.setEndTime(TimeUtil.getCurrentTimeNano());
+        methodDescribeModel.setReturnClazz(result.getClass().getName());
         return null;
     }
 
     @Override
-    public void doCatch(Throwable e, Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doCatch(Throwable e, Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable) {
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._REDIS_TEMPLATE);
         ErrorDescribeModel errorDescribeModel = new ErrorDescribeModel();
         errorDescribeModel.setClazz(clazz.getName());
-        errorDescribeModel.setMessage(e.getMessage());
+        errorDescribeModel.setMessage(e.toString());
         errorDescribeModel.setStacks(e.getStackTrace());
         errorDescribeModel.setTimeStamp(System.currentTimeMillis());
         assert model != null;
@@ -71,7 +100,7 @@ public class RedisCommonMethodHandler extends AbstractMethodInterceptHandler {
     }
 
     @Override
-    public void doFinal(Method method, Object[] params, Class<?> clazz, Callable<Object> callable) {
+    public void doFinal(Method method, Object[] params, Object instance,Class<?> clazz, Callable<Object> callable) {
         CollectDataBaseModel model = AwCollectManager.getNode(ConstantAppNode._REDIS_TEMPLATE);
         assert model != null;
         model.setEndTime(TimeUtil.getCurrentTimeNano());
