@@ -1,8 +1,8 @@
 package com.antworking.plugin.httpclient;
 
 import com.antworking.utils.JsonUtil;
-import org.apache.http.Header;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -31,9 +31,17 @@ public class CloseableHttpResponseAdapter {
 
         public String getHeaders() {
             try {
-                Object[] headers;
-                headers = (Header[]) _getAllHeaders.invoke(target);
-                return JsonUtil.toJsonString(Arrays.stream(headers).map(Object::toString).collect(Collectors.toList()));
+                Object result = _getAllHeaders.invoke(target);;
+                int length = Array.getLength(result);
+                Object objectArray =  Array.newInstance( Object.class,length);
+
+                // 遍历原始数组，并将元素复制到新的Object数组中
+                for (int i = 0; i < length; i++) {
+                    Object header = Array.get(result, i);
+                    Array.set(objectArray, i, header);
+                }
+
+                return JsonUtil.toJsonString(Arrays.stream((Object[])objectArray).map(Object::toString).collect(Collectors.toList()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
