@@ -34,13 +34,10 @@ public class CloseableHttpResponseAdapter {
                 Object result = _getAllHeaders.invoke(target);;
                 int length = Array.getLength(result);
                 Object objectArray =  Array.newInstance( Object.class,length);
-
-                // 遍历原始数组，并将元素复制到新的Object数组中
                 for (int i = 0; i < length; i++) {
                     Object header = Array.get(result, i);
                     Array.set(objectArray, i, header);
                 }
-
                 return JsonUtil.toJsonString(Arrays.stream((Object[])objectArray).map(Object::toString).collect(Collectors.toList()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
