@@ -8,9 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import sun.net.www.http.HttpClient;
 import sun.net.www.protocol.http.HttpURLConnection;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
@@ -103,6 +107,14 @@ public class IndexController {
         new Thread(()->{
             System.out.println(redisTemplate.opsForValue().get("name"));
         }).start();
+    }
+    @GetMapping("testParam")
+    public void redis(HttpServletRequest request, HttpServletResponse response,MultipartFile file){
+        System.out.println(request);
+        System.out.println(response);
+        System.out.println(file);
+
+
     }
 
     public void a() throws IOException {

@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>tomcat-plugin</module>
+        <module>springmvc-plugin</module>
         <module>jdbc-plugin</module>
         <module>redis-template-plugin</module>
         <module>apache-http-client-4x</module>

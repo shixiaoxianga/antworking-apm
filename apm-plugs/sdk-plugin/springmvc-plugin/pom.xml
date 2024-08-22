@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.antworking.plugin.tomcat</groupId>
-    <artifactId>tomcat-plugin</artifactId>
+    <groupId>com.antworking.plugin.spingmvc</groupId>
+    <artifactId>springmvc-plugin</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

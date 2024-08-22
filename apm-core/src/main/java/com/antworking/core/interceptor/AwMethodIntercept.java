@@ -28,7 +28,7 @@ public class AwMethodIntercept {
         handler.before(method, args, instance,clazz, callable);
         Object result;
         try {
-            result = callable.call();
+                result = callable.call();
             Object newRes = handler.after(method, args,instance, clazz, callable, result);
             return newRes == null ? result : newRes;
         } catch (Throwable e) {
