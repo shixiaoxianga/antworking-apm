@@ -26,7 +26,14 @@ public class AntWorkingAgentApp {
         initPlugin();
         initByteBuddy(instrumentation);
         initApplication();
-        log.info("AntWorking init end...");
+        log.info("PreMain AntWorking init end...");
+    }
+    public static void agentmain(String arg, Instrumentation instrumentation) {
+        welcome();
+        initPlugin();
+        initByteBuddy(instrumentation);
+        initApplication();
+        log.info("AgentMain AntWorking init end...");
     }
 
     private static void initApplication() {

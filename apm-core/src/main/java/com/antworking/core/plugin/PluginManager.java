@@ -43,6 +43,7 @@ public enum PluginManager {
                 URL url = new URL("jar:file:" + jarFile.getAbsolutePath() + "!/" + "antworking.properties");
                 put(jarFile);
                 Properties properties = new Properties();
+                // TODO: 2023/11/21 关闭in
                 InputStream inputStream = url.openStream();
                 properties.load(inputStream);
                 PluginInst inst = new PluginInst();
@@ -51,7 +52,6 @@ public enum PluginManager {
                     Class<?> aClass = AntWorkingClassLoad.INSTANCE.loadClass(clazz);
                     inst.getStatements().add((AwEnhanceStatement) aClass.newInstance());
                 }
-                pluginInst.add(inst);
             } catch (Exception e) {
                 e.printStackTrace();
             }

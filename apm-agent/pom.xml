@@ -115,6 +115,7 @@
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
                                         <Premain-Class>com.antworking.agent.AntWorkingAgentApp</Premain-Class>
+                                        <Agent-Class>com.antworking.agent.AntWorkingAgentApp</Agent-Class>
                                         <main-Class>com.antworking.agent.AntWorkingAgentApp</main-Class>
                                         <Can-Redefine-Classes>true</Can-Redefine-Classes>
                                         <Can-Retransform-Classes>true</Can-Retransform-Classes>
