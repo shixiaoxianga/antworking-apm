@@ -14,10 +14,11 @@ import java.security.ProtectionDomain;
 
 public class TomcatServletEnhanceStatementImpl extends AbstractEnhanceStatement {
     private final String CLASS_NAME = "javax.servlet.http.HttpServlet";
+    private final String CLASS_NAME1 = "jakarta.servlet.http.HttpServlet";
 
     @Override
     public ElementMatcher<? super TypeDescription> doMatcherClass() {
-        return ElementMatchers.named(CLASS_NAME);
+        return ElementMatchers.named(CLASS_NAME).or(ElementMatchers.named(CLASS_NAME1));
     }
 
     @Override

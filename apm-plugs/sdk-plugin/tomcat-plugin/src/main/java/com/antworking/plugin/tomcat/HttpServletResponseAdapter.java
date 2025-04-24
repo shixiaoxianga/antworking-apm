@@ -12,11 +12,17 @@ public class HttpServletResponseAdapter {
         private  Method _getResponseCode;
 
         private final static String targetClassName = "javax.servlet.http.HttpServletResponse";
+        private final static String targetClassName1 = "jakarta.servlet.http.HttpServletResponse";
 
         public HttpServletResponseAdapter(Object target) {
             this.target = target;
             try {
-                Class<?> targetClass = target.getClass().getClassLoader().loadClass(targetClassName);
+                Class<?> targetClass;
+                try {
+                    targetClass = target.getClass().getClassLoader().loadClass(targetClassName);
+                }catch (ClassNotFoundException exception){
+                    targetClass = target.getClass().getClassLoader().loadClass(targetClassName1);
+                }
                 _getResponseBody= targetClass.getMethod("getOutputStream");
                 _getResponseCode= targetClass.getMethod("getStatus");
             } catch (Exception e) {

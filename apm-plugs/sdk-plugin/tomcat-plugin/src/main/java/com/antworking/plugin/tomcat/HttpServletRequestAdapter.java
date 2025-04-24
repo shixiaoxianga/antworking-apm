@@ -22,11 +22,17 @@ public class HttpServletRequestAdapter {
         private final Method _getHeaderNames;
         private final Method _getReader;
         private final static String targetClassName = "javax.servlet.http.HttpServletRequest";
+        private final static String targetClassName1 = "jakarta.servlet.http.HttpServletRequest";
 
         public HttpServletRequestAdapter(Object target) {
             this.target = target;
             try {
-                Class<?> targetClass = target.getClass().getClassLoader().loadClass(targetClassName);
+                Class<?> targetClass;
+                try {
+                    targetClass = target.getClass().getClassLoader().loadClass(targetClassName);
+                }catch (ClassNotFoundException exception){
+                    targetClass = target.getClass().getClassLoader().loadClass(targetClassName1);
+                }
                 _getRequestURI = targetClass.getMethod("getRequestURI");
                 _getParameterMap = targetClass.getMethod("getParameterMap");
                 _getMethod = targetClass.getMethod("getMethod");

@@ -41,6 +41,7 @@ public class SpringmvcHttpServletInterceptMethodHandler extends AbstractMethodIn
                 !param.getClass().getName().contains("org.springframework") &&
                 !param.getClass().getName().contains("com.alibaba.druid") &&
                 !param.getClass().getName().contains("java.io.BufferedReader") &&
+                !param.getClass().getName().contains("io.undertow.servlet.spec.HttpServletRequestImpl") &&
                 !(param instanceof  Exception) &&
                         !param.getClass().getName().equals("javax.servlet.http.HttpServletResponse") &&
                         !param.getClass().getName().contains("org.springframework.web.multipart.MultipartFile")).collect(Collectors.toList());
