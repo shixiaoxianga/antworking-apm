@@ -31,27 +31,76 @@ public class SpringmvcHttpServletInterceptMethodHandler extends AbstractMethodIn
                 AwCollectManager.getTraceId());
         AwCollectManager.createOrAdd(model);
 
-
-        List<Object> args = Arrays.stream((Object[])params[0]).filter(param ->
-                param!=null &&
-                !param.getClass().getName().equals("org.apache.catalina.core.ApplicationHttpRequest") &&
-                !param.getClass().getName().equals("org.apache.catalina.connector.ResponseFacade") &&
-                !param.getClass().getName().equals("org.apache.catalina.connector.RequestFacade") &&
-                !param.getClass().getName().equals("javax.servlet.http.HttpServletRequest") &&
-                !param.getClass().getName().contains("org.springframework") &&
-                !param.getClass().getName().contains("com.alibaba.druid") &&
-                !param.getClass().getName().contains("java.io.BufferedReader") &&
-                !param.getClass().getName().contains("io.undertow.servlet.spec.HttpServletRequestImpl") &&
-                !(param instanceof  Exception) &&
-                        !param.getClass().getName().equals("javax.servlet.http.HttpServletResponse") &&
-                        !param.getClass().getName().contains("org.springframework.web.multipart.MultipartFile")).collect(Collectors.toList());
         try {
-            if(args.size() == 0){return;}
-            springmvc.setParam(args.stream().map(JsonUtil::toJsonString).toArray());
-        }catch (Throwable e){
+//            if (params == null || params.length == 0 || params[0] == null) {
+//                return;
+//            }
+//
+//            Object[] paramsArray = (Object[])params[0];
+//            Object[] safeParams = new Object[paramsArray.length];
+//
+//            for (int i = 0; i < paramsArray.length; i++) {
+//                Object param = paramsArray[i];
+//                if (param == null) {
+//                    safeParams[i] = null;
+//                    continue;
+//                }
+//
+//                String className = param.getClass().getName();
+//
+//                // 排除已知可能导致序列化问题的类型
+//                if (className.equals("org.apache.catalina.core.ApplicationHttpRequest") ||
+//                    className.equals("org.apache.catalina.connector.ResponseFacade") ||
+//                    className.equals("org.apache.catalina.connector.RequestFacade") ||
+//                    className.equals("javax.servlet.http.HttpServletRequest") ||
+//                    className.equals("javax.servlet.http.HttpServletResponse") ||
+//                    className.contains("org.springframework") ||
+//                    className.contains("com.alibaba.druid") ||
+//                    className.contains("java.io.BufferedReader") ||
+//                    className.contains("java.io.Reader") ||
+//                    className.contains("java.io.InputStream") ||
+//                    className.contains("io.undertow.servlet.spec") ||
+//                    className.contains("org.springframework.web.multipart.MultipartFile") ||
+//                    param instanceof Exception) {
+//
+//                    // 对于不安全的类型，只保存类名和简单信息
+//                    safeParams[i] = "类型: " + className;
+//                } else {
+//                    // 对于可能安全的类型，尝试安全序列化
+//                    try {
+//                        // 简单类型和常见安全类型可以直接序列化
+//                        if (param instanceof String || param instanceof Number ||
+//                            param instanceof Boolean || param instanceof Character ||
+//                            param instanceof Enum || param.getClass().isPrimitive()) {
+//                            safeParams[i] = param;
+//                        } else {
+//                            // 对于复杂类型，只返回类型信息和toString结果（限制长度避免过大）
+//                            String toString = param.toString();
+//                            if (toString.length() > 100) {
+//                                toString = toString.substring(0, 100) + "...";
+//                            }
+//                            safeParams[i] = "类型: " + className + ", 值: " + toString;
+//                        }
+//                    } catch (Throwable e) {
+//                        // 如果出现任何异常，只返回类名
+//                        safeParams[i] = "类型: " + className + " (无法获取值)";
+//                    }
+//                }
+//            }
+            
+            // 过滤掉空值
+//            List<Object> nonNullParams = Arrays.stream(safeParams)
+//                .filter(Objects::nonNull)
+//                .collect(Collectors.toList());
+//
+//            if (nonNullParams.isEmpty()) {
+//                return;
+//            }
+            
+//            springmvc.setParam(nonNullParams.toArray());
+        } catch (Throwable e) {
             log.error("采集MVC参数异常：{}",e.getMessage(),e);
         }
-
     }
 
     @Override
